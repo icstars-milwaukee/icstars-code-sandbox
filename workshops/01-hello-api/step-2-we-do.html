@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Step 2 · We Do — The Mystery Silhouette</title>
+  <link rel="stylesheet" href="../../css/theme.css">
+</head>
+<body>
+
+  <header class="ics-header">
+    <div class="ics-wrap">
+      <a class="ics-back" href="index.html">&larr; Hello, API</a>
+      <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span></div>
+      <h1 class="ics-title">Who's That Pokémon?</h1>
+      <p class="ics-sub">Step 2 — we type this together, one line at a time.</p>
+    </div>
+  </header>
+
+  <div class="ics-stage">
+    <img id="sprite" class="ics-sprite hidden" alt="Mystery Pokémon silhouette">
+  </div>
+
+  <main class="ics-wrap">
+    <span class="ics-step">Step 2 · We do</span>
+
+    <p>
+      Step 1 asked for <strong>one</strong> Pokémon (<code>/pokemon/25</code>).
+      Now we ask for <strong>a list of 151</strong> and pick one at random —
+      that's a mystery. Click <strong>Reveal</strong> to see who it is.
+    </p>
+
+    <div class="ics-row">
+      <button class="ics-btn" id="revealBtn" disabled>Reveal</button>
+      <button class="ics-btn" id="nextBtn" disabled>New mystery</button>
+      <span class="ics-count" id="answer"></span>
+    </div>
+
+    <div class="ics-note" id="status">Loading 151 Pokémon...</div>
+
+    <p class="ics-footer">
+      Data from <a href="https://pokeapi.co/api/v2/pokemon?limit=151">pokeapi.co/api/v2/pokemon?limit=151</a>
+    </p>
+  </main>
+
+  <script src="js/step-2.js"></script>
+
+</body>
+</html>

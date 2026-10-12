@@ -1,0 +1,21 @@
+/* Extras for THIS site only. The theme does the heavy lifting. */
+
+.scoreboard { justify-content: space-between; }
+
+/* The streak flame, only shown once you're on a run */
+.streak {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--red);
+}
+
+/* A quieter second button */
+.ics-btn.ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.ics-btn.ghost:hover { background: var(--ink); color: var(--paper); }
+
+/* Hide the status box when there is nothing to say */
+.hidden-note { display: none; }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Step 1 · I Do — One Pokémon</title>
+  <link rel="stylesheet" href="../../css/theme.css">
+</head>
+<body>
+
+  <header class="ics-header">
+    <div class="ics-wrap">
+      <a class="ics-back" href="index.html">&larr; Hello, API</a>
+      <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span></div>
+      <h1 class="ics-title">One Pokémon</h1>
+      <p class="ics-sub">Step 1 — watch the instructor. Ask questions. Don't type yet.</p>
+    </div>
+  </header>
+
+  <div class="ics-stage">
+    <img id="sprite" class="ics-sprite" alt="">
+  </div>
+
+  <main class="ics-wrap">
+    <span class="ics-step">Step 1 · I do</span>
+
+    <p>Goal: click a button, ask another computer for <strong>one Pokémon</strong>, put it on the page.</p>
+
+    <div class="ics-row">
+      <button class="ics-btn" id="loadBtn">Get Pokémon #25</button>
+    </div>
+
+    <!-- Empty on purpose. JavaScript fills these in. -->
+    <div class="ics-out" id="output">Nothing yet. Click the button.</div>
+
+    <p class="ics-footer">
+      Data from <a href="https://pokeapi.co/api/v2/pokemon/25">pokeapi.co/api/v2/pokemon/25</a>
+      — free, no key, no signup. We did not make this data; we borrowed it.
+    </p>
+  </main>
+
+  <script src="js/step-1.js"></script>
+
+</body>
+</html>

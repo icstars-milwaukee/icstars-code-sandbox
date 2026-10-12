@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WORKSHOP TITLE — i.c.stars Code Sandbox</title>
+  <link rel="stylesheet" href="../../css/theme.css">
+</head>
+<body>
+
+  <header class="ics-header">
+    <div class="ics-wrap">
+      <a class="ics-back" href="../../index.html">&larr; Code Sandbox</a>
+      <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span> Milwaukee</div>
+      <h1 class="ics-title">Workshop Title</h1>
+      <p class="ics-sub">
+        Week N · NN minutes · one ARTIFACT, three passes.
+        Say what they walk out holding, not what the topic is called.
+      </p>
+    </div>
+  </header>
+
+  <main class="ics-wrap">
+
+    <div class="ics-note">
+      <strong>This is the template.</strong> Copy this whole folder to
+      <code>workshops/0N-your-slug/</code> before you change anything, then work through
+      <code>README.md</code> in the copy. Everything here already opens and runs — including
+      the deck — so you are editing a working workshop, never a blank page.
+    </div>
+
+    <span class="ics-step">Start here</span>
+
+    <div class="links">
+      <a class="link" href="REF-deck.html">
+        <span class="pass">Instructor</span>
+        <b>The workshop deck &rarr;</b>
+        <span>12 slides, already laid out. Arrow keys drive it, Ctrl+P saves it as a PDF.
+          The <code>&lt;style&gt;</code> block is the house palette &mdash; don't touch it.</span>
+      </a>
+
+      <a class="link" href="step-1-i-do.html">
+        <span class="pass">I do</span>
+        <b>Step 1 &mdash; SMALLEST VERSION THAT WORKS</b>
+        <span>What the instructor builds while everyone watches. Hands off keyboards.</span>
+      </a>
+
+      <a class="link" href="step-2-we-do.html">
+        <span class="pass">We do</span>
+        <b>Step 2 &mdash; THE NEXT LAYER</b>
+        <span>Built together, with a checkpoint after every step.</span>
+      </a>
+
+      <a class="link" href="step-3-you-do.html">
+        <span class="pass">You do</span>
+        <b>Step 3 &mdash; THE REAL THING</b>
+        <span>Exactly three TODOs in a file that already runs.
+          (<a href="step-3-you-do-solution.html">solution</a>)</span>
+      </a>
+    </div>
+
+    <h2 style="margin-top:36px;font-size:1.2rem">What to fill in, and in what order</h2>
+    <p class="ics-sub" style="color:var(--grey-dark)">
+      The full checklist is in <code>README.md</code>. The short version: deck first, because
+      writing the slides is what tells you whether the workshop is actually one workshop.
+    </p>
+
+    <div class="tree">workshops/_template/
+├── README.md                the checklist. Read it first.
+├── <b>index.html</b>               this page — rewrite the links and the title
+├── REF-deck.html            <b>start here.</b> 12 slides, placeholders marked
+│
+├── step-1-i-do.html         markup only...
+├── step-2-we-do.html        ...each page loads one file from js/
+├── step-3-you-do.html
+├── step-3-you-do-solution.html
+│
+└── js/
+    ├── step-1.js            I DO   · the smallest thing that works
+    ├── step-2.js            WE DO  · one more layer
+    ├── step-3.js            YOU DO · exactly 3 TODOs
+    └── step-3-solution.js   the answer key, and it must actually run
+
+the shared theme lives at  ../../css/theme.css   — read it, don't fork it
+the catalog lives at       ../../js/workshops.js — add your entry last</div>
+
+    <p class="ics-footer">
+      Part of the <a href="../../index.html">i.c.stars Code Sandbox</a>.
+      Workshops should use free, no-key sample data wherever possible &mdash; a signup wall
+      on night one costs you half the room.
+    </p>
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,594 @@
+<title>Week 6 — Hello, API · i.c.stars Milwaukee</title>
+<style>
+  :root{
+    --ink:#161217; --ink-soft:#231C24; --paper:#FAF6F2; --paper-dim:#EFE8E2;
+    --red:#D6003C; --red-deep:#A00030; --grey:#9A9095; --grey-dark:#5C5458;
+    --disp:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    --mono:Consolas,"Courier New",monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{font-family:var(--disp);background:var(--ink);color:var(--paper)}
+  .deck{position:relative;height:100%;width:100%}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    padding:6vh 8vw;opacity:0;visibility:hidden;transform:translateX(4%);
+    transition:opacity .45s ease,transform .45s ease,visibility .45s;overflow-y:auto}
+  .slide.active{opacity:1;visibility:visible;transform:none}
+  @media (prefers-reduced-motion: reduce){.slide{transition:none;transform:none}}
+  .ink{background:var(--ink);color:var(--paper)}
+  .paper{background:var(--paper);color:var(--ink)}
+  .redbg{background:var(--red);color:var(--paper)}
+
+  .eyebrow{font-size:clamp(12px,1.4vw,16px);font-weight:700;letter-spacing:.28em;
+    text-transform:uppercase;color:var(--red);margin-bottom:2.2vh}
+  .redbg .eyebrow{color:var(--paper)}
+  h1{font-weight:900;font-size:clamp(40px,7.2vw,104px);line-height:.98;letter-spacing:-.02em;
+    text-wrap:balance;text-transform:uppercase}
+  h2{font-weight:900;font-size:clamp(28px,4.6vw,66px);line-height:1.02;letter-spacing:-.015em;
+    text-wrap:balance;text-transform:uppercase;margin-bottom:3vh}
+  .sub{font-size:clamp(16px,1.8vw,23px);line-height:1.5;max-width:64ch;color:var(--grey)}
+  .paper .sub{color:var(--grey-dark)}
+  .redbg .sub{color:#FFD9E2}
+  .star{color:var(--red);font-style:normal}
+
+  .brand{position:fixed;top:3.2vh;left:8vw;z-index:40;font-weight:900;
+    font-size:clamp(15px,1.6vw,21px);letter-spacing:-.01em;pointer-events:none}
+  .brand .pipe{font-weight:400;opacity:.55;margin:0 .12em}
+  .brand .mke{font-weight:400;letter-spacing:.22em;text-transform:uppercase;
+    font-size:.62em;vertical-align:.12em;margin-left:.9em;opacity:.75}
+  .tag{position:fixed;bottom:3.2vh;left:8vw;z-index:40;font-size:clamp(11px,1.15vw,14px);
+    letter-spacing:.22em;text-transform:uppercase;color:var(--grey);pointer-events:none}
+  .counter{position:fixed;bottom:3.2vh;right:8vw;z-index:40;font-family:var(--mono);
+    font-size:clamp(12px,1.2vw,15px);color:var(--grey);pointer-events:none;font-variant-numeric:tabular-nums}
+  .bar{position:fixed;top:0;left:0;height:5px;background:var(--red);z-index:50;
+    width:0;transition:width .45s ease}
+  @media (prefers-reduced-motion: reduce){.bar{transition:none}}
+
+  ul.big{list-style:none;font-size:clamp(16px,1.9vw,25px);line-height:1.45}
+  ul.big li{padding:1.3vh 0;border-bottom:1px solid rgba(154,144,149,.28);display:flex;gap:.7em}
+  ul.big li:last-child{border-bottom:none}
+  ul.big .b{color:var(--red);font-weight:900;flex-shrink:0}
+  .paper ul.big li{border-color:rgba(92,84,88,.22)}
+
+  .defs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2vh 2.5vw}
+  .def{border-top:4px solid var(--red);padding-top:1.3vh}
+  .def dt{font-weight:900;font-size:clamp(17px,2vw,26px);text-transform:uppercase;letter-spacing:.01em}
+  .def dd{font-size:clamp(14px,1.55vw,19px);line-height:1.45;color:var(--grey);margin-top:.5vh}
+  .paper .def dd{color:var(--grey-dark)}
+
+  .file{font-family:var(--mono);font-size:.92em;background:rgba(214,0,60,.12);
+    color:var(--red);padding:.1em .45em;border-radius:3px;white-space:nowrap}
+  .paper .file{background:rgba(214,0,60,.09)}
+
+  .huge{font-weight:900;font-size:clamp(60px,11vw,170px);line-height:.95;letter-spacing:-.03em;text-transform:uppercase}
+  .stamp{display:inline-block;font-family:var(--mono);font-weight:700;border:3px solid currentColor;
+    padding:.35em .7em;font-size:clamp(15px,1.8vw,23px);letter-spacing:.12em;margin-top:3vh}
+
+  table{border-collapse:collapse;width:100%;font-size:clamp(13px,1.55vw,19px)}
+  th{text-align:left;font-size:.72em;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--red);padding:0 1.2em .7em 0;font-weight:700}
+  td{padding:.65em 1.2em .65em 0;border-top:1px solid rgba(154,144,149,.28);line-height:1.4;vertical-align:top}
+  .paper td{border-color:rgba(92,84,88,.22)}
+  .tnum{font-family:var(--mono);color:var(--red);font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+  .rfpcard{background:var(--paper);color:var(--ink);border-left:8px solid var(--red);
+    padding:3.5vh 3vw;font-size:clamp(15px,1.8vw,23px);line-height:1.65;max-width:74ch;
+    box-shadow:0 12px 40px rgba(0,0,0,.35)}
+  .rfpcard .from{font-family:var(--mono);font-size:.65em;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--red);display:block;margin-bottom:1.5vh}
+  .rfpcard .forge{display:block;margin-top:1.5vh;padding-top:1.5vh;border-top:2px dashed rgba(214,0,60,.4);
+    font-weight:700}
+
+  .hint{position:fixed;bottom:3.2vh;left:50%;transform:translateX(-50%);z-index:40;
+    font-size:clamp(11px,1.1vw,13px);letter-spacing:.18em;text-transform:uppercase;
+    color:var(--grey);opacity:.8;pointer-events:none;transition:opacity .6s}
+  .hint.gone{opacity:0}
+  .navzone{position:fixed;top:0;bottom:0;width:14vw;z-index:30;cursor:pointer;background:none;border:none}
+  .navzone:focus-visible{outline:3px solid var(--red);outline-offset:-3px}
+  .navzone.prev{left:0}.navzone.next{right:0}
+
+  /* Print = export: Ctrl+P -> Save as PDF gives one slide per page */
+  @page{size:13.33in 7.5in;margin:0}
+  @media print{
+    html,body{height:auto;overflow:visible}
+    .bar,.brand,.tag,.counter,.hint,.navzone{display:none!important}
+    .deck{height:auto}
+    .slide{position:relative;inset:auto;opacity:1!important;visibility:visible!important;transform:none!important;
+      height:7.5in;width:13.33in;page-break-after:always;overflow:hidden;transition:none}
+  }
+  .code{font-family:var(--mono);font-size:clamp(12px,1.45vw,18px);line-height:1.55;background:var(--ink-soft);color:var(--paper);padding:2.2vh 1.8vw;border-left:6px solid var(--red);white-space:pre;overflow-x:auto;max-width:100%}  .paper .code{background:#241D25}  .code .cm{color:var(--grey)}</style>
+<!-- ============================================================
+     Live-demo styling only. The house template block above is
+     untouched — everything here is additive.
+     ============================================================ -->
+<style>
+  .demo{margin-top:1.5vh}
+  .demo-stage{display:grid;place-items:center;background:var(--ink-soft);
+    border-left:6px solid var(--red);padding:2vh;min-height:22vh}
+  .paper .demo-stage{background:#241D25}
+  .demo-sprite{width:clamp(130px,15vw,210px);height:auto;image-rendering:pixelated;
+    transition:filter .35s ease}
+  .demo-sprite.silhouette{filter:brightness(0)}
+  .demo-row{display:flex;flex-wrap:wrap;gap:.8em;align-items:center;margin-top:2vh}
+  .demo-btn{font-family:var(--disp);font-weight:700;font-size:clamp(14px,1.5vw,19px);
+    cursor:pointer;color:var(--paper);background:var(--red);border:2px solid var(--red);
+    padding:.6em 1.2em}
+  .demo-btn:hover:enabled{background:var(--red-deep);border-color:var(--red-deep)}
+  .demo-btn:disabled{opacity:.45;cursor:not-allowed}
+  .demo-choices{display:grid;grid-template-columns:repeat(4,1fr);gap:.7em;margin-top:2vh}
+  @media (max-width:760px){.demo-choices{grid-template-columns:repeat(2,1fr)}}
+  .demo-choice{font-family:var(--disp);font-weight:700;font-size:clamp(13px,1.45vw,20px);
+    text-transform:capitalize;cursor:pointer;padding:.8em .4em;
+    color:var(--paper);background:transparent;border:2px solid var(--grey)}
+  .paper .demo-choice{color:var(--ink)}
+  .demo-choice:hover:enabled{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+  .demo-choice:disabled{cursor:default;opacity:.9}
+  .demo-choice.right{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+  .demo-choice.wrong{background:var(--red);color:var(--paper);border-color:var(--red)}
+  .demo-out{font-family:var(--mono);font-size:clamp(12px,1.35vw,17px);line-height:1.5;
+    white-space:pre-wrap;background:var(--ink-soft);color:var(--paper);
+    border-left:6px solid var(--red);padding:1.6vh 1.4vw;margin-top:2vh;min-height:7em}
+  .demo-say{font-family:var(--mono);font-size:clamp(12px,1.25vw,16px);color:var(--grey);
+    margin-top:1.6vh}
+  .demo-score{font-family:var(--mono);font-weight:700;font-size:clamp(14px,1.5vw,20px);
+    letter-spacing:.08em}
+  .demo-score b{color:var(--red);font-size:1.35em}
+  .live{display:inline-block;font-family:var(--mono);font-weight:700;font-size:.62em;
+    letter-spacing:.2em;background:var(--red);color:var(--paper);padding:.25em .6em;
+    vertical-align:.25em;margin-left:.6em}
+</style>
+
+<div class="bar" id="bar"></div>
+<div class="brand" id="brand">i.c.stars<span class="pipe">|</span><span class="star">*</span><span class="mke">Milwaukee</span></div>
+<div class="tag">RFP Tech Learning · Week 6</div>
+<div class="counter" id="counter">1 / 16</div>
+<div class="hint" id="hint">→ arrow keys or tap sides</div>
+<button class="navzone prev" id="zPrev" aria-label="Previous slide"></button>
+<button class="navzone next" id="zNext" aria-label="Next slide"></button>
+
+<div class="deck" id="deck">
+
+<!-- 1 · TITLE -->
+<section class="slide ink active">
+  <div class="eyebrow">Tonight · 30 minutes · guided tutorial</div>
+  <h1>Hello,<br>API<span class="star">*</span></h1>
+  <p class="sub" style="margin-top:3vh">Thirty minutes from now you will have built
+  <strong style="color:var(--paper)">a working game</strong> out of data you never typed.
+  I'll do it, we'll do it, then you do it — <strong style="color:var(--paper)">same game, three
+  passes.</strong></p>
+</section>
+
+<!-- 2 · TONIGHT -->
+<section class="slide paper">
+  <div class="eyebrow">Thirty minutes, one game, three passes</div>
+  <h2>Tonight</h2>
+  <ul class="big">
+    <li><span class="b">5 min</span><span>Four words, then we <strong>look at real data</strong> in Postman — no code yet</span></li>
+    <li><span class="b">6 min</span><span><strong>I do</strong> — one Pokémon on the page. You watch.</span></li>
+    <li><span class="b">8 min</span><span><strong>We do</strong> — a random mystery silhouette, together</span></li>
+    <li><span class="b">9 min</span><span><strong>You do</strong> — four guess buttons and a score. <strong>Now it's a game.</strong></span></li>
+    <li><span class="b">2 min</span><span>Homework, and what changes when React shows up</span></li>
+  </ul>
+  <p class="sub" style="margin-top:2.5vh">No servers, no npm, no logins, no accounts.
+  A browser, VS Code, and Postman.</p>
+</section>
+
+<!-- 3 · THE NUMBER -->
+<section class="slide redbg">
+  <div class="eyebrow">What you actually have to learn</div>
+  <p class="huge">3</p>
+  <p class="sub" style="margin-top:2vh">lines of JavaScript. Not three files, not three frameworks.
+  <strong style="color:var(--paper)">Three lines</strong> — and they are the
+  <strong style="color:var(--paper)">same three lines</strong> in every file tonight.
+  Everything else is decoration.</p>
+</section>
+
+<!-- 4 · FOUR WORDS -->
+<section class="slide ink">
+  <div class="eyebrow">An API is a URL that gives you data instead of a page</div>
+  <h2>Four words</h2>
+  <dl class="defs">
+    <div class="def"><dt>API</dt><dd>A computer that hands out data when you ask. Tonight: <span class="file">pokeapi.co</span></dd></div>
+    <div class="def"><dt>Endpoint</dt><dd>One specific URL on it. <span class="file">/pokemon/25</span> gives one, <span class="file">/pokemon?limit=151</span> gives a list</dd></div>
+    <div class="def"><dt>JSON</dt><dd>How data is written down while it travels. Looks like JavaScript, because it is</dd></div>
+    <div class="def"><dt>Status code</dt><dd><strong style="color:var(--paper)">200</strong> worked · <strong style="color:var(--paper)">404</strong> no such thing · <strong style="color:var(--paper)">500</strong> their fault</dd></div>
+  </dl>
+  <p class="sub" style="margin-top:3vh">REST, HTTP verbs, headers, auth tokens, rate limits —
+  <strong style="color:var(--paper)">all of it can wait.</strong> People quit this subject because
+  somebody handed them forty words on night one.</p>
+</section>
+
+<!-- 5 · READING JSON -->
+<section class="slide ink">
+  <div class="eyebrow">Reading JSON · one question answers half of tonight's bugs</div>
+  <h2>Braces or brackets?</h2>
+  <div class="code"><span class="cm">CURLY BRACES = one thing.   /pokemon/25  gives you:</span>
+{ "id": 25, "name": "pikachu", "weight": 60,
+  "sprites": { "front_default": "https://.../25.png" } }
+<span class="cm">                ↑ NESTED. A dot means "go inside":  pokemon.sprites.front_default</span>
+
+<span class="cm">SQUARE BRACKETS = a list.   /pokemon?limit=151  gives you:</span>
+{ "results": [ { "name": "bulbasaur", "url": ".../pokemon/1/" },
+               { "name": "ivysaur",   "url": ".../pokemon/2/" }, <span class="cm">...149 more</span> ] }</div>
+  <p class="sub" style="margin-top:2.5vh"><strong style="color:var(--paper)">Brackets mean you can
+  loop it, count it, and pick from it at random.</strong> That one sentence is why a game is
+  possible tonight.</p>
+</section>
+
+<!-- 6 · HOW TONIGHT WORKS -->
+<section class="slide redbg">
+  <div class="eyebrow">Three passes, three rules</div>
+  <h2>I do → We do → You do</h2>
+  <ul class="big">
+    <li><span class="b">1</span><span>During <strong>I do</strong>, hands off keyboards. Typing along means debugging instead of watching</span></li>
+    <li><span class="b">2</span><span><strong>Read the red text.</strong> F12 → Console. An error is the computer telling you what's wrong — information, never a verdict on you</span></li>
+    <li><span class="b">3</span><span>Say <strong>STUCK</strong> the moment you're stuck. Stuck is a group problem here, never a private one</span></li>
+  </ul>
+  <p class="sub" style="margin-top:3vh">Three passes at <strong>the same game</strong>: I show you one
+  Pokémon, we hide a random one together, then you make it playable.</p>
+</section>
+
+<!-- 7 · I DO 1: POSTMAN -->
+<section class="slide ink">
+  <div class="eyebrow">I do · 1 of 2 — just watch, you'll type in six minutes</div>
+  <h2>I look at the data<br>before I write code</h2>
+  <div class="code"><span class="cm">Postman. New → HTTP Request. Method stays GET. I TYPE the URL:</span>
+https://pokeapi.co/api/v2/pokemon/25
+
+<span class="cm">I press Send. THE SCREEN SAYS:</span>
+Status: 200 OK
+{ "id": 25, "name": "pikachu", "height": 4, "weight": 60,
+  "sprites": { "front_default": "https://.../sprites/pokemon/25.png" } }
+
+<span class="cm">Now I break it on purpose — I TYPE:</span>
+https://pokeapi.co/api/v2/pokemon/99999
+Status: 404 Not Found</div>
+  <p class="sub" style="margin-top:2vh"><strong style="color:var(--paper)">I say:</strong>
+  "Zero code so far — Postman means I'm never debugging my typing and guessing the data's shape
+  at the same time. And that 404? There is no Pokémon 99999, and the API said so clearly. Meet a
+  404 here, with me, not alone at 11pm when it feels like proof you can't do this."</p>
+</section>
+
+<!-- 8 · I DO 2: THE THREE LINES -->
+<section class="slide ink">
+  <div class="eyebrow">I do · 2 of 2 — the whole tutorial, right here</div>
+  <h2>I put one Pokémon<br>on the page</h2>
+  <div class="code"><span class="cm">js/step-1.js — at EDIT 2, I TYPE:</span>
+const response = await fetch(API_URL);     <span class="cm">// 1. ASK</span>
+const pokemon  = await response.json();    <span class="cm">// 2. UNWRAP</span>
+output.textContent = pokemon.name;         <span class="cm">// 3. SHOW</span>
+
+sprite.src = pokemon.sprites.front_default;  <span class="cm">// the picture is just a field!</span>
+
+<span class="cm">async = "there's a wait inside this function."  Goes before  function.</span>
+<span class="cm">await = "pause here until the data arrives."    Goes before  fetch  and  .json().</span></div>
+  <p class="sub" style="margin-top:2vh"><strong style="color:var(--paper)">I say:</strong>
+  "Ask, unwrap, show. Two steps because <span class="file">response</span> is a sealed envelope —
+  the status is printed on the outside, <span class="file">.json()</span> opens it.
+  <strong style="color:var(--paper)">Next slide: let's run it.</strong>"</p>
+</section>
+
+<!-- 9 · LIVE DEMO 1 -->
+<section class="slide ink">
+  <div class="eyebrow">I do · running for real, right here in the deck</div>
+  <h2>Watch it work<span class="live">live</span></h2>
+  <div class="demo">
+    <div class="demo-stage"><img id="d1sprite" class="demo-sprite" alt=""></div>
+    <div class="demo-row">
+      <button class="demo-btn" id="d1btn">Get Pokémon #25</button>
+      <button class="demo-btn" id="d1btn404">Try #99999 (a 404)</button>
+    </div>
+    <div class="demo-out" id="d1out">Nothing yet. Click the button.</div>
+  </div>
+  <p class="demo-say">↑ a real fetch to pokeapi.co — the exact code on the slide before</p>
+</section>
+
+<!-- 10 · WE DO -->
+<section class="slide ink">
+  <div class="eyebrow">We do · together, keyboards up — nobody types ahead</div>
+  <h2>A random mystery</h2>
+  <div class="code"><span class="cm">js/step-2.js. New URL — a LIST this time. YOU TYPE:</span>
+const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
+const data     = await response.json();
+allPokemon     = data.results;        <span class="cm">// 151 of them, in [ ]</span>
+
+<span class="cm">Pick one nobody chose — that's a mystery:</span>
+mystery = allPokemon[Math.floor(Math.random() * allPokemon.length)];
+
+<span class="cm">Build the picture address from its number, then hide it:</span>
+const id = mystery.url.split("/")[6];        <span class="cm">// ".../pokemon/25/" → "25"</span>
+sprite.src = SPRITE_BASE + id + ".png";
+sprite.classList.add("hidden");              <span class="cm">// CSS: filter: brightness(0)</span></div>
+  <p class="sub" style="margin-top:2vh"><em>Checkpoint: a black silhouette, and Reveal shows who it
+  is. Thumbs up.</em> <strong style="color:var(--paper)">brightness(0) paints every pixel black</strong>
+  — the whole effect, one line of CSS.</p>
+</section>
+
+<!-- 11 · LIVE DEMO 2 -->
+<section class="slide ink">
+  <div class="eyebrow">We do · running for real</div>
+  <h2>The mystery<span class="live">live</span></h2>
+  <div class="demo">
+    <div class="demo-stage"><img id="d2sprite" class="demo-sprite silhouette" alt="Mystery Pokémon silhouette"></div>
+    <div class="demo-row">
+      <button class="demo-btn" id="d2reveal">Reveal</button>
+      <button class="demo-btn" id="d2next">New mystery</button>
+      <span class="demo-score" id="d2answer"></span>
+    </div>
+  </div>
+  <p class="demo-say">↑ one fetch of 151 names · a random pick · one CSS class on and off</p>
+</section>
+
+<!-- 12 · YOU DO: THE GAME -->
+<section class="slide redbg">
+  <div class="eyebrow">You do · nine minutes · now make it playable</div>
+  <h2>Make it<br>a game<span class="star" style="color:var(--paper)">*</span></h2>
+  <p class="sub" style="margin-top:1vh;font-size:clamp(18px,2.3vw,29px)">A mystery you can only
+  <em style="color:var(--paper)">look at</em> isn't a game. Add
+  <strong style="color:var(--paper)">four buttons and a score</strong> and it is.</p>
+  <ul class="big" style="margin-top:2vh">
+    <li><span class="b">1</span><span>Write the two <strong>fetch</strong> lines — third time tonight, you've got this</span></li>
+    <li><span class="b">2</span><span><strong>Loop the four choices</strong> into four buttons <em>(same forEach shape as always)</em></span></li>
+    <li><span class="b">3</span><span>Right or wrong? <strong>Add to the score</strong> and colour the button</span></li>
+  </ul>
+  <p class="stamp">step-3-you-do.html</p>
+</section>
+
+<!-- 13 · LIVE DEMO 3 -->
+<section class="slide ink">
+  <div class="eyebrow">You do · this is what you're building — play it</div>
+  <h2>The game<span class="live">live</span></h2>
+  <div class="demo">
+    <div class="demo-stage"><img id="d3sprite" class="demo-sprite silhouette" alt="Mystery Pokémon silhouette"></div>
+    <div class="demo-choices" id="d3choices"></div>
+    <div class="demo-row">
+      <span class="demo-score" id="d3score">SCORE <b>0</b> / 0</span>
+      <span class="demo-score" id="d3msg" style="color:var(--grey)"></span>
+      <button class="demo-btn" id="d3next" disabled>Next &rarr;</button>
+    </div>
+  </div>
+  <p class="demo-say">↑ the finished thing in game.html · press 1-4 to guess, Enter for the next round</p>
+</section>
+
+<!-- 14 · THE FINISHED GAME -->
+<section class="slide paper">
+  <div class="eyebrow">Where it goes · game.html, already in your folder</div>
+  <h2>The finished game<br>needs four more things</h2>
+  <dl class="defs">
+    <div class="def"><dt>Loads on open</dt><dd>No "click me" button. Real sites just load.</dd></div>
+    <div class="def"><dt>Keeps score</dt><dd>Score, streak, personal best — and keys <strong>1–4</strong> to play fast.</dd></div>
+    <div class="def"><dt>Loading message</dt><dd>They wait 200 milliseconds. Say something.</dd></div>
+    <div class="def"><dt>Error message</dt><dd>Wifi dies, API goes down. Never show a blank page.</dd></div>
+  </dl>
+  <p class="sub" style="margin-top:2.5vh">Built and commented in <span class="file">game.html</span> + <span class="file">js/game.js</span> —
+  three files, split the way real sites split them. The shape to steal:
+  <strong style="color:var(--ink)">change <span class="file">state</span>, then call
+  <span class="file">render()</span></strong>. Never edit the page directly. That is exactly the
+  habit React requires, so practising it tonight is free.</p>
+</section>
+
+<!-- 15 · REACT + HOMEWORK -->
+<section class="slide paper">
+  <div class="eyebrow">Two minutes · what's coming, and what to watch</div>
+  <h2>React changes less<br>than you think</h2>
+  <table>
+    <tr><th>What you wrote tonight</th><th>In React</th><th>Changes?</th></tr>
+    <tr><td><span class="file">choices.forEach(...)</span></td><td><span class="file">choices.map(c =&gt; &lt;Choice /&gt;)</span></td><td>Same loop</td></tr>
+    <tr><td>Calling <span class="file">render()</span> yourself</td><td>React does it <strong>for you</strong></td><td class="tnum">you delete it</td></tr>
+    <tr><td><span class="file">fetch</span> / <span class="file">await</span> / <span class="file">.json()</span></td><td><strong>identical</strong></td><td class="tnum">nothing</td></tr>
+    <tr><td><span class="file">class="ics-choice"</span></td><td><span class="file">className="ics-choice"</span></td><td>One word</td></tr>
+  </table>
+  <p class="sub" style="margin-top:2vh"><strong style="color:var(--ink)">Homework — Pluralsight, pick ONE
+  and finish it.</strong> <strong>React Fundamentals</strong> (or the React 18 path) if you're ready ·
+  <strong>JavaScript: Getting Started</strong> if JS still feels shaky ·
+  <strong>JavaScript Promises and Async Programming</strong> if <span class="file">await</span> bugged you ·
+  <strong>Guided: APIs in JavaScript</strong> if you learn by doing. Links in the README.</p>
+</section>
+
+<!-- 16 · WHEN IT BREAKS / CLOSE -->
+<section class="slide redbg">
+  <div class="eyebrow">Screenshot this before you go</div>
+  <h2>When it breaks</h2>
+  <table>
+    <tr><th style="color:var(--paper)">The screen says</th><th style="color:var(--paper)">The fix</th></tr>
+    <tr><td><strong>Promise { &lt;pending&gt; }</strong></td><td>You forgot <strong>await</strong> — it goes before <strong>fetch</strong> AND before <strong>.json()</strong></td></tr>
+    <tr><td><strong>Cannot read properties of undefined</strong></td><td>Wrong field name, or a level of nesting skipped. Is it <strong>sprites.front_default</strong>?</td></tr>
+    <tr><td><strong>await is only valid in async functions</strong></td><td>Add <strong>async</strong> before the word <strong>function</strong></td></tr>
+    <tr><td>A broken-image icon</td><td>The sprite URL is wrong — check the <strong>id</strong> you pulled out of the url</td></tr>
+    <tr><td>Nothing happens on click</td><td><strong>id</strong> must match <strong>getElementById</strong> exactly — case-sensitive</td></tr>
+  </table>
+  <p class="sub" style="margin-top:2.5vh">In thirty minutes you asked another computer for data,
+  put it on your own page, and turned it into a game somebody would actually play.
+  <strong style="color:var(--paper)">Ask, unwrap, show.</strong></p>
+</section>
+
+</div>
+
+<script>
+/* ---------- deck navigation (house template) ---------- */
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var bar=document.getElementById('bar'),counter=document.getElementById('counter'),
+      hint=document.getElementById('hint'),brand=document.getElementById('brand'),
+      tag=document.querySelector('.tag');
+  var i=0,n=slides.length,moved=false;
+  function paint(){
+    slides.forEach(function(s,k){s.classList.toggle('active',k===i)});
+    bar.style.width=((i+1)/n*100)+'%';
+    counter.textContent=(i+1)+' / '+n;
+    var dark=!slides[i].classList.contains('paper');
+    var fg=dark?'#FAF6F2':'#161217';
+    brand.style.color=fg; tag.style.color=dark?'#9A9095':'#5C5458';
+    counter.style.color=dark?'#9A9095':'#5C5458';
+    if(!moved&&i>0){moved=true;hint.classList.add('gone')}
+  }
+  function go(d){i=Math.min(n-1,Math.max(0,i+d));paint()}
+  document.addEventListener('keydown',function(e){
+    // Live demos have real buttons and number keys. Don't steal those.
+    // Scoped to .demo so the invisible navzone buttons still advance on space.
+    if(e.target.closest&&e.target.closest('.demo')&&(e.key===' '||e.key==='Enter'))return;
+    if(/^[1-4]$/.test(e.key)&&document.querySelector('.slide.active .demo-choices'))return;
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown')go(1);
+    if(e.key==='ArrowLeft'||e.key==='PageUp')go(-1);
+    if(e.key==='Home'){i=0;paint()} if(e.key==='End'){i=n-1;paint()}
+  });
+  document.getElementById('zNext').addEventListener('click',function(){go(1)});
+  document.getElementById('zPrev').addEventListener('click',function(){go(-1)});
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>60)go(dx<0?1:-1);
+    x0=null;
+  },{passive:true});
+  paint();
+})();
+
+/* ---------- the three live demos ----------
+   Real fetches to pokeapi.co. Exactly the code the students write.
+   ------------------------------------------ */
+(function(){
+  var LIST_URL    = "https://pokeapi.co/api/v2/pokemon?limit=151";
+  var SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
+  var all = [];                                  // fetched once, shared by demos 2 and 3
+
+  function pickRandom(l){ return l[Math.floor(Math.random()*l.length)]; }
+  function shuffle(l){ return l.sort(function(){ return Math.random()-0.5; }); }
+  function idFromUrl(u){ return u.split("/")[6]; }
+
+  /* ---- DEMO 1 · one Pokémon (and a real 404) ---- */
+  var d1out=document.getElementById('d1out'), d1sprite=document.getElementById('d1sprite');
+
+  async function showOne(url){
+    d1out.textContent = "Loading...";
+    try{
+      var response = await fetch(url);
+      if(!response.ok){
+        d1sprite.removeAttribute('src');
+        d1out.textContent = "Status: " + response.status + " " + response.statusText
+          + "\n\nThe API answered clearly: there is no such Pokémon.\nThat is information, not a failure.";
+        return;
+      }
+      var pokemon = await response.json();
+      d1out.textContent =
+        "name:   " + pokemon.name + "\n" +
+        "id:     " + pokemon.id + "\n" +
+        "weight: " + pokemon.weight + "\n" +
+        "type:   " + pokemon.types[0].type.name + "\n" +
+        "sprite: pokemon.sprites.front_default";
+      d1sprite.src = pokemon.sprites.front_default;
+      d1sprite.alt = pokemon.name;
+    }catch(err){
+      d1out.textContent = "Failed to fetch — check the wifi. (" + err.message + ")";
+    }
+  }
+  document.getElementById('d1btn').addEventListener('click',function(){
+    showOne("https://pokeapi.co/api/v2/pokemon/25");
+  });
+  document.getElementById('d1btn404').addEventListener('click',function(){
+    showOne("https://pokeapi.co/api/v2/pokemon/99999");
+  });
+
+  /* ---- DEMO 2 · the mystery silhouette ---- */
+  var d2sprite=document.getElementById('d2sprite'), d2answer=document.getElementById('d2answer'),
+      d2reveal=document.getElementById('d2reveal'), d2next=document.getElementById('d2next');
+  var mystery=null;
+
+  function d2New(){
+    if(!all.length) return;
+    mystery = pickRandom(all);
+    d2sprite.src = SPRITE_BASE + idFromUrl(mystery.url) + ".png";
+    d2sprite.alt = "Mystery Pokémon silhouette";
+    d2sprite.classList.add('silhouette');
+    d2answer.textContent = "";
+    d2reveal.disabled = false; d2next.disabled = true;
+  }
+  d2reveal.addEventListener('click',function(){
+    d2sprite.classList.remove('silhouette');
+    d2sprite.alt = mystery.name;
+    d2answer.textContent = "It's " + mystery.name + "!";
+    d2reveal.disabled = true; d2next.disabled = false;
+  });
+  d2next.addEventListener('click', d2New);
+
+  /* ---- DEMO 3 · the playable game ---- */
+  var d3sprite=document.getElementById('d3sprite'), d3choices=document.getElementById('d3choices'),
+      d3score=document.getElementById('d3score'), d3msg=document.getElementById('d3msg'),
+      d3next=document.getElementById('d3next');
+  var answer=null, choices=[], picked=null, right=0, asked=0;
+
+  function d3New(){
+    if(!all.length) return;
+    answer = pickRandom(all);
+    choices = [answer];
+    while(choices.length<4){ var m=pickRandom(all); if(choices.indexOf(m)===-1) choices.push(m); }
+    shuffle(choices);
+    picked = null;
+    d3sprite.src = SPRITE_BASE + idFromUrl(answer.url) + ".png";
+    d3sprite.alt = "Mystery Pokémon silhouette";
+    d3sprite.classList.add('silhouette');
+    d3msg.textContent = "who's that pokémon?";
+    d3msg.style.color = "var(--grey)";
+    d3next.disabled = true;
+    d3render();
+  }
+  function d3render(){
+    d3choices.innerHTML = "";
+    choices.forEach(function(option){
+      var btn=document.createElement('button');
+      btn.className='demo-choice';
+      btn.textContent=option.name;
+      if(picked!==null){
+        btn.disabled=true;
+        if(option===answer) btn.classList.add('right');
+        else if(option===picked) btn.classList.add('wrong');
+      }else{
+        btn.addEventListener('click',function(){ d3guess(option); });
+      }
+      d3choices.appendChild(btn);
+    });
+    d3score.innerHTML = "SCORE <b>"+right+"</b> / "+asked;
+  }
+  function d3guess(option){
+    picked=option; asked++;
+    d3sprite.classList.remove('silhouette');
+    d3sprite.alt = answer.name;
+    if(option===answer){
+      right++;
+      d3msg.textContent = "correct — " + answer.name + "!";
+      d3msg.style.color = "var(--paper)";
+    }else{
+      d3msg.textContent = "nope — it was " + answer.name;
+      d3msg.style.color = "var(--red)";
+    }
+    d3next.disabled=false;
+    d3render();
+  }
+  d3next.addEventListener('click', d3New);
+
+  // Keys 1-4 play the game, Enter moves on — only while demo 3 is on screen.
+  document.addEventListener('keydown',function(e){
+    var onGame = document.querySelector('.slide.active .demo-choices');
+    if(!onGame) return;
+    if(e.key==='Enter' && picked!==null){ d3New(); return; }
+    var slot=Number(e.key);
+    if(slot>=1 && slot<=4 && picked===null && choices[slot-1]) d3guess(choices[slot-1]);
+  });
+
+  /* ---- one fetch powers demos 2 and 3 ---- */
+  (async function(){
+    try{
+      var response = await fetch(LIST_URL);
+      if(!response.ok) throw new Error("server replied "+response.status);
+      var data = await response.json();
+      all = data.results;
+      d2New(); d3New();
+    }catch(err){
+      d2answer.textContent = "Could not load: " + err.message;
+      d3msg.textContent = "Could not load: " + err.message;
+      d3msg.style.color = "var(--red)";
+    }
+  })();
+})();
+</script>

@@ -1,0 +1,4 @@
+# Windows shop. Normalize to LF in the repo, check out CRLF in the
+# working tree, so nobody's editor turns a one-line fix into a
+# whole-file diff.
+* text=auto eol=crlf

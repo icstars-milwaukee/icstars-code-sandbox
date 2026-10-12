@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Sandbox — i.c.stars Milwaukee</title>
+  <meta name="description" content="A growing library of guided tech learning workshops from
+    i.c.stars Milwaukee. Every one is a deck, three passes, and code you can run in a browser.">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/library.css">
+</head>
+<body>
+
+  <header class="ics-header">
+    <div class="ics-wrap">
+      <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span> Milwaukee</div>
+      <h1 class="ics-title">Code Sandbox</h1>
+      <p class="ics-sub">
+        A library of guided tech learning workshops. Every one of them runs in a browser,
+        ends in something that works, and stays here after the session is over.
+      </p>
+    </div>
+  </header>
+
+  <main class="ics-wrap">
+
+    <p class="lib-lede">
+      Nothing in here is a lecture. Each workshop is a <strong>deck you can present</strong>,
+      a <strong>set of files you can run</strong>, and a finished build to compare yours against.
+      No servers, no npm, no accounts &mdash; a browser and VS&nbsp;Code.
+      <strong>Walk out with the thing built.</strong>
+    </p>
+
+    <h2 class="lib-h2" id="shelf-heading">The shelf</h2>
+    <p class="lib-lede" id="count">&nbsp;</p>
+
+    <div class="lib-filters" id="filters" role="group" aria-label="Filter by track"></div>
+    <div class="shelf" id="shelf" aria-labelledby="shelf-heading"></div>
+
+    <!-- ================= How a workshop is shaped ================= -->
+    <h2 class="lib-h2">How every workshop is built</h2>
+    <p class="lib-lede">
+      Same three passes at the <strong>same artifact</strong>, every time. People quit this
+      subject when night one is forty new words and a blank file. They don't quit when they
+      watched it work first.
+    </p>
+
+    <div class="rail">
+      <div class="rail-step">
+        <b>Pass 1</b>
+        <h4>I do</h4>
+        <p>Hands off keyboards. Typing along means debugging instead of watching.
+          The instructor builds the smallest version that works.</p>
+      </div>
+      <div class="rail-step">
+        <b>Pass 2</b>
+        <h4>We do</h4>
+        <p>Keyboards up, nobody types ahead. A checkpoint after every step &mdash;
+          <em>&ldquo;you should see this. Thumbs up.&rdquo;</em></p>
+      </div>
+      <div class="rail-step">
+        <b>Pass 3</b>
+        <h4>You do</h4>
+        <p>Three TODOs in a file that already runs. An answer key exists, and looking
+          at it is allowed. Saying <strong>STUCK</strong> out loud is encouraged.</p>
+      </div>
+    </div>
+
+    <!-- ================= Adding the next one ================= -->
+    <h2 class="lib-h2" id="add">Add the next workshop</h2>
+    <p class="lib-lede">
+      Fifteen minutes of setup, then you're writing content. The template is a working
+      workshop with the words taken out &mdash; it opens and runs before you change a thing.
+    </p>
+
+    <ol class="howto">
+      <li>Copy <code>workshops/_template/</code> to <code>workshops/0N-your-slug/</code>.
+        Numbers are shelf order, not week order.</li>
+      <li>Rewrite <code>REF-deck.html</code>. Arrow keys drive it, <code>Ctrl+P</code> saves it
+        as a PDF. <strong>Do not touch the <code>&lt;style&gt;</code> block</strong> &mdash; the
+        palette is the house palette.</li>
+      <li>Fill in the three step pages and their files in <code>js/</code>. Leave exactly three
+        TODOs in the <em>You do</em> step.</li>
+      <li>Write the answer key. If you can't finish your own TODOs in nine minutes, they're too big.</li>
+      <li>Add one object to <code>js/workshops.js</code>. The card builds itself.</li>
+      <li>Teach it to real people, then change <code>status</code> to <code>"ready"</code>.
+        That word means <em>survived a cohort</em>, not <em>finished writing</em>.</li>
+    </ol>
+
+    <p class="lib-lede">
+      Full checklist in <code>CONTRIBUTING.md</code>, including the parts of the house style
+      that are not up for redesign.
+    </p>
+
+    <!-- ================= The tree ================= -->
+    <h2 class="lib-h2">The source tree</h2>
+    <p class="lib-lede">
+      Plain static site. Pages are HTML, styles are CSS, scripts are JS, and the whole thing
+      is served straight off GitHub Pages. There is no build step to break.
+    </p>
+
+    <div class="tree">icstars-code-sandbox/
+├── index.html              <b>the front door — you are here</b>
+├── CONTRIBUTING.md         how to add a workshop, and the house rules
+├── .nojekyll               <b>keeps GitHub Pages from hiding _template/</b>
+│
+├── css/
+│   ├── theme.css           the house theme. Shared by every workshop.
+│   └── library.css         front-door-only styling
+│
+├── js/
+│   └── workshops.js        <b>THE CATALOG — add your workshop here</b>
+│
+└── workshops/
+    ├── _template/          copy this to start
+    │   ├── README.md       the checklist
+    │   ├── index.html      workshop landing page
+    │   ├── REF-deck.html   the house deck, empty
+    │   ├── step-1-i-do.html
+    │   ├── step-2-we-do.html
+    │   ├── step-3-you-do.html
+    │   ├── step-3-you-do-solution.html
+    │   └── js/             one file per step
+    │
+    └── 01-hello-api/       Pokémon guessing game · fetch, JSON, async
+        ├── index.html
+        ├── REF-deck.html   16 slides, three live demos
+        ├── step-*.html
+        ├── game.html       the finished build
+        ├── css/game.css
+        └── js/</div>
+
+    <p class="ics-footer">
+      i.c.stars<span class="star" style="color:var(--red)">*</span> Milwaukee &middot;
+      RFP Tech Learning. Workshops use free, no-key sample APIs such as
+      <a href="https://pokeapi.co/">PokeAPI</a> and
+      <a href="https://jsonplaceholder.typicode.com/">JSONPlaceholder</a>.
+      Found a bug or taught one of these and learned something? Open an issue.
+    </p>
+  </main>
+
+  <script src="js/workshops.js"></script>
+</body>
+</html>

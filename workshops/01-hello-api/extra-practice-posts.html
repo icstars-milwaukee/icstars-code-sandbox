@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Step 3 · You Do — Your Turn</title>
+  <link rel="stylesheet" href="../../css/theme.css">
+</head>
+<body>
+
+  <header class="ics-header">
+    <div class="ics-wrap">
+      <a class="ics-back" href="index.html">&larr; Hello, API</a>
+      <div class="ics-brand"><span class="star">★</span> i.c.stars</div>
+      <h1 class="ics-title">Your Turn: Blog Posts</h1>
+      <p class="ics-sub">Extra practice — same three lines, a different endpoint. Do this at home.</p>
+    </div>
+  </header>
+
+  <main class="ics-wrap">
+    <span class="ics-step">Extra practice</span>
+
+    <p>
+      New endpoint, same three lines:
+      <code>https://jsonplaceholder.typicode.com/posts?_limit=12</code><br>
+      Each post looks like <code>{ id, userId, title, body }</code>.
+    </p>
+
+    <div class="ics-row">
+      <button class="ics-btn" id="loadBtn">Load posts</button>
+      <span class="ics-count" id="count"></span>
+    </div>
+
+    <div class="ics-grid" id="cards"></div>
+
+    <p class="ics-footer">Stuck? Open <code>extra-practice-posts-solution.html</code> — but try for 10 minutes first.</p>
+  </main>
+
+  <script src="js/extra-practice.js"></script>
+
+</body>
+</html>

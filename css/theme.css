@@ -1,0 +1,250 @@
+/* ============================================================
+   i.c.stars theme — one stylesheet, used by every file tonight.
+   Same colors as the workshop deck: ink, paper, red.
+   You do NOT need to understand this file to finish the tutorial.
+   ============================================================ */
+
+/* 1. Design tokens: every color has ONE name, defined once. */
+:root {
+  --ink:       #161217;
+  --ink-soft:  #231C24;
+  --paper:     #FAF6F2;
+  --paper-dim: #EFE8E2;
+  --red:       #D6003C;
+  --red-deep:  #A00030;
+  --grey:      #9A9095;
+  --grey-dark: #5C5458;
+
+  --disp: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --mono: Consolas, "Courier New", monospace;
+  --gap:  16px;
+}
+
+/* 2. Page basics */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--disp);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.55;
+}
+
+.ics-wrap { max-width: 980px; margin: 0 auto; padding: 24px 20px 56px; }
+
+/* 3. Header — the ink bar with the red underline */
+.ics-header {
+  background: var(--ink);
+  border-bottom: 5px solid var(--red);
+  color: var(--paper);
+  padding: 24px 20px;
+}
+.ics-header .ics-wrap { padding: 0; }
+
+.ics-brand { font-weight: 900; font-size: 1.05rem; letter-spacing: -.01em; }
+.ics-brand .pipe { font-weight: 400; opacity: .55; margin: 0 .12em; }
+.ics-brand .star { color: var(--red); }
+
+.ics-title {
+  margin: 14px 0 6px;
+  font-size: clamp(1.6rem, 4vw, 2.3rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -.02em;
+  line-height: 1.02;
+}
+.ics-sub { margin: 0; color: var(--grey); font-size: .95rem; max-width: 64ch; }
+
+/* 4. Step label — "STEP 1 · I DO" */
+.ics-step {
+  display: inline-block;
+  background: var(--red);
+  color: var(--paper);
+  font-weight: 700;
+  font-size: .72rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  padding: 5px 11px;
+}
+
+/* 5. Cards — the box we use for every piece of API data */
+.ics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--gap);
+  margin-top: var(--gap);
+}
+
+.ics-card {
+  background: #fff;
+  border: 1px solid var(--paper-dim);
+  border-top: 4px solid var(--red);
+  padding: 16px;
+}
+.ics-card h3 { margin: 0 0 6px; font-size: 1.02rem; }
+.ics-card p  { margin: 2px 0; color: var(--grey-dark); font-size: .9rem; }
+
+/* 6. Buttons */
+.ics-btn {
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--paper);
+  background: var(--red);
+  border: 2px solid var(--red);
+  padding: 11px 18px;
+}
+.ics-btn:hover    { background: var(--red-deep); border-color: var(--red-deep); }
+.ics-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* 7. Text input / search box */
+.ics-input {
+  font: inherit;
+  width: 100%;
+  max-width: 360px;
+  padding: 11px 12px;
+  background: #fff;
+  border: 1px solid var(--grey);
+}
+.ics-input:focus { outline: 3px solid var(--red); outline-offset: 1px; }
+
+/* 8. Status messages: loading / error / empty */
+.ics-note {
+  margin-top: var(--gap);
+  padding: 12px 14px;
+  border-left: 5px solid var(--grey);
+  background: var(--paper-dim);
+  font-size: .92rem;
+}
+.ics-note.error   { border-left-color: var(--red); background: #FBE4EA; color: #7A0022; }
+.ics-note.success { border-left-color: var(--ink); background: #E8F0E8; color: #1C3A1C; }
+
+/* 9. Output box — where we print raw API data while learning */
+.ics-out {
+  font-family: var(--mono);
+  font-size: .9rem;
+  white-space: pre-wrap;
+  background: var(--ink-soft);
+  color: var(--paper);
+  border-left: 6px solid var(--red);
+  padding: 16px;
+  margin-top: var(--gap);
+  overflow-x: auto;
+}
+
+/* 10. Small helpers */
+.ics-row    { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: var(--gap); }
+.ics-count  { color: var(--grey-dark); font-size: .9rem; }
+.ics-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--paper-dim);
+              color: var(--grey); font-size: .85rem; }
+.ics-footer a { color: var(--red); }
+code { font-family: var(--mono); background: var(--paper-dim); padding: 1px 5px; }
+
+/* ============================================================
+   11. GAME BITS — only step-3 (the game) uses these.
+   ============================================================ */
+
+/* The mystery picture. brightness(0) paints every pixel black
+   = an instant silhouette, no image editing required. */
+.ics-sprite {
+  width: 220px;
+  height: 220px;
+  image-rendering: pixelated;      /* keep the retro sprite crisp */
+  transition: filter .35s ease;
+}
+.ics-sprite.hidden { filter: brightness(0); }
+
+.ics-stage {
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  border-bottom: 5px solid var(--red);
+  padding: 20px;
+  min-height: 260px;
+}
+
+/* The four answer buttons */
+.ics-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: var(--gap);
+}
+.ics-choice {
+  font: inherit;
+  font-weight: 700;
+  font-size: 1.05rem;
+  text-transform: capitalize;
+  cursor: pointer;
+  padding: 16px 12px;
+  color: var(--ink);
+  background: #fff;
+  border: 2px solid var(--ink);
+}
+.ics-choice:hover:enabled { background: var(--ink); color: var(--paper); }
+.ics-choice:disabled      { cursor: default; }
+.ics-choice.right { background: var(--ink);  color: var(--paper); border-color: var(--ink); }
+.ics-choice.wrong { background: var(--red);  color: var(--paper); border-color: var(--red); opacity: .85; }
+
+/* The scoreboard */
+.ics-score {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: .08em;
+}
+.ics-score b { color: var(--red); font-size: 1.4rem; }
+
+/* ============================================================
+   12. WORKSHOP INDEX PAGE
+   Every workshop folder has an index.html that lists its passes.
+   These are the pieces that page is built from, so no workshop
+   has to carry its own copy in an inline <style> block.
+   ============================================================ */
+
+.links { display: grid; gap: 12px; margin-top: var(--gap); }
+
+.link {
+  display: block;
+  text-decoration: none;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--paper-dim);
+  border-left: 5px solid var(--red);
+  padding: 14px 16px;
+}
+.link:hover { background: var(--paper-dim); }
+.link b    { display: block; font-size: 1.05rem; }
+.link span { color: var(--grey-dark); font-size: .9rem; }
+
+/* The pass label — INSTRUCTOR / I DO / WE DO / YOU DO */
+.link .pass {
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--red); font-weight: 700;
+}
+
+/* The source tree. Wrap filenames in <b> to point at one. */
+.tree {
+  font-family: var(--mono); font-size: .82rem; line-height: 1.5;
+  white-space: pre;
+  background: var(--ink-soft); color: var(--paper);
+  border-left: 6px solid var(--red);
+  padding: 16px; margin-top: var(--gap);
+  overflow-x: auto;
+}
+.tree b { color: var(--red); font-weight: 700; }
+
+/* Breadcrumb back to the front door. Every workshop page that has
+   a header gets one, so nobody dead-ends in a subfolder. */
+.ics-back {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-family: var(--mono);
+  font-size: .74rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--grey);
+}
+.ics-back:hover { color: var(--red); }

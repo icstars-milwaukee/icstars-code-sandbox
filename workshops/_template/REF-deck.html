@@ -1,0 +1,362 @@
+<title>Week N — WORKSHOP TITLE · i.c.stars Milwaukee</title>
+<style>
+  :root{
+    --ink:#161217; --ink-soft:#231C24; --paper:#FAF6F2; --paper-dim:#EFE8E2;
+    --red:#D6003C; --red-deep:#A00030; --grey:#9A9095; --grey-dark:#5C5458;
+    --disp:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    --mono:Consolas,"Courier New",monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{font-family:var(--disp);background:var(--ink);color:var(--paper)}
+  .deck{position:relative;height:100%;width:100%}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    padding:6vh 8vw;opacity:0;visibility:hidden;transform:translateX(4%);
+    transition:opacity .45s ease,transform .45s ease,visibility .45s;overflow-y:auto}
+  .slide.active{opacity:1;visibility:visible;transform:none}
+  @media (prefers-reduced-motion: reduce){.slide{transition:none;transform:none}}
+  .ink{background:var(--ink);color:var(--paper)}
+  .paper{background:var(--paper);color:var(--ink)}
+  .redbg{background:var(--red);color:var(--paper)}
+
+  .eyebrow{font-size:clamp(12px,1.4vw,16px);font-weight:700;letter-spacing:.28em;
+    text-transform:uppercase;color:var(--red);margin-bottom:2.2vh}
+  .redbg .eyebrow{color:var(--paper)}
+  h1{font-weight:900;font-size:clamp(40px,7.2vw,104px);line-height:.98;letter-spacing:-.02em;
+    text-wrap:balance;text-transform:uppercase}
+  h2{font-weight:900;font-size:clamp(28px,4.6vw,66px);line-height:1.02;letter-spacing:-.015em;
+    text-wrap:balance;text-transform:uppercase;margin-bottom:3vh}
+  .sub{font-size:clamp(16px,1.8vw,23px);line-height:1.5;max-width:64ch;color:var(--grey)}
+  .paper .sub{color:var(--grey-dark)}
+  .redbg .sub{color:#FFD9E2}
+  .star{color:var(--red);font-style:normal}
+
+  .brand{position:fixed;top:3.2vh;left:8vw;z-index:40;font-weight:900;
+    font-size:clamp(15px,1.6vw,21px);letter-spacing:-.01em;pointer-events:none}
+  .brand .pipe{font-weight:400;opacity:.55;margin:0 .12em}
+  .brand .mke{font-weight:400;letter-spacing:.22em;text-transform:uppercase;
+    font-size:.62em;vertical-align:.12em;margin-left:.9em;opacity:.75}
+  .tag{position:fixed;bottom:3.2vh;left:8vw;z-index:40;font-size:clamp(11px,1.15vw,14px);
+    letter-spacing:.22em;text-transform:uppercase;color:var(--grey);pointer-events:none}
+  .counter{position:fixed;bottom:3.2vh;right:8vw;z-index:40;font-family:var(--mono);
+    font-size:clamp(12px,1.2vw,15px);color:var(--grey);pointer-events:none;font-variant-numeric:tabular-nums}
+  .bar{position:fixed;top:0;left:0;height:5px;background:var(--red);z-index:50;
+    width:0;transition:width .45s ease}
+  @media (prefers-reduced-motion: reduce){.bar{transition:none}}
+
+  ul.big{list-style:none;font-size:clamp(16px,1.9vw,25px);line-height:1.45}
+  ul.big li{padding:1.3vh 0;border-bottom:1px solid rgba(154,144,149,.28);display:flex;gap:.7em}
+  ul.big li:last-child{border-bottom:none}
+  ul.big .b{color:var(--red);font-weight:900;flex-shrink:0}
+  .paper ul.big li{border-color:rgba(92,84,88,.22)}
+
+  .defs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2vh 2.5vw}
+  .def{border-top:4px solid var(--red);padding-top:1.3vh}
+  .def dt{font-weight:900;font-size:clamp(17px,2vw,26px);text-transform:uppercase;letter-spacing:.01em}
+  .def dd{font-size:clamp(14px,1.55vw,19px);line-height:1.45;color:var(--grey);margin-top:.5vh}
+  .paper .def dd{color:var(--grey-dark)}
+
+  .file{font-family:var(--mono);font-size:.92em;background:rgba(214,0,60,.12);
+    color:var(--red);padding:.1em .45em;border-radius:3px;white-space:nowrap}
+  .paper .file{background:rgba(214,0,60,.09)}
+
+  .huge{font-weight:900;font-size:clamp(60px,11vw,170px);line-height:.95;letter-spacing:-.03em;text-transform:uppercase}
+  .stamp{display:inline-block;font-family:var(--mono);font-weight:700;border:3px solid currentColor;
+    padding:.35em .7em;font-size:clamp(15px,1.8vw,23px);letter-spacing:.12em;margin-top:3vh}
+
+  table{border-collapse:collapse;width:100%;font-size:clamp(13px,1.55vw,19px)}
+  th{text-align:left;font-size:.72em;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--red);padding:0 1.2em .7em 0;font-weight:700}
+  td{padding:.65em 1.2em .65em 0;border-top:1px solid rgba(154,144,149,.28);line-height:1.4;vertical-align:top}
+  .paper td{border-color:rgba(92,84,88,.22)}
+  .tnum{font-family:var(--mono);color:var(--red);font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+  .rfpcard{background:var(--paper);color:var(--ink);border-left:8px solid var(--red);
+    padding:3.5vh 3vw;font-size:clamp(15px,1.8vw,23px);line-height:1.65;max-width:74ch;
+    box-shadow:0 12px 40px rgba(0,0,0,.35)}
+  .rfpcard .from{font-family:var(--mono);font-size:.65em;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--red);display:block;margin-bottom:1.5vh}
+  .rfpcard .forge{display:block;margin-top:1.5vh;padding-top:1.5vh;border-top:2px dashed rgba(214,0,60,.4);
+    font-weight:700}
+
+  .hint{position:fixed;bottom:3.2vh;left:50%;transform:translateX(-50%);z-index:40;
+    font-size:clamp(11px,1.1vw,13px);letter-spacing:.18em;text-transform:uppercase;
+    color:var(--grey);opacity:.8;pointer-events:none;transition:opacity .6s}
+  .hint.gone{opacity:0}
+  .navzone{position:fixed;top:0;bottom:0;width:14vw;z-index:30;cursor:pointer;background:none;border:none}
+  .navzone:focus-visible{outline:3px solid var(--red);outline-offset:-3px}
+  .navzone.prev{left:0}.navzone.next{right:0}
+
+  /* Print = export: Ctrl+P -> Save as PDF gives one slide per page */
+  @page{size:13.33in 7.5in;margin:0}
+  @media print{
+    html,body{height:auto;overflow:visible}
+    .bar,.brand,.tag,.counter,.hint,.navzone{display:none!important}
+    .deck{height:auto}
+    .slide{position:relative;inset:auto;opacity:1!important;visibility:visible!important;transform:none!important;
+      height:7.5in;width:13.33in;page-break-after:always;overflow:hidden;transition:none}
+  }
+  .code{font-family:var(--mono);font-size:clamp(12px,1.45vw,18px);line-height:1.55;background:var(--ink-soft);color:var(--paper);padding:2.2vh 1.8vw;border-left:6px solid var(--red);white-space:pre;overflow-x:auto;max-width:100%}  .paper .code{background:#241D25}  .code .cm{color:var(--grey)}</style>
+
+<!-- ============================================================
+     ADDITIVE styles only. The house block above is untouched —
+     copied byte-for-byte from the deck template. Do not edit it,
+     do not add colors to it. If your workshop needs a live demo
+     or a custom component, add it HERE, using the same tokens.
+     ============================================================ -->
+<style>
+  /* e.g. .demo{margin-top:1.5vh} ... delete this block if unused */
+</style>
+
+<div class="bar" id="bar"></div>
+<div class="brand" id="brand">i.c.stars<span class="pipe">|</span><span class="star">*</span><span class="mke">Milwaukee</span></div>
+<div class="tag">RFP Tech Learning · Week N</div>
+<div class="counter" id="counter">1 / 12</div>
+<div class="hint" id="hint">→ arrow keys or tap sides</div>
+<button class="navzone prev" id="zPrev" aria-label="Previous slide"></button>
+<button class="navzone next" id="zNext" aria-label="Next slide"></button>
+
+<div class="deck" id="deck">
+
+<!-- 1 · TITLE ·································································
+     Two words if you can manage it. The sub promises the artifact — the thing
+     they hold at the end — not the topic. "You will have built X" beats
+     "tonight we cover X". -->
+<section class="slide ink active">
+  <div class="eyebrow">Tonight · NN minutes · guided tutorial</div>
+  <h1>WORKSHOP<br>TITLE<span class="star">*</span></h1>
+  <p class="sub" style="margin-top:3vh">NN minutes from now you will have built
+  <strong style="color:var(--paper)">THE ARTIFACT</strong>.
+  I'll do it, we'll do it, then you do it — <strong style="color:var(--paper)">same thing,
+  three passes.</strong></p>
+</section>
+
+<!-- 2 · TONIGHT ·······························································
+     The timed agenda. Minutes in the .b column. They must add up to the number
+     on slide 1, and you must have actually timed it. -->
+<section class="slide paper">
+  <div class="eyebrow">NN minutes, one ARTIFACT, three passes</div>
+  <h2>Tonight</h2>
+  <ul class="big">
+    <li><span class="b">5 min</span><span>The vocabulary, then we <strong>look at the real thing</strong> — no code yet</span></li>
+    <li><span class="b">6 min</span><span><strong>I do</strong> — SMALLEST VERSION THAT WORKS. You watch.</span></li>
+    <li><span class="b">8 min</span><span><strong>We do</strong> — THE NEXT LAYER, together</span></li>
+    <li><span class="b">9 min</span><span><strong>You do</strong> — THREE TODOS. <strong>Now it's real.</strong></span></li>
+    <li><span class="b">2 min</span><span>Homework, and what changes when NEXT TOOL shows up</span></li>
+  </ul>
+  <p class="sub" style="margin-top:2.5vh">What they need installed, and nothing more.
+  No servers, no npm, no logins unless the workshop truly cannot run without one.</p>
+</section>
+
+<!-- 3 · THE NUMBER ···························································
+     One honest number that shrinks the fear. Lines of code to learn, keystrokes,
+     concepts. Then say plainly that everything else is decoration. -->
+<section class="slide redbg">
+  <div class="eyebrow">What you actually have to learn</div>
+  <p class="huge">N</p>
+  <p class="sub" style="margin-top:2vh">UNITS of THE THING. Not N files, not N frameworks.
+  <strong style="color:var(--paper)">N THINGS</strong> — and they are the
+  <strong style="color:var(--paper)">same N</strong> in every file tonight.
+  Everything else is decoration.</p>
+</section>
+
+<!-- 4 · THE VOCABULARY ·······················································
+     Four words. FOUR. Every extra word you add here is a person who quits.
+     The eyebrow carries the one-sentence version of the whole idea. -->
+<section class="slide ink">
+  <div class="eyebrow">THE ONE-SENTENCE VERSION OF THE WHOLE IDEA</div>
+  <h2>Four words</h2>
+  <dl class="defs">
+    <div class="def"><dt>WORD 1</dt><dd>Plain-English definition. Tonight: <span class="file">the concrete example</span></dd></div>
+    <div class="def"><dt>WORD 2</dt><dd>Plain-English definition, with a <span class="file">file or URL</span> they will actually see</dd></div>
+    <div class="def"><dt>WORD 3</dt><dd>Plain-English definition</dd></div>
+    <div class="def"><dt>WORD 4</dt><dd>Plain-English definition</dd></div>
+  </dl>
+  <p class="sub" style="margin-top:3vh">EVERY ADVANCED TERM YOU ARE DELIBERATELY SKIPPING —
+  <strong style="color:var(--paper)">all of it can wait.</strong> People quit this subject because
+  somebody handed them forty words on night one.</p>
+</section>
+
+<!-- 5 · HOW TONIGHT WORKS ····················································
+     The three rules. Keep rule 2 and rule 3 close to verbatim — they are the
+     reason the room stays safe enough for anyone to admit they're lost. -->
+<section class="slide redbg">
+  <div class="eyebrow">Three passes, three rules</div>
+  <h2>I do → We do → You do</h2>
+  <ul class="big">
+    <li><span class="b">1</span><span>During <strong>I do</strong>, hands off keyboards. Typing along means debugging instead of watching</span></li>
+    <li><span class="b">2</span><span><strong>Read the red text.</strong> WHERE THE ERRORS SHOW UP. An error is the computer telling you what's wrong — information, never a verdict on you</span></li>
+    <li><span class="b">3</span><span>Say <strong>STUCK</strong> the moment you're stuck. Stuck is a group problem here, never a private one</span></li>
+  </ul>
+  <p class="sub" style="margin-top:3vh">Three passes at <strong>the same thing</strong>:
+  SENTENCE DESCRIBING THE THREE VERSIONS.</p>
+</section>
+
+<!-- 6 · I DO, PART 1 ·························································
+     Look at the raw material before writing code. The tool, the data, the file —
+     whatever it is, see it first. Break it on purpose while they watch, so the
+     first error they meet happens in company and not alone at 11pm. -->
+<section class="slide ink">
+  <div class="eyebrow">I do · 1 of 2 — just watch, you'll type in six minutes</div>
+  <h2>I look at THE RAW THING<br>before I write code</h2>
+  <div class="code"><span class="cm">THE TOOL. The exact clicks. I TYPE:</span>
+the exact input
+
+<span class="cm">I press THE BUTTON. THE SCREEN SAYS:</span>
+the exact output, copied from a real run
+
+<span class="cm">Now I break it on purpose — I TYPE:</span>
+the broken input
+the exact error</div>
+  <p class="sub" style="margin-top:2vh"><strong style="color:var(--paper)">I say:</strong>
+  "The narration goes here, in quotes, on the slide. Say it out loud once while writing it —
+  if it doesn't sound like a person talking, rewrite it. There is no presenter-notes panel
+  in this template, and that's on purpose: what you say is part of the deck."</p>
+</section>
+
+<!-- 7 · I DO, PART 2 ·························································
+     The whole workshop in one code block. If this block is longer than about
+     ten lines you are teaching two workshops. -->
+<section class="slide ink">
+  <div class="eyebrow">I do · 2 of 2 — the whole tutorial, right here</div>
+  <h2>I BUILD THE<br>SMALLEST VERSION</h2>
+  <div class="code"><span class="cm">js/step-1.js — at EDIT 2, I TYPE:</span>
+line one;                                  <span class="cm">// 1. WHAT IT DOES</span>
+line two;                                  <span class="cm">// 2. WHAT IT DOES</span>
+line three;                                <span class="cm">// 3. WHAT IT DOES</span>
+
+<span class="cm">keyword = "plain-English gloss."  Where it goes, and why.</span></div>
+  <p class="sub" style="margin-top:2vh"><strong style="color:var(--paper)">I say:</strong>
+  "The three-word summary they will still remember next week.
+  <strong style="color:var(--paper)">Next slide: let's run it.</strong>"</p>
+</section>
+
+<!-- 8 · WE DO ································································
+     Keyboards up. YOU TYPE, not I TYPE. End on an exact, checkable screen state
+     and the words "Thumbs up." Never move on without it. Add one of these
+     slides per we-do step if there's more than one. -->
+<section class="slide ink">
+  <div class="eyebrow">We do · together, keyboards up — nobody types ahead</div>
+  <h2>THE NEXT LAYER</h2>
+  <div class="code"><span class="cm">js/step-2.js. YOU TYPE:</span>
+the lines they type
+
+<span class="cm">Why this line exists, in one short comment:</span>
+the next line</div>
+  <p class="sub" style="margin-top:2vh"><em>Checkpoint: EXACTLY WHAT IS NOW ON THEIR SCREEN.
+  Thumbs up.</em> <strong style="color:var(--paper)">THE ONE IDEA THIS STEP BOUGHT THEM</strong>
+  — in one sentence.</p>
+</section>
+
+<!-- 9 · YOU DO ·······························································
+     The ask, as a reason rather than an assignment: why the thing isn't finished
+     yet. Then the three TODOs, numbered to match the comments in the file. -->
+<section class="slide redbg">
+  <div class="eyebrow">You do · nine minutes · now YOUR TURN</div>
+  <h2>MAKE IT<br>THE REAL THING<span class="star" style="color:var(--paper)">*</span></h2>
+  <p class="sub" style="margin-top:1vh;font-size:clamp(18px,2.3vw,29px)">WHY WHAT WE HAVE SO FAR
+  ISN'T FINISHED. Add <strong style="color:var(--paper)">THE TWO MISSING PIECES</strong>
+  and it is.</p>
+  <ul class="big" style="margin-top:2vh">
+    <li><span class="b">1</span><span>TODO 1 — <strong>third time tonight, you've got this</strong></span></li>
+    <li><span class="b">2</span><span>TODO 2</span></li>
+    <li><span class="b">3</span><span>TODO 3</span></li>
+  </ul>
+  <p class="sub" style="margin-top:2vh">Open <span class="file">step-3-you-do.html</span>.
+  The TODOs are numbered in the file. The answer key is one click away and looking at it is allowed.</p>
+</section>
+
+<!-- 10 · WHEN IT BREAKS ······················································
+     Pre-empt the four errors you have actually watched people hit. Error text on
+     the left in .tnum, the plain-English cause on the right. This slide saves
+     more minutes than any other slide in the deck. -->
+<section class="slide paper">
+  <div class="eyebrow">You will see at least one of these. That's normal.</div>
+  <h2>When it breaks</h2>
+  <table>
+    <tr><th>The screen says</th><th>What it means</th><th>Do this</th></tr>
+    <tr><td class="tnum">exact error text</td><td>plain-English cause</td><td>the fix</td></tr>
+    <tr><td class="tnum">exact error text</td><td>plain-English cause</td><td>the fix</td></tr>
+    <tr><td class="tnum">exact error text</td><td>plain-English cause</td><td>the fix</td></tr>
+    <tr><td class="tnum">nothing at all</td><td>the silent failure — usually a typo in a name</td><td>where to look</td></tr>
+  </table>
+  <p class="sub" style="margin-top:2.5vh">Every one of these happened to someone in a previous
+  cohort. <strong>Say STUCK.</strong></p>
+</section>
+
+<!-- 11 · HOMEWORK ····························································
+     The same move against different material. That's what proves the skill
+     transferred instead of being memorized. -->
+<section class="slide ink">
+  <div class="eyebrow">Before next session · 20 minutes</div>
+  <h2>Same move,<br>different DATA</h2>
+  <div class="code"><span class="cm">Open:</span> extra-practice.html
+<span class="cm">Change:</span> the one thing that's different
+<span class="cm">Keep:</span>   the N THINGS, exactly as they are tonight</div>
+  <p class="sub" style="margin-top:2.5vh">If it works against something you have never seen before,
+  you didn't memorize tonight — <strong style="color:var(--paper)">you learned it.</strong></p>
+  <div class="stamp">DUE: NEXT SESSION</div>
+</section>
+
+<!-- 12 · WHAT YOU DID ························································
+     Name the artifact. Close on the same three-word summary from slide 7 so it
+     lands twice. Never close on "questions?". -->
+<section class="slide paper">
+  <div class="eyebrow">NN minutes ago you had an empty file</div>
+  <h2>What you just did</h2>
+  <ul class="big">
+    <li><span class="b">✓</span><span>THING ONE they can now do</span></li>
+    <li><span class="b">✓</span><span>THING TWO they can now do</span></li>
+    <li><span class="b">✓</span><span>THING THREE — the one that sounds hard and isn't anymore</span></li>
+  </ul>
+  <p class="sub" style="margin-top:2.5vh">SENTENCE NAMING THE ARTIFACT AND WHO WOULD USE IT.
+  <strong>THE THREE-WORD SUMMARY.</strong></p>
+</section>
+
+</div>
+
+<script>
+/* ---------- deck navigation (house template — do not edit) ---------- */
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var bar=document.getElementById('bar'),counter=document.getElementById('counter'),
+      hint=document.getElementById('hint'),brand=document.getElementById('brand'),
+      tag=document.querySelector('.tag');
+  var i=0,n=slides.length,moved=false;
+  function paint(){
+    slides.forEach(function(s,k){s.classList.toggle('active',k===i)});
+    bar.style.width=((i+1)/n*100)+'%';
+    counter.textContent=(i+1)+' / '+n;
+    var dark=!slides[i].classList.contains('paper');
+    var fg=dark?'#FAF6F2':'#161217';
+    brand.style.color=fg; tag.style.color=dark?'#9A9095':'#5C5458';
+    counter.style.color=dark?'#9A9095':'#5C5458';
+    if(!moved&&i>0){moved=true;hint.classList.add('gone')}
+  }
+  function go(d){i=Math.min(n-1,Math.max(0,i+d));paint()}
+  document.addEventListener('keydown',function(e){
+    // Live demos have real buttons and number keys. Don't steal those.
+    // Scoped to .demo so the invisible navzone buttons still advance on space.
+    if(e.target.closest&&e.target.closest('.demo')&&(e.key===' '||e.key==='Enter'))return;
+    if(/^[1-4]$/.test(e.key)&&document.querySelector('.slide.active .demo-choices'))return;
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown')go(1);
+    if(e.key==='ArrowLeft'||e.key==='PageUp')go(-1);
+    if(e.key==='Home'){i=0;paint()} if(e.key==='End'){i=n-1;paint()}
+  });
+  document.getElementById('zNext').addEventListener('click',function(){go(1)});
+  document.getElementById('zPrev').addEventListener('click',function(){go(-1)});
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>60)go(dx<0?1:-1);
+    x0=null;
+  },{passive:true});
+  paint();
+})();
+
+/* ---------- your live demos, if any, go below ----------
+   Real code, running in the deck, identical to what the students write.
+   Keep each demo's ids prefixed (d1*, d2*) so slides can't collide. */
+</script>

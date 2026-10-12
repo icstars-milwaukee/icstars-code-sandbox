@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Step 3 · Solution — Make It a Game</title>
+  <link rel="stylesheet" href="../../css/theme.css">
+</head>
+<body>
+
+  <header class="ics-header">
+    <div class="ics-wrap">
+      <a class="ics-back" href="index.html">&larr; Hello, API</a>
+      <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span></div>
+      <h1 class="ics-title">Make It a Game</h1>
+      <p class="ics-sub">Solution — compare with yours. Different code that works is still correct.</p>
+    </div>
+  </header>
+
+  <div class="ics-stage">
+    <img id="sprite" class="ics-sprite hidden" alt="Mystery Pokémon silhouette">
+  </div>
+
+  <main class="ics-wrap">
+    <div class="ics-row">
+      <span class="ics-step">Step 3 · Solution</span>
+      <span class="ics-score" id="score">SCORE <b>0</b> / 0</span>
+    </div>
+
+    <p>
+      Step 2 showed a mystery and revealed it. A <strong>game</strong> needs one more thing:
+      <strong>four buttons to guess with</strong>, and a score.
+    </p>
+
+    <!-- Your four buttons will go in here. -->
+    <div class="ics-choices" id="choices"></div>
+
+    <div class="ics-note" id="status">Loading 151 Pokémon...</div>
+
+    <div class="ics-row">
+      <button class="ics-btn" id="nextBtn" disabled>Next &rarr;</button>
+    </div>
+
+    <p class="ics-footer">
+      Press <strong>F12</strong> → Console to read your errors.
+    </p>
+  </main>
+
+  <script src="js/step-3-solution.js"></script>
+
+</body>
+</html>

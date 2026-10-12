@@ -1,0 +1,229 @@
+/* ============================================================
+   Code Sandbox — library.css
+   ONLY the front door (index.html) loads this file.
+   Workshops themselves need nothing but theme.css.
+
+   Every color here comes from a token defined in theme.css.
+   This file invents no new colors. If you are tempted to add
+   one, you are designing a different school's website.
+   ============================================================ */
+
+/* 1. The lede — the paragraph that explains the place ------- */
+.lib-lede {
+  font-size: 1.02rem;
+  color: var(--grey-dark);
+  max-width: 68ch;
+  margin: 18px 0 0;
+}
+.lib-lede strong { color: var(--ink); }
+
+.lib-h2 {
+  margin: 44px 0 0;
+  font-size: 1.35rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+}
+.lib-h2 + .lib-lede { margin-top: 8px; }
+
+/* 2. Filter chips — one per track, built from the catalog --- */
+.lib-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+.lib-chip {
+  font: inherit;
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 7px 13px;
+  color: var(--ink);
+  background: #fff;
+  border: 2px solid var(--ink);
+}
+.lib-chip:hover { background: var(--paper-dim); }
+.lib-chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.lib-chip:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+
+/* 3. The shelf — where the workshop cards live -------------- */
+.shelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: var(--gap);
+  margin-top: var(--gap);
+}
+.shelf-empty {
+  grid-column: 1 / -1;
+  padding: 24px;
+  border-left: 5px solid var(--grey);
+  background: var(--paper-dim);
+  color: var(--grey-dark);
+}
+
+/* 4. One workshop ------------------------------------------- */
+.wcard {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--paper-dim);
+  border-top: 4px solid var(--red);
+  padding: 15px 18px 18px;
+}
+.wcard-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.wnum {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--red);
+  font-variant-numeric: tabular-nums;
+}
+.wcard h3 {
+  margin: 12px 0 0;
+  font-size: 1.26rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -.015em;
+  line-height: 1.06;
+}
+.wmeta {
+  margin: 5px 0 0;
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+.whook {
+  margin: 11px 0 0;
+  font-size: .93rem;
+  line-height: 1.5;
+  color: var(--grey-dark);
+}
+
+/* What the student walks out knowing. Keep these to 5 or fewer
+   — a list of nine is a syllabus, not a workshop. */
+.wteaches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 13px;
+}
+.wteaches span {
+  font-family: var(--mono);
+  font-size: .71rem;
+  padding: 3px 7px;
+  color: var(--grey-dark);
+  background: var(--paper-dim);
+}
+
+/* margin-top:auto pins the links to the bottom so cards of
+   different text lengths still line their buttons up. */
+.wlinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 16px;
+}
+.wlink {
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-decoration: none;
+  padding: 9px 14px;
+  color: var(--ink);
+  background: #fff;
+  border: 2px solid var(--ink);
+}
+.wlink:hover { background: var(--ink); color: var(--paper); }
+.wlink.primary { color: var(--paper); background: var(--red); border-color: var(--red); }
+.wlink.primary:hover { background: var(--red-deep); border-color: var(--red-deep); }
+
+/* 5. Status chip — ready / draft / soon --------------------- */
+.chip {
+  font-family: var(--mono);
+  font-size: .67rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  white-space: nowrap;
+}
+.chip.ready { background: var(--ink);       color: var(--paper); }
+.chip.draft { background: var(--paper-dim); color: var(--grey-dark); }
+.chip.soon  { background: #fff; color: var(--grey-dark); border: 1px dashed var(--grey); }
+
+/* 6. The ghost card — "the next one goes here" -------------- */
+.wcard.ghost {
+  background: transparent;
+  border: 2px dashed var(--grey);
+  color: var(--grey-dark);
+}
+.wcard.ghost .wnum { color: var(--grey); }
+.wcard.ghost h3    { color: var(--grey-dark); }
+
+/* 7. The rail — I do / We do / You do ---------------------- */
+.rail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: var(--gap);
+  margin-top: var(--gap);
+}
+.rail-step {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 16px 18px 18px;
+  border-left: 5px solid var(--red);
+}
+.rail-step b {
+  display: block;
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.rail-step h4 {
+  margin: 8px 0 6px;
+  font-size: 1.1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+.rail-step p { margin: 0; font-size: .89rem; color: var(--grey); line-height: 1.5; }
+
+/* 8. Numbered how-to — adding the next workshop ------------- */
+.howto { list-style: none; counter-reset: s; padding: 0; margin: var(--gap) 0 0; }
+.howto li {
+  counter-increment: s;
+  position: relative;
+  padding: 11px 0 11px 44px;
+  border-bottom: 1px solid var(--paper-dim);
+  font-size: .95rem;
+}
+.howto li:last-child { border-bottom: none; }
+.howto li::before {
+  content: counter(s);
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 28px;
+  text-align: center;
+  font-family: var(--mono);
+  font-weight: 700;
+  color: var(--paper);
+  background: var(--red);
+  padding: 2px 0;
+}
+
+/* 9. The source tree lives in theme.css (section 12) — shared with
+      every workshop index page, so it is not repeated here. */

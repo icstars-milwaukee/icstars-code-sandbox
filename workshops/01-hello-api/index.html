@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hello, API — i.c.stars Week 6 Tutorial</title>
+  <link rel="stylesheet" href="../../css/theme.css">
+</head>
+<body>
+
+  <header class="ics-header">
+    <div class="ics-wrap">
+      <a class="ics-back" href="../../index.html">&larr; Code Sandbox</a>
+      <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span> Milwaukee</div>
+      <h1 class="ics-title">Hello, API</h1>
+      <p class="ics-sub">
+        Week 6 · 30 minutes · one game, three passes. Build "Who's That Pokémon?"
+        out of data you never typed.
+      </p>
+    </div>
+  </header>
+
+  <main class="ics-wrap">
+
+    <span class="ics-step">Start here</span>
+
+    <div class="links">
+      <a class="link" href="REF-deck.html">
+        <span class="pass">Instructor</span>
+        <b>The workshop deck &rarr;</b>
+        <span>16 slides with three <strong>live</strong> demos built in. Arrow keys to drive.
+          Ctrl+P saves it as a PDF.</span>
+      </a>
+
+      <a class="link" href="step-1-i-do.html">
+        <span class="pass">I do</span>
+        <b>Step 1 — One Pokémon</b>
+        <span>The three lines. Name, weight, type, and its picture on the page.</span>
+      </a>
+
+      <a class="link" href="step-2-we-do.html">
+        <span class="pass">We do</span>
+        <b>Step 2 — The mystery silhouette</b>
+        <span>A list of 151, a random pick, and one line of CSS that hides it.</span>
+      </a>
+
+      <a class="link" href="step-3-you-do.html">
+        <span class="pass">You do</span>
+        <b>Step 3 — Make it a game</b>
+        <span>Three TODOs: four guess buttons and a score.
+          (<a href="step-3-you-do-solution.html">solution</a>)</span>
+      </a>
+
+      <a class="link" href="game.html">
+        <span class="pass">Finished</span>
+        <b>The complete game</b>
+        <span>Score, streak, personal best, keys 1&ndash;4, loading and error states.</span>
+      </a>
+
+      <a class="link" href="extra-practice-posts.html">
+        <span class="pass">Homework</span>
+        <b>Extra practice — a different API</b>
+        <span>Same three lines, somebody else's data. Proof the move transfers.
+          (<a href="extra-practice-posts-solution.html">solution</a>)</span>
+      </a>
+    </div>
+
+    <h2 style="margin-top:36px;font-size:1.2rem">The source tree</h2>
+    <p class="ics-sub" style="color:var(--grey-dark)">
+      Standard static-site layout: pages in this folder, styles in <code>css/</code>,
+      scripts in <code>js/</code>. No build step, no npm.
+    </p>
+
+    <div class="tree">workshops/01-hello-api/
+├── <b>index.html</b>                        you are here
+├── REF-deck.html                     the deck (self-contained)
+│
+├── css/
+│   └── game.css                      a few extras for the finished game
+│                                     (the shared theme is ../../css/theme.css)
+│
+├── js/
+│   ├── step-1.js                     I DO   · marked EDIT 1-4 for the live demo
+│   ├── step-2.js                     WE DO  · list + random + silhouette
+│   ├── step-3.js                     YOU DO · 3 TODOs
+│   ├── step-3-solution.js            answer key
+│   ├── game.js                       the finished game: state -> render -> load
+│   ├── extra-practice.js
+│   └── extra-practice-solution.js
+│
+├── step-1-i-do.html                  each page is markup only...
+├── step-2-we-do.html                 ...and loads one file from js/
+├── step-3-you-do.html
+├── step-3-you-do-solution.html
+├── game.html
+├── extra-practice-posts.html
+└── extra-practice-posts-solution.html</div>
+
+    <p class="ics-footer">
+      Sample data from <a href="https://pokeapi.co/">PokeAPI</a> and
+      <a href="https://jsonplaceholder.typicode.com/">JSONPlaceholder</a> — free, no key, no signup.
+      <br>Part of the <a href="../../index.html">i.c.stars Code Sandbox</a>.
+    </p>
+  </main>
+
+</body>
+</html>
