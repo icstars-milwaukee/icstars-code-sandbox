@@ -46,6 +46,22 @@ const WORKSHOPS = [
     teaches: ["fetch", "JSON", "async / await", "Postman", "DOM"],
     deck: "REF-deck.html",
     live: true
+  },
+
+  {
+    n: "02",
+    slug: "02-molson-data",
+    title: "Molson Data",
+    track: "Data",
+    status: "draft",
+    minutes: 30,
+    origin: "Cycle 21",
+    hook: "Write one SELECT, send it to the Cycle 21 gateway, and put your team's own " +
+          "rows on a page. Two of the three functions are finished — the third gets the " +
+          "wrong answer, and fixing it is the lesson.",
+    teaches: ["SELECT", "query params", "API tokens", "rows as arrays"],
+    deck: null,
+    live: true
   }
 
   /* ---- Copy this block to add the next one -------------------

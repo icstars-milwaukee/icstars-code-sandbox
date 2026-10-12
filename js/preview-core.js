@@ -71,7 +71,15 @@ window.ICS_PREVIEW = (function () {
     '.ics-score b{color:var(--red);font-size:1.4rem}',
     '.ics-footer{margin-top:24px;padding-top:12px;border-top:1px solid var(--paper-dim);',
     'color:var(--grey);font-size:.85rem}',
-    'code{font-family:var(--mono);background:var(--paper-dim);padding:1px 5px}'
+    'code{font-family:var(--mono);background:var(--paper-dim);padding:1px 5px}',
+    '.ics-table{border-collapse:collapse;width:100%;margin-top:var(--gap);',
+    'font-size:.88rem;background:#fff}',
+    '.ics-table th{text-align:left;font-family:var(--mono);font-size:.7rem;',
+    'letter-spacing:.14em;text-transform:uppercase;color:var(--paper);',
+    'background:var(--ink);padding:8px 12px;white-space:nowrap}',
+    '.ics-table td{padding:7px 12px;border-top:1px solid var(--paper-dim);vertical-align:top}',
+    'select.ics-input{max-width:200px}',
+    'textarea.ics-input{font-family:var(--mono);font-size:.9rem}'
   ].join("");
 
   /* ---------- the bridge --------------------------------------

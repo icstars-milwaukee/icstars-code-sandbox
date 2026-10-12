@@ -196,6 +196,35 @@ code { font-family: var(--mono); background: var(--paper-dim); padding: 1px 5px;
 }
 .ics-score b { color: var(--red); font-size: 1.4rem; }
 
+/* Results table — for workshops whose API answers with rows.
+   Scrolls sideways inside its own box: a query with nine columns
+   must not make the whole page scroll. */
+.ics-tablewrap { overflow-x: auto; margin-top: var(--gap); }
+.ics-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: var(--gap);
+  font-size: .88rem;
+  background: #fff;
+}
+.ics-table th {
+  text-align: left;
+  font-family: var(--mono);
+  font-size: .7rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+.ics-table td {
+  padding: 7px 12px;
+  border-top: 1px solid var(--paper-dim);
+  vertical-align: top;
+}
+.ics-table tr:hover td { background: var(--paper-dim); }
+
 /* ============================================================
    12. LINK LISTS AND SOURCE TREES
    Used by the front door and any page that needs to list things

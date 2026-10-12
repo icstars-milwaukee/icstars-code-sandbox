@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Molson Data — i.c.stars Code Sandbox</title>
+  <link rel="stylesheet" href="../../css/theme.css">
+</head>
+<body>
+
+  <header class="ics-header">
+    <div class="ics-wrap">
+      <a class="ics-back" href="../../index.html">&larr; Code Sandbox</a>
+      <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span> Milwaukee</div>
+      <h1 class="ics-title">Molson Data</h1>
+      <p class="ics-sub">
+        Write a <strong>SELECT</strong>, send it to the Cycle 21 gateway, put the rows on the
+        page. Three functions do the whole job &mdash; and one of them is wrong.
+      </p>
+    </div>
+  </header>
+
+  <main class="ics-wrap">
+
+    <span class="ics-step">Your team's data</span>
+
+    <div class="ics-row">
+      <select class="ics-input" id="team" style="max-width:160px">
+        <option value="ibis">ibis</option>
+        <option value="unity">unity</option>
+        <option value="flogic">flogic</option>
+        <option value="teq">teq</option>
+      </select>
+
+      <!-- type="password" so it is not readable over your shoulder on a
+           projector. Nothing stores it — see the note in js/main.js. -->
+      <input class="ics-input" id="token" type="password"
+             style="max-width:240px" placeholder="team password"
+             autocomplete="off">
+    </div>
+
+    <p class="ics-sub" style="color:var(--grey-dark);margin-top:12px">
+      The gateway is <strong>read-only</strong>: your SQL has to start with
+      <code>SELECT</code> or <code>WITH</code>, and it will tell you off if it doesn't.
+      The query below asks the database what tables it has &mdash; start there, then
+      replace it with a real one.
+    </p>
+
+    <div class="ics-row">
+      <textarea class="ics-input" id="sql" rows="3" spellcheck="false"
+        style="max-width:100%;font-family:var(--mono);font-size:.9rem"
+      >SELECT name FROM sqlite_master WHERE type = 'table'</textarea>
+    </div>
+
+    <div class="ics-row">
+      <button class="ics-btn" id="runBtn">Run the query</button>
+      <span class="ics-count" id="meta"></span>
+    </div>
+
+    <div class="ics-note" id="status">Pick your team, type the password, press Run.</div>
+
+    <!-- Function 3 writes here. It is the broken one. -->
+    <div class="ics-out" id="summary">(no summary yet)</div>
+
+    <!-- Function 2 writes here. -->
+    <div id="results"></div>
+
+    <p class="ics-footer">
+      <code>GET /api/query</code> on
+      <a href="https://c21-data-gateway.icstars-milwaukee.workers.dev/docs">the gateway</a>.
+      The code is in <code>js/main.js</code>: two functions are finished, the third one
+      has a bug and a <code>TODO</code> above it.
+      <br>Open it in the <a href="playground.html">live editor</a>.
+    </p>
+  </main>
+
+  <script src="js/main.js"></script>
+
+</body>
+</html>
