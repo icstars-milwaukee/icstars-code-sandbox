@@ -166,8 +166,17 @@
 .chip.soon  { background: #fff; color: var(--grey-dark); border: 1px dashed var(--grey); }
 
 /* "You can do this one right now, in this browser, on a borrowed
-   laptop." That is worth a red chip. */
-.chip.live  { background: var(--red); color: var(--paper); }
+   laptop." That is worth a red chip — and it is a link to the
+   playground, so it gets hover and focus states to say so. */
+.chip.live {
+  background: var(--red);
+  color: var(--paper);
+  text-decoration: none;
+  cursor: pointer;
+}
+.chip.live:hover { background: var(--red-deep); }
+.chip.live:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.chip.live::after { content: " ▸"; }
 
 /* 6. The ghost card — "the next one goes here" -------------- */
 .wcard.ghost {

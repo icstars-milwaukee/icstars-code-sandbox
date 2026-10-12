@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playground — Workshop Title</title>
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/sandbox.css">
+  <link rel="stylesheet" href="../../css/playground.css">
+</head>
+<body>
+
+  <header class="ics-header">
+    <div class="ics-wrap">
+      <a class="ics-back" href="index.html">&larr; Workshop Title</a>
+      <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span> Milwaukee</div>
+      <h1 class="ics-title">Playground</h1>
+      <p class="ics-sub">
+        Every file in this workshop, already working. Click a folder to run it,
+        click a file to open it, then break it and find out what it was holding up.
+      </p>
+    </div>
+  </header>
+
+  <main class="ics-wrap">
+    <span class="ics-step">Break it on purpose</span>
+
+    <p class="pg-note">
+      Nothing here can be broken for anyone but you &mdash; it all runs in this browser,
+      and <strong>Reset all</strong> puts every file back how it started. Your edits
+      survive a refresh, so you can come back to them.
+    </p>
+
+    <div data-pg data-pg-storage="_template">
+
+      <script type="application/json" data-pg-labels>
+        {
+          "step-1-i-do": "Step 1 · I do — Smallest Version",
+          "step-2-we-do": "Step 2 · We do — The Next Layer",
+          "step-3-you-do": "Step 3 · You do — Make It Real",
+          "step-3-you-do-solution": "Step 3 · Answer key — Make It Real"
+        }
+      </script>
+
+      <script type="text/plain" data-pg-file="step-1-i-do/index.html">
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Step 1 · I do — Smallest Version</title>
+          <link rel="stylesheet" href="../../css/theme.css">
+        </head>
+        <body>
+
+          <main class="ics-wrap">
+            <span class="ics-step">Step 1 · I do — Smallest Version</span>
+            <div class="ics-row">
+              <button class="ics-btn" id="goBtn">DO THE THING</button>
+              <span class="ics-count" id="count"></span>
+            </div>
+            <div class="ics-note" id="status">Nothing yet. Click the button.</div>
+            <div class="ics-out" id="out">(output appears here)</div>
+          </main>
+
+          <script src="js/step-1.js"><\/script>
+
+        </body>
+        </html>
+      </script>
+      <script type="text/plain" data-pg-file="step-1-i-do/js/step-1.js">
+        /* STEP 1 - I DO - the smallest version that works.
+           Three EDIT slots. Fill them in order, pressing Run after each,
+           so the room watches the page come alive three times. */
+
+        // ---- 1. WHERE THE DATA COMES FROM ------------------------
+        // EDIT 1: in a real workshop this is a URL or a filename.
+        const SOURCE = [];
+
+        // ---- 2. THE PAGE -----------------------------------------
+        // Grab every element once, at the top, by its id. Students who
+        // learn this habit stop writing getElementById inside loops.
+        const goBtn    = document.getElementById("goBtn");
+        const statusEl = document.getElementById("status");
+        const outEl    = document.getElementById("out");
+        const countEl  = document.getElementById("count");
+
+        // ---- 3. THE WORK -----------------------------------------
+        function show() {
+          // EDIT 2: the three-ish lines that ARE this workshop. If this
+          // function runs past ten lines, you are teaching two workshops.
+
+
+        }
+
+        // ---- 4. WIRE IT UP ---------------------------------------
+        // EDIT 3: the one line that connects the button to the work.
+
+
+        statusEl.textContent = "Ready. Click the button.";
+      </script>
+      <script type="text/plain" data-pg-file="step-2-we-do/index.html">
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Step 2 · We do — The Next Layer</title>
+          <link rel="stylesheet" href="../../css/theme.css">
+        </head>
+        <body>
+
+          <main class="ics-wrap">
+            <span class="ics-step">Step 2 · We do — The Next Layer</span>
+            <div class="ics-row">
+              <button class="ics-btn" id="goBtn">DO THE THING</button>
+              <span class="ics-count" id="count"></span>
+            </div>
+            <div class="ics-note" id="status">Nothing yet. Click the button.</div>
+            <div class="ics-out" id="out">(output appears here)</div>
+          </main>
+
+          <script src="js/step-2.js"><\/script>
+
+        </body>
+        </html>
+      </script>
+      <script type="text/plain" data-pg-file="step-2-we-do/js/step-2.js">
+        /* STEP 2 - WE DO - one more layer, built together.
+           One new idea, no more. Here: pick at random, and hide it.
+           Stop at every CHECKPOINT and look at the room. */
+
+        const SOURCE = ["first thing", "second thing", "third thing", "fourth thing"];
+
+        const goBtn    = document.getElementById("goBtn");
+        const statusEl = document.getElementById("status");
+        const outEl    = document.getElementById("out");
+        const countEl  = document.getElementById("count");
+
+        // State lives in ONE place, named, at the top. When the page is
+        // wrong, the first question is always "what is in here?"
+        let current = null;
+
+        // BLANK 1: Math.random() gives 0 to 0.999..., times the length,
+        // floored, is a valid index every time. Say this one out loud -
+        // they will reach for this move for the rest of their lives.
+        function pickRandom(list) {
+
+        }
+
+        function newRound() {
+          current = pickRandom(SOURCE);
+
+          outEl.textContent    = "? ? ?";          // hidden, on purpose
+          statusEl.className   = "ics-note";
+          statusEl.textContent = "Something is picked. You can't see which one yet.";
+          countEl.textContent  = "picked from " + SOURCE.length;
+
+          // CHECKPOINT: the box shows ? ? ? and clicking changes nothing
+          // visible. Thumbs up. Then ask: how would you PROVE it really
+          // picked something? (Answer: reveal it. That's the next blank.)
+        }
+
+        function reveal() {
+          // BLANK 2: put `current` in the output box and say what it was.
+
+
+          // CHECKPOINT: Reveal shows a different answer most times.
+          // Thumbs up. That randomness is what makes step 3 a game.
+        }
+
+        let revealed = false;
+        goBtn.addEventListener("click", function () {
+          revealed = !revealed;
+          if (revealed) { reveal(); } else { newRound(); }
+          goBtn.textContent = revealed ? "New one" : "Reveal";
+        });
+
+        newRound();
+        goBtn.textContent = "Reveal";
+      </script>
+      <script type="text/plain" data-pg-file="step-3-you-do/index.html">
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Step 3 · You do — Make It Real</title>
+          <link rel="stylesheet" href="../../css/theme.css">
+        </head>
+        <body>
+
+          <main class="ics-wrap">
+            <span class="ics-step">Step 3 · You do — Make It Real</span>
+            <div class="ics-row">
+              <span class="ics-score" id="score">SCORE <b>0</b> / 0</span>
+            </div>
+            <div class="ics-choices" id="choices"></div>
+            <div class="ics-note" id="status">Nothing yet.</div>
+            <div class="ics-out" id="out">(output appears here)</div>
+            <div class="ics-row">
+              <button class="ics-btn" id="goBtn">Next &rarr;</button>
+            </div>
+          </main>
+
+          <script src="js/step-3.js"><\/script>
+
+        </body>
+        </html>
+      </script>
+      <script type="text/plain" data-pg-file="step-3-you-do/js/step-3.js">
+        /* ============================================================
+           STEP 3 · YOU DO    — exactly three TODOs
+
+           THE RULE FOR WHOEVER WRITES THIS FILE:
+             - exactly three TODOs. Not two, not five.
+             - each one is 1-4 lines of typing.
+             - the page still RUNS with all three unfinished. It just
+               tells the student which one to go do. A white screen and
+               a console error is how you lose somebody for the night.
+             - every TODO is a move they already watched twice tonight.
+           ============================================================ */
+
+        const SOURCE = ["first thing", "second thing", "third thing", "fourth thing"];
+
+        const goBtn     = document.getElementById("goBtn");
+        const statusEl  = document.getElementById("status");
+        const outEl     = document.getElementById("out");
+        const choicesEl = document.getElementById("choices");
+        const scoreEl   = document.getElementById("score");
+
+        let answer = null;
+        let right  = 0;    // how many you got right
+        let asked  = 0;    // how many you've been asked
+
+        function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]; }
+        function shuffle(list)    { list.sort(function () { return Math.random() - 0.5; }); }
+
+        // ---- 1. START A ROUND (given — this is step 2's code) ------
+        function newRound() {
+          goBtn.disabled       = true;
+          answer               = pickRandom(SOURCE);
+          outEl.textContent    = "? ? ?";
+          statusEl.className   = "ics-note";
+          statusEl.textContent = "Which one is it?";
+
+          // The answer plus up to three decoys that aren't the answer.
+          const choices = [answer];
+          while (choices.length < 4 && choices.length < SOURCE.length) {
+            const maybe = pickRandom(SOURCE);
+            if (!choices.includes(maybe)) { choices.push(maybe); }
+          }
+          shuffle(choices);
+
+          choicesEl.innerHTML = "";
+
+          // ---- TODO 1: build one button per choice ----------------
+          // The same forEach shape you've seen twice already tonight.
+          choices.forEach(function (option) {
+
+            // a) make a <button> and put it in a variable called btn
+            //      hint: document.createElement("button")
+
+            // b) give it the class:   btn.className = "ics-choice";
+
+            // c) put the text on it:  btn.textContent = option;
+
+            // d) on click, call guess:
+            //      btn.addEventListener("click", function () { guess(btn, option); });
+
+            // e) put it on the page:  choicesEl.appendChild(btn);
+
+          });
+
+          // Nothing got built? Say so in plain English instead of
+          // leaving an empty box. (Delete this once TODO 1 works.)
+          if (choicesEl.children.length === 0) {
+            statusEl.className   = "ics-note error";
+            statusEl.textContent = "No buttons yet — finish TODO 1 in js/step-3.js.";
+          }
+        }
+
+        // ---- 2. HANDLE A GUESS -------------------------------------
+        function guess(button, picked) {
+          outEl.textContent = answer;      // the reveal
+          asked++;
+
+          // ---- TODO 2: was it right? -----------------------------
+          // If picked is the same as answer: add 1 to right, give the
+          // button .classList.add("right"), and say "Correct!"
+          // Otherwise: .classList.add("wrong"), and say what it really was.
+          //
+          // if (picked === answer) {
+          //   ...
+          // } else {
+          //   ...
+          // }
+
+          // Grey out every button and highlight the correct one (given).
+          document.querySelectorAll(".ics-choice").forEach(function (b) {
+            b.disabled = true;
+            if (b.textContent === answer) { b.classList.add("right"); }
+          });
+
+          // ---- TODO 3: put the score on the page -----------------
+          // scoreEl.innerHTML = "SCORE <b>" + ... + "</b> / " + ...;
+
+          goBtn.disabled = false;
+        }
+
+        goBtn.addEventListener("click", newRound);
+
+        newRound();
+        goBtn.textContent = "Next →";
+      </script>
+      <script type="text/plain" data-pg-file="step-3-you-do-solution/index.html">
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Step 3 · Answer key — Make It Real</title>
+          <link rel="stylesheet" href="../../css/theme.css">
+        </head>
+        <body>
+
+          <main class="ics-wrap">
+            <span class="ics-step">Step 3 · Answer key — Make It Real</span>
+            <div class="ics-row">
+              <span class="ics-score" id="score">SCORE <b>0</b> / 0</span>
+            </div>
+            <div class="ics-choices" id="choices"></div>
+            <div class="ics-note" id="status">Nothing yet.</div>
+            <div class="ics-out" id="out">(output appears here)</div>
+            <div class="ics-row">
+              <button class="ics-btn" id="goBtn">Next &rarr;</button>
+            </div>
+          </main>
+
+          <script src="js/step-3-solution.js"><\/script>
+
+        </body>
+        </html>
+      </script>
+      <script type="text/plain" data-pg-file="step-3-you-do-solution/js/step-3-solution.js">
+        /* ============================================================
+           STEP 3 · ANSWER KEY
+
+           The same file with the three TODOs filled in. Two jobs:
+             1. the student compares against it after trying
+             2. it is the TEST. If this file does not run, the workshop
+                is not finished. Open it and play a round before you
+                ever teach from this folder.
+           ============================================================ */
+
+        const SOURCE = ["first thing", "second thing", "third thing", "fourth thing"];
+
+        const goBtn     = document.getElementById("goBtn");
+        const statusEl  = document.getElementById("status");
+        const outEl     = document.getElementById("out");
+        const choicesEl = document.getElementById("choices");
+        const scoreEl   = document.getElementById("score");
+
+        let answer = null;
+        let right  = 0;
+        let asked  = 0;
+
+        function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]; }
+        function shuffle(list)    { list.sort(function () { return Math.random() - 0.5; }); }
+
+        function newRound() {
+          goBtn.disabled       = true;
+          answer               = pickRandom(SOURCE);
+          outEl.textContent    = "? ? ?";
+          statusEl.className   = "ics-note";
+          statusEl.textContent = "Which one is it?";
+
+          const choices = [answer];
+          while (choices.length < 4 && choices.length < SOURCE.length) {
+            const maybe = pickRandom(SOURCE);
+            if (!choices.includes(maybe)) { choices.push(maybe); }
+          }
+          shuffle(choices);
+
+          choicesEl.innerHTML = "";
+
+          // ---- TODO 1, done ---------------------------------------
+          choices.forEach(function (option) {
+            const btn = document.createElement("button");
+            btn.className   = "ics-choice";
+            btn.textContent = option;
+            btn.addEventListener("click", function () { guess(btn, option); });
+            choicesEl.appendChild(btn);
+          });
+        }
+
+        function guess(button, picked) {
+          outEl.textContent = answer;
+          asked++;
+
+          // ---- TODO 2, done ---------------------------------------
+          if (picked === answer) {
+            right++;
+            button.classList.add("right");
+            statusEl.className   = "ics-note success";
+            statusEl.textContent = "Correct!";
+          } else {
+            button.classList.add("wrong");
+            statusEl.className   = "ics-note error";
+            statusEl.textContent = "Not quite — it was " + answer + ".";
+          }
+
+          document.querySelectorAll(".ics-choice").forEach(function (b) {
+            b.disabled = true;
+            if (b.textContent === answer) { b.classList.add("right"); }
+          });
+
+          // ---- TODO 3, done ---------------------------------------
+          scoreEl.innerHTML = "SCORE <b>" + right + "</b> / " + asked;
+
+          goBtn.disabled = false;
+        }
+
+        goBtn.addEventListener("click", newRound);
+
+        newRound();
+        goBtn.textContent = "Next →";
+      </script>
+    </div>
+
+    <p class="ics-footer">
+      <!-- GENERATED by tools/build-playground.py from this workshop's own files.
+           Edit the workshop, then re-run the tool. Hand edits here will be lost. -->
+      Generated from this workshop's files by <code>tools/build-playground.py</code>.
+      <br>Back to <a href="index.html">Workshop Title</a> &middot;
+      <a href="../../index.html">the Code Sandbox</a>
+    </p>
+  </main>
+
+  <script src="../../js/preview-core.js"></script>
+  <script src="../../js/playground.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playground — Hello, API</title>
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/sandbox.css">
+  <link rel="stylesheet" href="../../css/playground.css">
+</head>
+<body>
+
+  <header class="ics-header">
+    <div class="ics-wrap">
+      <a class="ics-back" href="index.html">&larr; Hello, API</a>
+      <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span> Milwaukee</div>
+      <h1 class="ics-title">Playground</h1>
+      <p class="ics-sub">
+        Every file in this workshop, already working. Click a folder to run it,
+        click a file to open it, then break it and find out what it was holding up.
+      </p>
+    </div>
+  </header>
+
+  <main class="ics-wrap">
+    <span class="ics-step">Break it on purpose</span>
+
+    <p class="pg-note">
+      Nothing here can be broken for anyone but you &mdash; it all runs in this browser,
+      and <strong>Reset all</strong> puts every file back how it started. Your edits
+      survive a refresh, so you can come back to them.
+    </p>
+
+    <div data-pg data-pg-storage="01-hello-api">
+
+      <script type="application/json" data-pg-labels>
+        {
+          "step-1-i-do": "Step 1 · I do — One Pokémon",
+          "step-2-we-do": "Step 2 · We do — Who's That Pokémon?",
+          "step-3-you-do": "Step 3 · You do — Make It a Game",
+          "step-3-you-do-solution": "Step 3 · Answer key — Make It a Game",
+          "game": "Who's That Pokémon?",
+          "extra-practice-posts": "Extra practice — Your Turn: Blog Posts",
+          "extra-practice-posts-solution": "Extra practice · Solution — Your Turn: Blog Posts"
+        }
+      </script>
+
+      <script type="text/plain" data-pg-file="step-1-i-do/index.html">
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Step 1 · I do — One Pokémon</title>
+          <link rel="stylesheet" href="../../css/theme.css">
+        </head>
+        <body>
+
+          <main class="ics-wrap">
+            <span class="ics-step">Step 1 · I do — One Pokémon</span>
+            <div class="ics-stage">
+              <img id="sprite" class="ics-sprite" alt="">
+            </div>
+            <div class="ics-row">
+              <button class="ics-btn" id="loadBtn">Get Pokémon #25</button>
+            </div>
+            <div class="ics-out" id="output">Nothing yet. Click the button.</div>
+          </main>
+
+          <script src="js/step-1.js"><\/script>
+
+        </body>
+        </html>
+      </script>
+      <script type="text/plain" data-pg-file="step-1-i-do/js/step-1.js">
+        /* STEP 1 · I DO — four edits, in order.
+           Everything that isn't an EDIT slot is already here. */
+
+        // The parts of the page we control. Grab them once, at the top.
+        const button = document.getElementById("loadBtn");
+        const output = document.getElementById("output");
+        const sprite = document.getElementById("sprite");
+
+
+        // >>>>>>>>>>>>>>>>>>>> EDIT 1 — the URL <<<<<<<<<<<<<<<<<<<<
+        // The exact address we just tested in Postman. Same address —
+        // the browser can ask for it too.
+
+        const API_URL = "";
+
+
+        // "When the button is clicked, run this function."
+        // async = "there is a wait inside this function."
+        button.addEventListener("click", async function () {
+          output.textContent = "Loading...";
+
+
+          // >>>>>>>>>>>> EDIT 2 — ASK, then UNWRAP <<<<<<<<<<<<
+          // The two lines. They never change — not tonight, not in React.
+          // await = "pause right here until the data comes back."
+
+
+
+
+          // >>>>>>>>>>>> EDIT 3 — SHOW the text <<<<<<<<<<<<
+          // Put the data on the page. One field at a time, and Run
+          // between them, so you watch each one appear.
+
+
+
+
+          // >>>>>>>>>>>> EDIT 4 — SHOW the picture <<<<<<<<<<<<
+          // The picture is NOT special. It's a field holding a URL,
+          // handed to an <img>. Count the dots out loud.
+
+
+
+        });
+      </script>
+      <script type="text/plain" data-pg-file="step-2-we-do/index.html">
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Step 2 · We do — Who's That Pokémon?</title>
+          <link rel="stylesheet" href="../../css/theme.css">
+        </head>
+        <body>
+
+          <main class="ics-wrap">
+            <span class="ics-step">Step 2 · We do — Who's That Pokémon?</span>
+            <div class="ics-stage">
+              <img id="sprite" class="ics-sprite hidden" alt="Mystery Pokémon silhouette">
+            </div>
+            <div class="ics-row">
+              <button class="ics-btn" id="revealBtn" disabled>Reveal</button>
+              <button class="ics-btn" id="nextBtn" disabled>New mystery</button>
+              <span class="ics-count" id="answer"></span>
+            </div>
+            <div class="ics-note" id="status">Loading 151 Pokémon...</div>
+          </main>
+
+          <script src="js/step-2.js"><\/script>
+
+        </body>
+        </html>
+      </script>
+      <script type="text/plain" data-pg-file="step-2-we-do/js/step-2.js">
+        /* STEP 2 · WE DO — three blanks, filled in together. */
+
+        // BLANK 1: the same two lines as Step 1 — but this URL returns a LIST.
+        const API_URL = "";
+
+        const sprite    = document.getElementById("sprite");
+        const revealBtn = document.getElementById("revealBtn");
+        const nextBtn   = document.getElementById("nextBtn");
+        const answerEl  = document.getElementById("answer");
+        const statusEl  = document.getElementById("status");
+
+        let allPokemon = [];   // all 151, straight from the API
+        let mystery    = null; // the one we're hiding right now
+
+
+        async function load() {
+          // BLANK 2: ASK and UNWRAP. Third time tonight.
+          //   const response = ...
+          //   const data     = ...
+          // Then keep just the list. This API wraps it in a field
+          // called "results" — square brackets [ ] means a list, so we
+          // can loop it, count it, and pick from it.
+          //   allPokemon = data.results;
+
+
+          if (allPokemon.length === 0) {
+            statusEl.className   = "ics-note error";
+            statusEl.textContent = "No list yet — finish BLANK 1 and BLANK 2.";
+            return;
+          }
+
+          statusEl.textContent = "Loaded " + allPokemon.length + " Pokémon.";
+          newMystery();
+          // CHECKPOINT: the note says "Loaded 151 Pokémon." Thumbs up.
+        }
+
+
+        function newMystery() {
+          // Math.random() gives 0-to-1. Times the length, rounded down,
+          // is a random slot — a move you will use for the rest of your life.
+          mystery = allPokemon[Math.floor(Math.random() * allPokemon.length)];
+
+          // BLANK 3: each item looks like { name: "pikachu", url: ".../pokemon/25/" }.
+          // We only need the number out of that url to build the picture address.
+          //   const id = mystery.url.split("/")[6];
+          //   sprite.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + id + ".png";
+
+
+          sprite.alt = "Mystery Pokémon silhouette";
+
+          // .hidden is one CSS line: filter: brightness(0).
+          // It paints every pixel black. That's the whole effect.
+          sprite.classList.add("hidden");
+
+          answerEl.textContent = "";
+          revealBtn.disabled = false;
+          nextBtn.disabled = true;
+          // CHECKPOINT: a black silhouette, and a different one each time
+          // you click "New mystery". Thumbs up.
+        }
+
+
+        revealBtn.addEventListener("click", function () {
+          sprite.classList.remove("hidden");     // that's the whole trick
+          sprite.alt = mystery.name;
+          answerEl.textContent = "It's " + mystery.name + "!";
+          revealBtn.disabled = true;
+          nextBtn.disabled = false;
+        });
+
+        nextBtn.addEventListener("click", newMystery);
+
+        load();
+      </script>
+      <script type="text/plain" data-pg-file="step-3-you-do/index.html">
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Step 3 · You do — Make It a Game</title>
+          <link rel="stylesheet" href="../../css/theme.css">
+        </head>
+        <body>
+
+          <main class="ics-wrap">
+            <span class="ics-step">Step 3 · You do — Make It a Game</span>
+            <div class="ics-stage">
+              <img id="sprite" class="ics-sprite hidden" alt="Mystery Pokémon silhouette">
+            </div>
+            <div class="ics-row">
+              <span class="ics-score" id="score">SCORE <b>0</b> / 0</span>
+            </div>
+            <div class="ics-choices" id="choices"></div>
+            <div class="ics-note" id="status">Loading 151 Pokémon...</div>
+            <div class="ics-row">
+              <button class="ics-btn" id="nextBtn" disabled>Next &rarr;</button>
+            </div>
+          </main>
+
+          <script src="js/step-3.js"><\/script>
+
+        </body>
+        </html>
+      </script>
+      <script type="text/plain" data-pg-file="step-3-you-do/js/step-3.js">
+        /* ============================================================
+           A game is just:  data  +  a random pick  +  a click handler
+           You built the first two in Step 2. Now you add the click.
+           ============================================================ */
+
+        const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=151";
+
+        const sprite    = document.getElementById("sprite");
+        const choicesEl = document.getElementById("choices");
+        const statusEl  = document.getElementById("status");
+        const scoreEl   = document.getElementById("score");
+        const nextBtn   = document.getElementById("nextBtn");
+
+        let allPokemon = [];
+        let right = 0;    // how many you got right
+        let asked = 0;    // how many you've been asked
+
+
+        // ---- 1. GET THE DATA -------------------------------------
+        async function load() {
+          // TODO 1: the two lines you've now written twice tonight.
+          //   a) const response = ... fetch the API_URL, and await it
+          //   b) const data     = ... turn response into JSON, and await it
+          //   Then uncomment this, which keeps just the list:
+          // allPokemon = data.results;
+
+
+          if (allPokemon.length === 0) {
+            statusEl.className   = "ics-note error";
+            statusEl.textContent = "No Pokémon yet — finish TODO 1.";
+            return;
+          }
+          statusEl.textContent = "Loaded " + allPokemon.length + " Pokémon. Guess away!";
+          newRound();
+        }
+
+
+        // ---- 2. START A ROUND (given — this is Step 2's code) -----
+        function newRound() {
+          nextBtn.disabled = true;
+          sprite.classList.add("hidden");
+          statusEl.className   = "ics-note";
+          statusEl.textContent = "Who's that Pokémon?";
+
+          // The answer, plus three decoys that aren't the answer.
+          const answer  = pickRandom(allPokemon);
+          const choices = [answer];
+          while (choices.length < 4) {
+            const maybe = pickRandom(allPokemon);
+            if (!choices.includes(maybe)) { choices.push(maybe); }
+          }
+          shuffle(choices);
+
+          sprite.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
+                     + idFromUrl(answer.url) + ".png";
+
+          // ---- TODO 2: build one button per choice -----------------
+          // This is the SAME forEach shape you've seen all night.
+          choicesEl.innerHTML = "";
+          choices.forEach(function (option) {
+
+            // a) make a <button> element and put it in a variable called btn
+            //      hint: document.createElement("button")
+
+            // b) give it   btn.className = "ics-choice";
+
+            // c) put the name on it:   btn.textContent = option.name;
+
+            // d) when it's clicked, call guess():
+            //      btn.addEventListener("click", function () { guess(btn, option, answer); });
+
+            // e) add it to the page:   choicesEl.appendChild(btn);
+
+          });
+
+          // Nothing built yet? Say so, instead of leaving an empty box.
+          // (Delete this once TODO 2 works.)
+          if (choicesEl.children.length === 0) {
+            statusEl.className   = "ics-note error";
+            statusEl.textContent = "No buttons yet — finish TODO 2.";
+          }
+        }
+
+
+        // ---- 3. HANDLE A GUESS ------------------------------------
+        function guess(button, picked, answer) {
+          sprite.classList.remove("hidden");   // the big reveal
+          asked++;
+
+          // ---- TODO 3: did they get it right? ----------------------
+          // If picked is the same as answer:  add 1 to right,
+          //   give the button  .classList.add("right")  and say "Correct!"
+          // Otherwise: give the button  .classList.add("wrong")  and say
+          //   what it really was.
+          //
+          // if (picked === answer) {
+          //   ...
+          // } else {
+          //   ...
+          // }
+
+
+          // Grey out every button and highlight the correct one (given).
+          document.querySelectorAll(".ics-choice").forEach(function (b) {
+            b.disabled = true;
+            if (b.textContent === answer.name) { b.classList.add("right"); }
+          });
+
+          scoreEl.innerHTML = "SCORE <b>" + right + "</b> / " + asked;
+          nextBtn.disabled = false;
+        }
+
+
+        // ---- little helpers (nothing new to learn here) ------------
+        function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]; }
+        function shuffle(list)    { list.sort(function () { return Math.random() - 0.5; }); }
+
+        // "https://pokeapi.co/api/v2/pokemon/25/"  ->  "25"
+        function idFromUrl(url)   { return url.split("/")[6]; }
+
+        nextBtn.addEventListener("click", newRound);
+
+        load();
+      </script>
+      <script type="text/plain" data-pg-file="step-3-you-do-solution/index.html">
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Step 3 · Answer key — Make It a Game</title>
+          <link rel="stylesheet" href="../../css/theme.css">
+        </head>
+        <body>
+
+          <main class="ics-wrap">
+            <span class="ics-step">Step 3 · Answer key — Make It a Game</span>
+            <div class="ics-stage">
+              <img id="sprite" class="ics-sprite hidden" alt="Mystery Pokémon silhouette">
+            </div>
+            <div class="ics-row">
+              <span class="ics-score" id="score">SCORE <b>0</b> / 0</span>
+            </div>
+            <div class="ics-choices" id="choices"></div>
+            <div class="ics-note" id="status">Loading 151 Pokémon...</div>
+            <div class="ics-row">
+              <button class="ics-btn" id="nextBtn" disabled>Next &rarr;</button>
+            </div>
+          </main>
+
+          <script src="js/step-3-solution.js"><\/script>
+
+        </body>
+        </html>
+      </script>
+      <script type="text/plain" data-pg-file="step-3-you-do-solution/js/step-3-solution.js">
+        /* ============================================================
+           STEP 3 — finished. The three TODOs, filled in.
+           ============================================================ */
+
+        const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=151";
+
+        const sprite    = document.getElementById("sprite");
+        const choicesEl = document.getElementById("choices");
+        const statusEl  = document.getElementById("status");
+        const scoreEl   = document.getElementById("score");
+        const nextBtn   = document.getElementById("nextBtn");
+
+        let allPokemon = [];
+        let right = 0;
+        let asked = 0;
+
+
+        async function load() {
+          // ---- TODO 1, done --------------------------------------
+          const response = await fetch(API_URL);
+          const data     = await response.json();
+          allPokemon     = data.results;
+
+          statusEl.textContent = "Loaded " + allPokemon.length + " Pokémon. Guess away!";
+          newRound();
+        }
+
+
+        function newRound() {
+          nextBtn.disabled = true;
+          sprite.classList.add("hidden");
+          statusEl.className   = "ics-note";
+          statusEl.textContent = "Who's that Pokémon?";
+
+          const answer  = pickRandom(allPokemon);
+          const choices = [answer];
+          while (choices.length < 4) {
+            const maybe = pickRandom(allPokemon);
+            if (!choices.includes(maybe)) { choices.push(maybe); }
+          }
+          shuffle(choices);
+
+          sprite.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
+                     + idFromUrl(answer.url) + ".png";
+
+          // ---- TODO 2, done --------------------------------------
+          choicesEl.innerHTML = "";
+          choices.forEach(function (option) {
+            const btn = document.createElement("button");
+            btn.className   = "ics-choice";
+            btn.textContent = option.name;
+            btn.addEventListener("click", function () { guess(btn, option, answer); });
+            choicesEl.appendChild(btn);
+          });
+        }
+
+
+        function guess(button, picked, answer) {
+          sprite.classList.remove("hidden");
+          asked++;
+
+          // ---- TODO 3, done --------------------------------------
+          if (picked === answer) {
+            right++;
+            button.classList.add("right");
+            statusEl.className   = "ics-note success";
+            statusEl.textContent = "Correct!";
+          } else {
+            button.classList.add("wrong");
+            statusEl.className   = "ics-note error";
+            statusEl.textContent = "Not quite — it was " + answer.name + ".";
+          }
+
+          document.querySelectorAll(".ics-choice").forEach(function (b) {
+            b.disabled = true;
+            if (b.textContent === answer.name) { b.classList.add("right"); }
+          });
+
+          scoreEl.innerHTML = "SCORE <b>" + right + "</b> / " + asked;
+          nextBtn.disabled = false;
+        }
+
+
+        function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]; }
+        function shuffle(list)    { list.sort(function () { return Math.random() - 0.5; }); }
+        function idFromUrl(url)   { return url.split("/")[6]; }
+
+        nextBtn.addEventListener("click", newRound);
+
+        load();
+      </script>
+      <script type="text/plain" data-pg-file="game/index.html">
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Who's That Pokémon? · i.c.stars</title>
+
+          <!-- Two stylesheets: the shared theme, then this site's few extras. -->
+          <link rel="stylesheet" href="../../css/theme.css">
+          <link rel="stylesheet" href="css/game.css">
+        </head>
+        <body>
+
+          <header class="ics-header">
+            <div class="ics-wrap">
+              <a class="ics-back" href="index.html">&larr; Hello, API</a>
+              <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span></div>
+              <h1 class="ics-title">Who's That Pokémon?</h1>
+              <p class="ics-sub">The finished game. Loads by itself, keeps score, survives a dead wifi.</p>
+            </div>
+          </header>
+
+          <div class="ics-stage">
+            <img id="sprite" class="ics-sprite hidden" alt="Mystery Pokémon silhouette">
+          </div>
+
+          <main class="ics-wrap">
+
+            <div class="ics-row scoreboard">
+              <span class="ics-score" id="score">SCORE <b>0</b> / 0</span>
+              <span class="streak" id="streak"></span>
+              <span class="ics-count" id="best"></span>
+            </div>
+
+            <!-- JavaScript owns everything below this line. -->
+            <div class="ics-choices" id="choices"></div>
+            <div class="ics-note" id="status">Loading 151 Pokémon...</div>
+
+            <div class="ics-row">
+              <button class="ics-btn" id="nextBtn" disabled>Next &rarr;</button>
+              <button class="ics-btn ghost" id="resetBtn">Reset score</button>
+            </div>
+
+            <p class="ics-footer">
+              Sample data from <a href="https://pokeapi.co/">PokeAPI</a> · sprites from the PokeAPI archive.
+              Built in 30 minutes at i.c.stars. Next: the same thing in React.
+            </p>
+          </main>
+
+          <!-- Script last, so the HTML above already exists when it runs. -->
+          <script src="js/game.js"><\/script>
+        </body>
+        </html>
+      </script>
+      <script type="text/plain" data-pg-file="game/css/game.css">
+        /* Extras for THIS site only. The theme does the heavy lifting. */
+
+        .scoreboard { justify-content: space-between; }
+
+        /* The streak flame, only shown once you're on a run */
+        .streak {
+          font-weight: 700;
+          font-size: 1rem;
+          color: var(--red);
+        }
+
+        /* A quieter second button */
+        .ics-btn.ghost {
+          background: transparent;
+          color: var(--ink);
+          border-color: var(--ink);
+        }
+        .ics-btn.ghost:hover { background: var(--ink); color: var(--paper); }
+
+        /* Hide the status box when there is nothing to say */
+        .hidden-note { display: none; }
+      </script>
+      <script type="text/plain" data-pg-file="game/js/game.js">
+        /* ============================================================
+           Who's That Pokémon? — the finished game.
+
+           Read it in this order:
+             1. state      — what the game knows
+             2. render()   — draw the screen from state
+             3. load()     — get data from the API, put it in state
+             4. newRound() and guess() — the game itself
+
+           That order is on purpose. It is how React works.
+           ============================================================ */
+
+        const API_URL    = "https://pokeapi.co/api/v2/pokemon?limit=151";
+        const SPRITE_BASE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
+
+        // --- The parts of the page we control ---------------------------
+        const spriteEl  = document.getElementById("sprite");
+        const choicesEl = document.getElementById("choices");
+        const statusEl  = document.getElementById("status");
+        const scoreEl   = document.getElementById("score");
+        const streakEl  = document.getElementById("streak");
+        const bestEl    = document.getElementById("best");
+        const nextBtn   = document.getElementById("nextBtn");
+        const resetBtn  = document.getElementById("resetBtn");
+
+        // --- 1. STATE: everything the game needs to know ---------------
+        // Change state, then call render(). Never the other way around.
+        const state = {
+          all:     [],     // all 151, from the API
+          answer:  null,   // the Pokémon being hidden
+          choices: [],     // the four options on screen
+          picked:  null,   // what the player clicked, or null mid-round
+          right:   0,
+          asked:   0,
+          streak:  0,
+          best:    0,
+          loading: true,
+          error:   ""
+        };
+
+        // --- 2. RENDER: turn state into HTML ---------------------------
+        function render() {
+          // Still waiting on the API.
+          if (state.loading) {
+            statusEl.className = "ics-note";
+            statusEl.textContent = "Loading 151 Pokémon...";
+            choicesEl.innerHTML = "";
+            return;
+          }
+
+          // Something went wrong (no wifi, API down, typo in the URL).
+          if (state.error) {
+            statusEl.className = "ics-note error";
+            statusEl.textContent = "Could not load the Pokémon: " + state.error;
+            choicesEl.innerHTML = "";
+            nextBtn.disabled = true;
+            return;
+          }
+
+          // The picture: a silhouette until they've guessed.
+          spriteEl.src = SPRITE_BASE + idFromUrl(state.answer.url) + ".png";
+          spriteEl.classList.toggle("hidden", state.picked === null);
+          spriteEl.alt = state.picked === null ? "Mystery Pokémon silhouette" : state.answer.name;
+
+          // The message.
+          if (state.picked === null) {
+            statusEl.className = "ics-note";
+            statusEl.textContent = "Who's that Pokémon?";
+          } else if (state.picked === state.answer) {
+            statusEl.className = "ics-note success";
+            statusEl.textContent = "Correct — it's " + state.answer.name + "!";
+          } else {
+            statusEl.className = "ics-note error";
+            statusEl.textContent = "Nope, that was " + state.answer.name + ".";
+          }
+
+          // The four buttons.
+          choicesEl.innerHTML = "";
+          state.choices.forEach(function (option) {
+            const btn = document.createElement("button");
+            btn.className = "ics-choice";
+            btn.textContent = option.name;
+
+            if (state.picked !== null) {
+              btn.disabled = true;                                   // round is over
+              if (option === state.answer)      { btn.classList.add("right"); }
+              else if (option === state.picked) { btn.classList.add("wrong"); }
+            } else {
+              btn.addEventListener("click", function () { guess(option); });
+            }
+            choicesEl.appendChild(btn);
+          });
+
+          // The scoreboard.
+          scoreEl.innerHTML = "SCORE <b>" + state.right + "</b> / " + state.asked;
+          streakEl.textContent = state.streak >= 2 ? "streak " + state.streak + " 🔥" : "";
+          bestEl.textContent   = state.best   >= 2 ? "best " + state.best : "";
+          nextBtn.disabled = state.picked === null;
+        }
+
+        // --- 3. LOAD: the same three lines from Step 1 ------------------
+        async function load() {
+          try {
+            const response = await fetch(API_URL);
+
+            // fetch() does NOT throw on a 404 or 500. We have to check ourselves.
+            if (!response.ok) {
+              throw new Error("server replied " + response.status);
+            }
+
+            const data  = await response.json();
+            state.all   = data.results;
+            state.loading = false;
+            newRound();                 // newRound() calls render() for us
+          } catch (err) {
+            state.loading = false;
+            state.error   = err.message;
+            render();
+          }
+        }
+
+        // --- 4. THE GAME -----------------------------------------------
+        function newRound() {
+          state.answer  = pickRandom(state.all);
+          state.choices = [state.answer];
+          while (state.choices.length < 4) {
+            const maybe = pickRandom(state.all);
+            if (!state.choices.includes(maybe)) { state.choices.push(maybe); }
+          }
+          shuffle(state.choices);
+          state.picked = null;          // nothing guessed yet this round
+          render();
+        }
+
+        function guess(option) {
+          state.picked = option;
+          state.asked++;
+
+          if (option === state.answer) {
+            state.right++;
+            state.streak++;
+            if (state.streak > state.best) { state.best = state.streak; }
+          } else {
+            state.streak = 0;
+          }
+          render();
+        }
+
+        // --- helpers ---------------------------------------------------
+        function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]; }
+        function shuffle(list)    { list.sort(function () { return Math.random() - 0.5; }); }
+
+        // "https://pokeapi.co/api/v2/pokemon/25/"  ->  "25"
+        function idFromUrl(url)   { return url.split("/")[6]; }
+
+        // --- wiring ----------------------------------------------------
+        nextBtn.addEventListener("click", newRound);
+
+        resetBtn.addEventListener("click", function () {
+          state.right = 0;
+          state.asked = 0;
+          state.streak = 0;
+          state.best = 0;
+          newRound();
+        });
+
+        // Keyboard play: press 1-4 to answer. Small touch, big difference.
+        document.addEventListener("keydown", function (event) {
+          if (state.loading || state.error) { return; }
+          if (event.key === "Enter" && state.picked !== null) { newRound(); return; }
+
+          const slot = Number(event.key);
+          if (slot >= 1 && slot <= 4 && state.picked === null) {
+            guess(state.choices[slot - 1]);
+          }
+        });
+
+        // --- Kick everything off ---------------------------------------
+        render();   // draw the "Loading..." state immediately
+        load();     // then go get the real data
+      </script>
+      <script type="text/plain" data-pg-file="extra-practice-posts/index.html">
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Step 3 · You Do — Your Turn</title>
+          <link rel="stylesheet" href="../../css/theme.css">
+        </head>
+        <body>
+
+          <header class="ics-header">
+            <div class="ics-wrap">
+              <a class="ics-back" href="index.html">&larr; Hello, API</a>
+              <div class="ics-brand"><span class="star">★</span> i.c.stars</div>
+              <h1 class="ics-title">Your Turn: Blog Posts</h1>
+              <p class="ics-sub">Extra practice — same three lines, a different endpoint. Do this at home.</p>
+            </div>
+          </header>
+
+          <main class="ics-wrap">
+            <span class="ics-step">Extra practice</span>
+
+            <p>
+              New endpoint, same three lines:
+              <code>https://jsonplaceholder.typicode.com/posts?_limit=12</code><br>
+              Each post looks like <code>{ id, userId, title, body }</code>.
+            </p>
+
+            <div class="ics-row">
+              <button class="ics-btn" id="loadBtn">Load posts</button>
+              <span class="ics-count" id="count"></span>
+            </div>
+
+            <div class="ics-grid" id="cards"></div>
+
+            <p class="ics-footer">Stuck? Open <code>extra-practice-posts-solution.html</code> — but try for 10 minutes first.</p>
+          </main>
+
+          <script src="js/extra-practice.js"><\/script>
+
+        </body>
+        </html>
+      </script>
+      <script type="text/plain" data-pg-file="extra-practice-posts/js/extra-practice.js">
+        // TODO 1: Put the posts URL in here (it's printed above the button).
+        const API_URL = "";
+
+        const button = document.getElementById("loadBtn");
+        const cards  = document.getElementById("cards");
+        const count  = document.getElementById("count");
+
+        button.addEventListener("click", async function () {
+          count.textContent = "Loading...";
+
+          cards.innerHTML = "";   // clear the old cards
+
+          // TODO 2: Write the two lines you've now written twice.
+          //   a) const response = ... fetch the API_URL, and await it
+          //   b) const posts    = ... turn response into JSON, and await it
+
+
+          // TODO 3: Loop over `posts`. For each one, build a card showing
+          //         post.title in an <h3> and post.body in a <p>.
+          //         Copy the shape from step-2-we-do.html, change the field names.
+
+
+          // TODO 4: Uncomment this once TODO 2 works. How many posts came back?
+          // count.textContent = posts.length + " posts loaded";
+        });
+      </script>
+      <script type="text/plain" data-pg-file="extra-practice-posts-solution/index.html">
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Step 3 · Solution</title>
+          <link rel="stylesheet" href="../../css/theme.css">
+        </head>
+        <body>
+
+          <header class="ics-header">
+            <div class="ics-wrap">
+              <a class="ics-back" href="index.html">&larr; Hello, API</a>
+              <div class="ics-brand"><span class="star">★</span> i.c.stars</div>
+              <h1 class="ics-title">Your Turn: Blog Posts — Solution</h1>
+              <p class="ics-sub">Compare this to yours. Different code that works is still correct.</p>
+            </div>
+          </header>
+
+          <main class="ics-wrap">
+            <span class="ics-step">Extra practice · Solution</span>
+
+            <div class="ics-row">
+              <button class="ics-btn" id="loadBtn">Load posts</button>
+              <span class="ics-count" id="count"></span>
+            </div>
+
+            <div class="ics-grid" id="cards"></div>
+
+            <p class="ics-footer">
+              Data from <a href="https://jsonplaceholder.typicode.com/posts">jsonplaceholder.typicode.com/posts</a>
+            </p>
+          </main>
+
+          <script src="js/extra-practice-solution.js"><\/script>
+
+        </body>
+        </html>
+      </script>
+      <script type="text/plain" data-pg-file="extra-practice-posts-solution/js/extra-practice-solution.js">
+        // TODO 1 answered:
+        const API_URL = "https://jsonplaceholder.typicode.com/posts?_limit=12";
+
+        const button = document.getElementById("loadBtn");
+        const cards  = document.getElementById("cards");
+        const count  = document.getElementById("count");
+
+        button.addEventListener("click", async function () {
+          count.textContent = "Loading...";
+
+          // TODO 2 answered — the same two lines, forever.
+          const response = await fetch(API_URL);
+          const posts    = await response.json();
+
+          cards.innerHTML = "";
+
+          // TODO 3 answered — same loop as Step 2, different field names.
+          posts.forEach(function (post) {
+            const card = document.createElement("div");
+            card.className = "ics-card";
+            card.innerHTML =
+              "<h3>" + post.title + "</h3>" +
+              "<p>" + post.body + "</p>";
+            cards.appendChild(card);
+          });
+
+          count.textContent = posts.length + " posts loaded";
+        });
+      </script>
+    </div>
+
+    <p class="ics-footer">
+      <!-- GENERATED by tools/build-playground.py from this workshop's own files.
+           Edit the workshop, then re-run the tool. Hand edits here will be lost. -->
+      Generated from this workshop's files by <code>tools/build-playground.py</code>.
+      <br>Back to <a href="index.html">Hello, API</a> &middot;
+      <a href="../../index.html">the Code Sandbox</a>
+    </p>
+  </main>
+
+  <script src="../../js/preview-core.js"></script>
+  <script src="../../js/playground.js"></script>
+
+</body>
+</html>

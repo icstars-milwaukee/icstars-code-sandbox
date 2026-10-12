@@ -9,10 +9,19 @@ editor** the student types real code into, and a **finished build** to compare
 against. No install, no npm, no build step, no accounts. Each one ends with the
 student holding something that works.
 
-Each step page carries a **Code Sandbox** — editor on the left, the running page
-on the right, a console underneath — so the first ten minutes of a session go to
-the lesson instead of to a file path. The same code sits on disk in each
-workshop's `js/` folder for anyone working in VS Code.
+Nobody installs anything to do a workshop. There are two live-code surfaces:
+
+- **The sandbox** — on every step page. One file, with the blanks still in it:
+  editor on the left, the running page on the right, a console underneath.
+- **The playground** — one per workshop (`playground.html`). The whole file tree
+  down the left side, already working. Click a folder and it runs; click a file
+  and it opens; delete a line and press Run to find out what it was holding up.
+  **Reset all** puts everything back. Open it from the red **live editor** chip
+  on any card on the front page.
+
+The same code sits on disk in each workshop's `js/` folder for anyone working in
+VS Code — that's still where students should end up. The editors exist so the
+first ten minutes of a session go to the lesson instead of to a file path.
 
 ---
 
@@ -46,10 +55,14 @@ CONTRIBUTING.md         how to add a workshop, and the house rules
 .nojekyll               keeps GitHub Pages from hiding workshops/_template/
 
 css/theme.css           the house theme — shared by every workshop
-css/sandbox.css         the live editor's styling
+css/sandbox.css         the one-file editor
+css/playground.css      the file tree
 css/library.css         front-door-only styling
 js/workshops.js         THE CATALOG — add your workshop here
-js/sandbox.js           the live editor. ~300 lines, no dependencies.
+js/preview-core.js      the shared engine — no dependencies
+js/sandbox.js           one editor, one file  (step pages)
+js/playground.js        a file tree, many files (per workshop)
+tools/build-playground.py   regenerates each playground.html
 
 workshops/_template/    copy this to start a new one (it runs as-is)
 workshops/01-hello-api/ fetch, JSON, async/await, DOM
@@ -64,8 +77,9 @@ The short version:
 2. Rewrite `REF-deck.html` — **don't touch its `<style>` block**
 3. Fill in the three passes (I do → We do → You do) and the answer key. Each
    step page is a sandbox: a starter block and an answer block, as plain text
-4. Add one object to `js/workshops.js`
-5. Teach it to real people, then set `status: "ready"`
+4. Run `python tools/build-playground.py` — it builds your `playground.html`
+5. Add one object to `js/workshops.js`, with `live: true`
+6. Teach it to real people, then set `status: "ready"`
 
 Full rules, including the parts of the house style that are not up for
 redesign, are in [CONTRIBUTING.md](CONTRIBUTING.md).
@@ -81,7 +95,14 @@ on the student. Nobody gets handed forty new words on night one.
 ## Deploying
 
 GitHub Pages, serving `main` from the repository root. Nothing to build, so a
-push is a deploy. `.nojekyll` is required — without it Pages hides any directory
+push is a deploy. `tools/build-playground.py` is an *authoring* tool, not part
+of serving the site — it writes a file you commit. Run it with `--check` in
+review to catch a `playground.html` that has gone stale:
+
+```bash
+python tools/build-playground.py --check   # exits 1 if any is out of date
+```
+ `.nojekyll` is required — without it Pages hides any directory
 whose name starts with an underscore, which would make `workshops/_template/`
 a 404.
 

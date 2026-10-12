@@ -59,7 +59,8 @@ the student sees, and the answer behind the Solution button:
 
 **Change `data-sb-storage` on every sandbox** from `TEMPLATE-rename-me/step-N`
 to `your-slug/step-N`. It's the key a student's work is saved under; leave it
-and your workshop fights the template for the same slot.
+and your workshop fights the template for the same slot. Same for
+`data-pg-storage` in `playground.html` — though the tool sets that one for you.
 
 The placeholder mechanic (pick one at random, hide it, guess it) is there so
 everything runs before you touch it. Replace the guts, keep the shape:
@@ -95,17 +96,38 @@ the next workshop gets it too.
 - [ ] The source tree on `index.html` matches the files that are actually there
 - [ ] The breadcrumb at the top of each page points at your `index.html`
 
-## 4. Put it on the shelf
+## 4. Build the playground
+
+`playground.html` is **generated** — don't hand-edit it. From the repo root:
+
+```bash
+python tools/build-playground.py 0N-your-slug
+```
+
+It reads your step pages and writes the file tree: one runnable folder per page,
+built from the blocks you already wrote. Re-run it whenever you change a step
+page, and check it before review:
+
+```bash
+python tools/build-playground.py --check
+```
+
+- [ ] Every folder in the tree runs when you click it
+- [ ] The folder order matches your teaching order (it follows the link order in
+      your `index.html` — fix it there, not in the tool)
+
+## 5. Put it on the shelf
 
 One object in `../../js/workshops.js`. Field-by-field notes are in the comment
 at the top of that file.
 
 - [ ] `slug` matches your folder name exactly
+- [ ] `live: true`, so the card gets its **live editor** chip
 - [ ] `hook` says what they **walk out holding**, not what the topic is called
 - [ ] `teaches` is five tags at most
 - [ ] `status` is `"draft"` — it is not `"ready"` until a cohort has survived it
 
-## 5. Teach it, then come back
+## 6. Teach it, then come back
 
 - [ ] Taught start to finish, with real people, on the clock
 - [ ] Every error anybody actually hit is now on the "When it breaks" slide

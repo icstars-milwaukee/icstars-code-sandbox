@@ -57,12 +57,39 @@ and the next person to teach it needs to see it.
 `theme.css` so the next workshop gets it too. A workshop-local stylesheet is
 for genuinely one-off things (see `workshops/01-hello-api/css/game.css`).
 
+## The two live-code surfaces
+
+Both run on one engine, `js/preview-core.js`. They exist because the first ten
+minutes of a workshop are the ones you lose — to a file path, a wrong folder, an
+editor nobody has opened before. These remove that and leave the lesson.
+
+| | Where | What it holds |
+|---|---|---|
+| **Sandbox** | every step page | one file, with the blanks still in it |
+| **Playground** | one per workshop | the whole file tree, already working |
+
+The playground is the "break it and see" surface: folders down the left, click
+one and it runs, click a file and it opens. It is **generated** from the
+workshop's own pages — you never hand-write it:
+
+```bash
+python tools/build-playground.py                # build all
+python tools/build-playground.py 0N-your-slug   # build yours
+python tools/build-playground.py --check        # fail if stale
+```
+
+Each runnable folder comes from a page that already exists: a sandbox step page
+becomes an `index.html` built from its `data-sb-html` block plus its starter
+code, and a plain runnable page (a finished build, a homework page) comes in
+whole with the `js/` and `css/` files it references. Project order follows the
+order your workshop's `index.html` links them in, so fix the order there.
+
+Re-run the tool after you touch a step page, and run `--check` before you ask
+for review.
+
 ## The sandbox
 
-Every step page carries a live editor: code on the left, the running page on
-the right, a console underneath. It exists because the first ten minutes of a
-workshop are the ones you lose — to a file path, a wrong folder, an editor
-nobody has opened before. The sandbox removes that and leaves the lesson.
+Code on the left, the running page on the right, a console underneath.
 
 You write three blocks of plain text; `js/sandbox.js` builds the rest.
 
@@ -82,15 +109,17 @@ You write three blocks of plain text; `js/sandbox.js` builds the rest.
   </script>
 
 </div>
+
+<script src="../../js/preview-core.js"></script>
 <script src="../../js/sandbox.js"></script>
 ```
 
-Link `css/sandbox.css` in the `<head>` alongside `theme.css`, and that's the
-whole integration.
+Link `css/sandbox.css` in the `<head>` alongside `theme.css`, load
+`js/preview-core.js` **before** `js/sandbox.js`, and that's the whole
+integration.
 
 - **`type="text/plain"`** means the browser neither runs nor parses the block,
-  so angle brackets and quotes survive exactly as typed. The one thing you
-  cannot put inside is the text `</script>`
+  so angle brackets and quotes survive exactly as typed
 - **`data-sb-storage`** must be unique per sandbox — it is the localStorage key
   that keeps a student's work across a refresh. Use `your-slug/step-N`. If you
   copy the template and forget to change it, two workshops fight over one key
@@ -103,6 +132,9 @@ whole integration.
 - The `data-sb-html` block is shown under the editor behind a "the markup this
   code runs against" toggle, because *"where does `sprite` come from?"* is the
   most common question at a sandbox
+- A block that must *contain* the text `</script>` writes it as `<\/script>` —
+  the HTML parser ends a `<script>` element at the first one regardless of
+  `type`. That is the only escape in the format, and the generator handles it
 
 The sandbox is not a replacement for VS Code. Keep the same code on disk in
 `js/`, and say so on the page — students need to end up editing real files.
@@ -160,6 +192,8 @@ Then, before you request review, open these yourself:
 - [ ] Your `REF-deck.html` — arrows drive it, `Ctrl+P` gives clean pages
 - [ ] Your `step-3-you-do.html` — runs with the TODOs unfinished and says which one to do
 - [ ] Your `step-3-you-do-solution.html` — actually plays through
+- [ ] Your `playground.html` — every folder runs when clicked
+- [ ] `python tools/build-playground.py --check` is clean
 - [ ] The whole folder from a `file://` path, not just a local server
 
 ---

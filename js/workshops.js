@@ -105,9 +105,16 @@ const WORKSHOPS = [
     const chips = el("div", "wchips");
     chips.appendChild(el("span", "chip " + w.status,
                          w.status === "soon" ? "coming soon" : w.status));
-    /* The signal that matters most to a student with no laptop
-       set up: can I do this right here, in the browser? */
-    if (w.live) chips.appendChild(el("span", "chip live", "live editor"));
+    /* The signal that matters most to a student with no laptop set
+       up: can I do this right here, in the browser? It is a link,
+       not a label — clicking "live editor" opens the playground,
+       because that is what anyone reading it expects. */
+    if (w.live && w.status !== "soon") {
+      const chip = el("a", "chip live", "live editor");
+      chip.href  = base + "playground.html";
+      chip.title = "Open every file in this workshop, already running";
+      chips.appendChild(chip);
+    }
     top.appendChild(chips);
     c.appendChild(top);
 
@@ -132,6 +139,7 @@ const WORKSHOPS = [
       links.appendChild(el("span", "wmeta", "Nothing to open yet."));
     } else {
       links.appendChild(link("Start the workshop", base + "index.html", true));
+      if (w.live) links.appendChild(link("Live editor ▸", base + "playground.html"));
       if (w.deck) links.appendChild(link("Deck", base + w.deck));
       (w.extras || []).forEach(function (x) {
         links.appendChild(link(x.label, base + x.file));

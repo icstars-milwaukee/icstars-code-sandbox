@@ -1,0 +1,208 @@
+/* ============================================================
+   THE PLAYGROUND — styling
+   Loaded by any page with a [data-pg] block. It builds on
+   sandbox.css: the toolbar buttons, the editor, the result frame
+   and the console pane are the same components, so link BOTH:
+
+     <link rel="stylesheet" href="../../css/theme.css">
+     <link rel="stylesheet" href="../../css/sandbox.css">
+     <link rel="stylesheet" href="../../css/playground.css">
+
+   What's new here is the file tree and the three-column body.
+   ============================================================ */
+
+.pg {
+  margin-top: var(--gap);
+  border: 1px solid var(--ink);
+  background: var(--ink);
+}
+
+/* 1. Toolbar — same furniture as the sandbox, plus a breadcrumb */
+.pg-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  background: var(--ink);
+  border-bottom: 3px solid var(--red);
+}
+.pg-kind {
+  font-family: var(--mono);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.pg-crumb {
+  font-family: var(--mono);
+  font-size: .78rem;
+  color: var(--paper);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* An edited file says so. It explains why Reset exists, and why
+   their work was still there after a refresh. */
+.pg-crumb.is-dirty::after {
+  content: " · edited";
+  color: var(--red);
+  font-weight: 700;
+}
+.pg-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+}
+
+/* 2. The three columns ------------------------------------- */
+.pg-body {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1.1fr) minmax(0, 1fr);
+  min-height: 430px;
+}
+@media (max-width: 1020px) {
+  .pg-body { grid-template-columns: 180px minmax(0, 1fr); }
+  .pg-right { grid-column: 1 / -1; border-left: none;
+              border-top: 1px solid rgba(154, 144, 149, .3); }
+}
+@media (max-width: 680px) {
+  .pg-body { grid-template-columns: 1fr; }
+  .pg-tree { max-height: 190px; border-right: none;
+             border-bottom: 1px solid rgba(154, 144, 149, .3); }
+}
+
+/* 3. The file tree ----------------------------------------- */
+.pg-tree {
+  overflow: auto;
+  padding: 8px 0 12px;
+  background: var(--ink);
+  border-right: 1px solid rgba(154, 144, 149, .3);
+}
+.pg-tree-head {
+  padding: 4px 12px 10px;
+  font-family: var(--mono);
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+
+/* A project folder. Clicking it runs the project. */
+.pg-folder > summary {
+  display: flex;
+  align-items: baseline;
+  gap: .5em;
+  cursor: pointer;
+  padding: 7px 12px;
+  list-style: none;
+  border-left: 3px solid transparent;
+}
+.pg-folder > summary::-webkit-details-marker { display: none; }
+.pg-folder > summary:hover { background: var(--ink-soft); }
+.pg-folder > summary:focus-visible { outline: 2px solid var(--red); outline-offset: -2px; }
+
+.pg-folder-name {
+  font-family: var(--mono);
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--paper);
+}
+.pg-folder-label {
+  font-size: .68rem;
+  color: var(--grey);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* The run affordance, so "click the folder" is discoverable
+   rather than something you have to be told. */
+.pg-folder-run {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: .64rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--red);
+  opacity: 0;
+}
+.pg-folder > summary:hover .pg-folder-run { opacity: 1; }
+
+/* The project currently in the preview. */
+.pg-folder.is-running > summary {
+  border-left-color: var(--red);
+  background: var(--ink-soft);
+}
+.pg-folder.is-running .pg-folder-run { opacity: 1; }
+
+.pg-children { padding-left: 12px; }
+
+.pg-subfolder > summary {
+  cursor: pointer;
+  padding: 4px 12px;
+  font-family: var(--mono);
+  font-size: .76rem;
+  color: var(--grey);
+  list-style: none;
+}
+.pg-subfolder > summary::-webkit-details-marker { display: none; }
+.pg-subfolder > summary::before { content: "▾ "; }
+.pg-subfolder:not([open]) > summary::before { content: "▸ "; }
+.pg-subfolder > summary:hover { color: var(--paper); }
+
+/* A file. */
+.pg-file {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  font-family: var(--mono);
+  font-size: .77rem;
+  cursor: pointer;
+  padding: 4px 12px 4px 20px;
+  color: var(--grey);
+  background: transparent;
+  border: none;
+  border-left: 3px solid transparent;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pg-file:hover { color: var(--paper); background: var(--ink-soft); }
+.pg-file:focus-visible { outline: 2px solid var(--red); outline-offset: -2px; }
+.pg-file.is-open {
+  color: var(--paper);
+  background: var(--ink-soft);
+  border-left-color: var(--red);
+  font-weight: 700;
+}
+
+/* 4. The editor column ------------------------------------- */
+.pg-editor {
+  display: flex;
+  min-width: 0;
+  background: var(--ink-soft);
+}
+
+/* 5. The right column — result over console ---------------- */
+.pg-right {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  min-width: 0;
+  border-left: 1px solid rgba(154, 144, 149, .3);
+}
+.pg .sb-frame  { min-height: 280px; }
+.pg .sb-log    { height: 120px; }
+
+/* 6. The caption under a playground ------------------------ */
+.pg-note {
+  margin: 8px 0 0;
+  font-size: .86rem;
+  color: var(--grey-dark);
+}
