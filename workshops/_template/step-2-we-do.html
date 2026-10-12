@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Step 2 · We Do — THE NEXT LAYER</title>
+  <title>Step 2 &middot; We Do &mdash; THE NEXT LAYER</title>
   <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/sandbox.css">
 </head>
 <body>
 
@@ -18,32 +19,155 @@
   </header>
 
   <main class="ics-wrap">
-
-    <span class="ics-step">Step 2 · We do</span>
+    <span class="ics-step">Step 2 &middot; We do</span>
 
     <p>
       What this step adds on top of Step 1, in one sentence. Then the checkpoint:
       <em>when this works you will see EXACTLY THIS on your screen.</em>
     </p>
 
-    <div class="ics-row">
-      <button class="ics-btn" id="goBtn">DO THE THING</button>
-      <span class="ics-count" id="count"></span>
+    <p class="ics-sub" style="color:var(--grey-dark)">
+      Two blanks. We stop at each <strong>CHECKPOINT</strong> until every thumb is up.
+    </p>
+
+    <div data-sb
+         data-sb-file="js/step-2.js"
+         data-sb-storage="TEMPLATE-rename-me/step-2">
+
+      <script type="text/plain" data-sb-html>
+        <div class="ics-row">
+          <button class="ics-btn" id="goBtn">DO THE THING</button>
+          <span class="ics-count" id="count"></span>
+        </div>
+        <div class="ics-note" id="status">Nothing yet. Click the button.</div>
+        <div class="ics-out" id="out">(output appears here)</div>
+      </script>
+
+      <script type="text/plain" data-sb-js>
+        /* STEP 2 - WE DO - one more layer, built together.
+           One new idea, no more. Here: pick at random, and hide it.
+           Stop at every CHECKPOINT and look at the room. */
+
+        const SOURCE = ["first thing", "second thing", "third thing", "fourth thing"];
+
+        const goBtn    = document.getElementById("goBtn");
+        const statusEl = document.getElementById("status");
+        const outEl    = document.getElementById("out");
+        const countEl  = document.getElementById("count");
+
+        // State lives in ONE place, named, at the top. When the page is
+        // wrong, the first question is always "what is in here?"
+        let current = null;
+
+        // BLANK 1: Math.random() gives 0 to 0.999..., times the length,
+        // floored, is a valid index every time. Say this one out loud -
+        // they will reach for this move for the rest of their lives.
+        function pickRandom(list) {
+
+        }
+
+        function newRound() {
+          current = pickRandom(SOURCE);
+
+          outEl.textContent    = "? ? ?";          // hidden, on purpose
+          statusEl.className   = "ics-note";
+          statusEl.textContent = "Something is picked. You can't see which one yet.";
+          countEl.textContent  = "picked from " + SOURCE.length;
+
+          // CHECKPOINT: the box shows ? ? ? and clicking changes nothing
+          // visible. Thumbs up. Then ask: how would you PROVE it really
+          // picked something? (Answer: reveal it. That's the next blank.)
+        }
+
+        function reveal() {
+          // BLANK 2: put `current` in the output box and say what it was.
+
+
+          // CHECKPOINT: Reveal shows a different answer most times.
+          // Thumbs up. That randomness is what makes step 3 a game.
+        }
+
+        let revealed = false;
+        goBtn.addEventListener("click", function () {
+          revealed = !revealed;
+          if (revealed) { reveal(); } else { newRound(); }
+          goBtn.textContent = revealed ? "New one" : "Reveal";
+        });
+
+        newRound();
+        goBtn.textContent = "Reveal";
+      </script>
+
+      <script type="text/plain" data-sb-solution>
+        /* STEP 2 - WE DO - finished.
+           One new idea, no more. Here: pick at random, and hide it.
+           Stop at every CHECKPOINT and look at the room. */
+
+        const SOURCE = ["first thing", "second thing", "third thing", "fourth thing"];
+
+        const goBtn    = document.getElementById("goBtn");
+        const statusEl = document.getElementById("status");
+        const outEl    = document.getElementById("out");
+        const countEl  = document.getElementById("count");
+
+        // State lives in ONE place, named, at the top. When the page is
+        // wrong, the first question is always "what is in here?"
+        let current = null;
+
+        // BLANK 1: Math.random() gives 0 to 0.999..., times the length,
+        // floored, is a valid index every time. Say this one out loud -
+        // they will reach for this move for the rest of their lives.
+        function pickRandom(list) {
+          return list[Math.floor(Math.random() * list.length)];
+        }
+
+        function newRound() {
+          current = pickRandom(SOURCE);
+
+          outEl.textContent    = "? ? ?";          // hidden, on purpose
+          statusEl.className   = "ics-note";
+          statusEl.textContent = "Something is picked. You can't see which one yet.";
+          countEl.textContent  = "picked from " + SOURCE.length;
+
+          // CHECKPOINT: the box shows ? ? ? and clicking changes nothing
+          // visible. Thumbs up. Then ask: how would you PROVE it really
+          // picked something? (Answer: reveal it. That's the next blank.)
+        }
+
+        function reveal() {
+          outEl.textContent    = current;
+          statusEl.className   = "ics-note success";
+          statusEl.textContent = "It was: " + current;
+
+          // CHECKPOINT: Reveal shows a different answer most times.
+          // Thumbs up. That randomness is what makes step 3 a game.
+        }
+
+        let revealed = false;
+        goBtn.addEventListener("click", function () {
+          revealed = !revealed;
+          if (revealed) { reveal(); } else { newRound(); }
+          goBtn.textContent = revealed ? "New one" : "Reveal";
+        });
+
+        newRound();
+        goBtn.textContent = "Reveal";
+      </script>
+
     </div>
 
-    <div class="ics-note" id="status">Nothing yet. Click the button.</div>
-
-    <!-- The output box. Use it to show raw data while learning —
-         seeing the shape of the real thing beats describing it. -->
-    <div class="ics-out" id="out">(output appears here)</div>
+    <p class="sb-caption">
+      Fill a blank, press <strong>Ctrl + Enter</strong>, read the result together.
+      Never move past a checkpoint on silence &mdash; silence is not agreement.
+    </p>
 
     <p class="ics-footer">
-      The code is in <code>js/step-2.js</code>. Stop at every
-      <code>CHECKPOINT</code> comment and wait for thumbs up before moving on.
+      The same code is on disk at <code>js/step-2.js</code> for anyone working in VS Code.
+      <br>Next: <a href="step-3-you-do.html">Step 3 &rarr;</a>
     </p>
   </main>
 
-  <script src="js/step-2.js"></script>
+  <script src="../../js/sandbox.js"></script>
 
 </body>
 </html>

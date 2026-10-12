@@ -159,9 +159,15 @@
   padding: 4px 8px;
   white-space: nowrap;
 }
+.wchips { display: flex; flex-wrap: wrap; gap: 5px; justify-content: flex-end; }
+
 .chip.ready { background: var(--ink);       color: var(--paper); }
 .chip.draft { background: var(--paper-dim); color: var(--grey-dark); }
 .chip.soon  { background: #fff; color: var(--grey-dark); border: 1px dashed var(--grey); }
+
+/* "You can do this one right now, in this browser, on a borrowed
+   laptop." That is worth a red chip. */
+.chip.live  { background: var(--red); color: var(--paper); }
 
 /* 6. The ghost card — "the next one goes here" -------------- */
 .wcard.ghost {

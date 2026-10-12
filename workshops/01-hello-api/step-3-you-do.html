@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Step 3 · You Do — Make It a Game</title>
   <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/sandbox.css">
 </head>
 <body>
 
@@ -17,37 +18,273 @@
     </div>
   </header>
 
-  <div class="ics-stage">
-    <img id="sprite" class="ics-sprite hidden" alt="Mystery Pokémon silhouette">
-  </div>
-
   <main class="ics-wrap">
-    <div class="ics-row">
-      <span class="ics-step">Step 3 · You do</span>
-      <span class="ics-score" id="score">SCORE <b>0</b> / 0</span>
-    </div>
+    <span class="ics-step">Step 3 · You do</span>
 
     <p>
       Step 2 showed a mystery and revealed it. A <strong>game</strong> needs one more thing:
       <strong>four buttons to guess with</strong>, and a score.
     </p>
 
-    <!-- Your four buttons will go in here. -->
-    <div class="ics-choices" id="choices"></div>
+    <p class="ics-sub" style="color:var(--grey-dark)">
+      Three TODOs, each a move you have already watched twice tonight. The page
+      <strong>runs right now</strong> with all three unfinished — it will tell you which one to
+      go do. Press <strong>Ctrl + Enter</strong> to run without reaching for the mouse.
+    </p>
 
-    <div class="ics-note" id="status">Loading 151 Pokémon...</div>
+    <div data-sb
+         data-sb-file="js/step-3.js"
+         data-sb-storage="01-hello-api/step-3">
 
-    <div class="ics-row">
-      <button class="ics-btn" id="nextBtn" disabled>Next &rarr;</button>
+      <script type="text/plain" data-sb-html>
+        <div class="ics-stage">
+          <img id="sprite" class="ics-sprite hidden" alt="Mystery Pokémon silhouette">
+        </div>
+        <div class="ics-row">
+          <span class="ics-score" id="score">SCORE <b>0</b> / 0</span>
+        </div>
+        <div class="ics-choices" id="choices"></div>
+        <div class="ics-note" id="status">Loading 151 Pokémon...</div>
+        <div class="ics-row">
+          <button class="ics-btn" id="nextBtn" disabled>Next &rarr;</button>
+        </div>
+      </script>
+
+      <script type="text/plain" data-sb-js>
+        /* ============================================================
+           A game is just:  data  +  a random pick  +  a click handler
+           You built the first two in Step 2. Now you add the click.
+           ============================================================ */
+
+        const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=151";
+
+        const sprite    = document.getElementById("sprite");
+        const choicesEl = document.getElementById("choices");
+        const statusEl  = document.getElementById("status");
+        const scoreEl   = document.getElementById("score");
+        const nextBtn   = document.getElementById("nextBtn");
+
+        let allPokemon = [];
+        let right = 0;    // how many you got right
+        let asked = 0;    // how many you've been asked
+
+
+        // ---- 1. GET THE DATA -------------------------------------
+        async function load() {
+          // TODO 1: the two lines you've now written twice tonight.
+          //   a) const response = ... fetch the API_URL, and await it
+          //   b) const data     = ... turn response into JSON, and await it
+          //   Then uncomment this, which keeps just the list:
+          // allPokemon = data.results;
+
+
+          if (allPokemon.length === 0) {
+            statusEl.className   = "ics-note error";
+            statusEl.textContent = "No Pokémon yet — finish TODO 1.";
+            return;
+          }
+          statusEl.textContent = "Loaded " + allPokemon.length + " Pokémon. Guess away!";
+          newRound();
+        }
+
+
+        // ---- 2. START A ROUND (given — this is Step 2's code) -----
+        function newRound() {
+          nextBtn.disabled = true;
+          sprite.classList.add("hidden");
+          statusEl.className   = "ics-note";
+          statusEl.textContent = "Who's that Pokémon?";
+
+          // The answer, plus three decoys that aren't the answer.
+          const answer  = pickRandom(allPokemon);
+          const choices = [answer];
+          while (choices.length < 4) {
+            const maybe = pickRandom(allPokemon);
+            if (!choices.includes(maybe)) { choices.push(maybe); }
+          }
+          shuffle(choices);
+
+          sprite.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
+                     + idFromUrl(answer.url) + ".png";
+
+          // ---- TODO 2: build one button per choice -----------------
+          // This is the SAME forEach shape you've seen all night.
+          choicesEl.innerHTML = "";
+          choices.forEach(function (option) {
+
+            // a) make a <button> element and put it in a variable called btn
+            //      hint: document.createElement("button")
+
+            // b) give it   btn.className = "ics-choice";
+
+            // c) put the name on it:   btn.textContent = option.name;
+
+            // d) when it's clicked, call guess():
+            //      btn.addEventListener("click", function () { guess(btn, option, answer); });
+
+            // e) add it to the page:   choicesEl.appendChild(btn);
+
+          });
+
+          // Nothing built yet? Say so, instead of leaving an empty box.
+          // (Delete this once TODO 2 works.)
+          if (choicesEl.children.length === 0) {
+            statusEl.className   = "ics-note error";
+            statusEl.textContent = "No buttons yet — finish TODO 2.";
+          }
+        }
+
+
+        // ---- 3. HANDLE A GUESS ------------------------------------
+        function guess(button, picked, answer) {
+          sprite.classList.remove("hidden");   // the big reveal
+          asked++;
+
+          // ---- TODO 3: did they get it right? ----------------------
+          // If picked is the same as answer:  add 1 to right,
+          //   give the button  .classList.add("right")  and say "Correct!"
+          // Otherwise: give the button  .classList.add("wrong")  and say
+          //   what it really was.
+          //
+          // if (picked === answer) {
+          //   ...
+          // } else {
+          //   ...
+          // }
+
+
+          // Grey out every button and highlight the correct one (given).
+          document.querySelectorAll(".ics-choice").forEach(function (b) {
+            b.disabled = true;
+            if (b.textContent === answer.name) { b.classList.add("right"); }
+          });
+
+          scoreEl.innerHTML = "SCORE <b>" + right + "</b> / " + asked;
+          nextBtn.disabled = false;
+        }
+
+
+        // ---- little helpers (nothing new to learn here) ------------
+        function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]; }
+        function shuffle(list)    { list.sort(function () { return Math.random() - 0.5; }); }
+
+        // "https://pokeapi.co/api/v2/pokemon/25/"  ->  "25"
+        function idFromUrl(url)   { return url.split("/")[6]; }
+
+        nextBtn.addEventListener("click", newRound);
+
+        load();
+      </script>
+
+      <script type="text/plain" data-sb-solution>
+        /* ============================================================
+           STEP 3 — finished. The three TODOs, filled in.
+           ============================================================ */
+
+        const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=151";
+
+        const sprite    = document.getElementById("sprite");
+        const choicesEl = document.getElementById("choices");
+        const statusEl  = document.getElementById("status");
+        const scoreEl   = document.getElementById("score");
+        const nextBtn   = document.getElementById("nextBtn");
+
+        let allPokemon = [];
+        let right = 0;
+        let asked = 0;
+
+
+        async function load() {
+          // ---- TODO 1, done --------------------------------------
+          const response = await fetch(API_URL);
+          const data     = await response.json();
+          allPokemon     = data.results;
+
+          statusEl.textContent = "Loaded " + allPokemon.length + " Pokémon. Guess away!";
+          newRound();
+        }
+
+
+        function newRound() {
+          nextBtn.disabled = true;
+          sprite.classList.add("hidden");
+          statusEl.className   = "ics-note";
+          statusEl.textContent = "Who's that Pokémon?";
+
+          const answer  = pickRandom(allPokemon);
+          const choices = [answer];
+          while (choices.length < 4) {
+            const maybe = pickRandom(allPokemon);
+            if (!choices.includes(maybe)) { choices.push(maybe); }
+          }
+          shuffle(choices);
+
+          sprite.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
+                     + idFromUrl(answer.url) + ".png";
+
+          // ---- TODO 2, done --------------------------------------
+          choicesEl.innerHTML = "";
+          choices.forEach(function (option) {
+            const btn = document.createElement("button");
+            btn.className   = "ics-choice";
+            btn.textContent = option.name;
+            btn.addEventListener("click", function () { guess(btn, option, answer); });
+            choicesEl.appendChild(btn);
+          });
+        }
+
+
+        function guess(button, picked, answer) {
+          sprite.classList.remove("hidden");
+          asked++;
+
+          // ---- TODO 3, done --------------------------------------
+          if (picked === answer) {
+            right++;
+            button.classList.add("right");
+            statusEl.className   = "ics-note success";
+            statusEl.textContent = "Correct!";
+          } else {
+            button.classList.add("wrong");
+            statusEl.className   = "ics-note error";
+            statusEl.textContent = "Not quite — it was " + answer.name + ".";
+          }
+
+          document.querySelectorAll(".ics-choice").forEach(function (b) {
+            b.disabled = true;
+            if (b.textContent === answer.name) { b.classList.add("right"); }
+          });
+
+          scoreEl.innerHTML = "SCORE <b>" + right + "</b> / " + asked;
+          nextBtn.disabled = false;
+        }
+
+
+        function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]; }
+        function shuffle(list)    { list.sort(function () { return Math.random() - 0.5; }); }
+        function idFromUrl(url)   { return url.split("/")[6]; }
+
+        nextBtn.addEventListener("click", newRound);
+
+        load();
+      </script>
+
     </div>
 
+    <p class="sb-caption">
+      Stuck for five minutes? Press <strong>Solution</strong> — looking at the answer is allowed,
+      and it asks before it overwrites your work. Errors land in the
+      <strong>Console</strong> pane with the line number. Say <strong>STUCK</strong> out loud.
+    </p>
+
     <p class="ics-footer">
-      Stuck? Open <code>step-3-you-do-solution.html</code> — but try for five minutes first.
-      <br>Press <strong>F12</strong> → Console to read your errors.
+      Same code on disk at <code>js/step-3.js</code> · answer key at
+      <a href="step-3-you-do-solution.html">step-3-you-do-solution.html</a>
+      <br>Then: <a href="game.html">the complete game &rarr;</a>
     </p>
   </main>
 
-  <script src="js/step-3.js"></script>
+  <script src="../../js/sandbox.js"></script>
 
 </body>
 </html>

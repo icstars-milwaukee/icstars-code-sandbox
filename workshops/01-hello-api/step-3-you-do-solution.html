@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Step 3 · Solution — Make It a Game</title>
   <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/sandbox.css">
 </head>
 <body>
 
@@ -13,40 +14,151 @@
       <a class="ics-back" href="index.html">&larr; Hello, API</a>
       <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span></div>
       <h1 class="ics-title">Make It a Game</h1>
-      <p class="ics-sub">Solution — compare with yours. Different code that works is still correct.</p>
+      <p class="ics-sub">Step 3, finished. Read it, then go back and fix yours.</p>
     </div>
   </header>
 
-  <div class="ics-stage">
-    <img id="sprite" class="ics-sprite hidden" alt="Mystery Pokémon silhouette">
-  </div>
-
   <main class="ics-wrap">
-    <div class="ics-row">
-      <span class="ics-step">Step 3 · Solution</span>
-      <span class="ics-score" id="score">SCORE <b>0</b> / 0</span>
-    </div>
+    <span class="ics-step">Step 3 · Answer key</span>
 
     <p>
-      Step 2 showed a mystery and revealed it. A <strong>game</strong> needs one more thing:
-      <strong>four buttons to guess with</strong>, and a score.
+      The same page with the three TODOs filled in &mdash; and it is playable right here.
+      Compare it against yours. Copying it in works tonight and costs you next week.
     </p>
 
-    <!-- Your four buttons will go in here. -->
-    <div class="ics-choices" id="choices"></div>
+    <p class="ics-sub" style="color:var(--grey-dark)">
+      The editor is live here too, so you can take the finished game apart: delete the
+      <code>shuffle(choices)</code> line and Run, then watch why it mattered. Breaking working
+      code on purpose is the cheapest way to learn what each line was holding up.
+    </p>
 
-    <div class="ics-note" id="status">Loading 151 Pokémon...</div>
+    <div data-sb
+         data-sb-file="js/step-3-solution.js"
+         data-sb-storage="01-hello-api/step-3-solution">
 
-    <div class="ics-row">
-      <button class="ics-btn" id="nextBtn" disabled>Next &rarr;</button>
+      <script type="text/plain" data-sb-html>
+        <div class="ics-stage">
+          <img id="sprite" class="ics-sprite hidden" alt="Mystery Pokémon silhouette">
+        </div>
+        <div class="ics-row">
+          <span class="ics-score" id="score">SCORE <b>0</b> / 0</span>
+        </div>
+        <div class="ics-choices" id="choices"></div>
+        <div class="ics-note" id="status">Loading 151 Pokémon...</div>
+        <div class="ics-row">
+          <button class="ics-btn" id="nextBtn" disabled>Next &rarr;</button>
+        </div>
+      </script>
+
+      <script type="text/plain" data-sb-js>
+        /* ============================================================
+           STEP 3 — finished. The three TODOs, filled in.
+           ============================================================ */
+
+        const API_URL = "https://pokeapi.co/api/v2/pokemon?limit=151";
+
+        const sprite    = document.getElementById("sprite");
+        const choicesEl = document.getElementById("choices");
+        const statusEl  = document.getElementById("status");
+        const scoreEl   = document.getElementById("score");
+        const nextBtn   = document.getElementById("nextBtn");
+
+        let allPokemon = [];
+        let right = 0;
+        let asked = 0;
+
+
+        async function load() {
+          // ---- TODO 1, done --------------------------------------
+          const response = await fetch(API_URL);
+          const data     = await response.json();
+          allPokemon     = data.results;
+
+          statusEl.textContent = "Loaded " + allPokemon.length + " Pokémon. Guess away!";
+          newRound();
+        }
+
+
+        function newRound() {
+          nextBtn.disabled = true;
+          sprite.classList.add("hidden");
+          statusEl.className   = "ics-note";
+          statusEl.textContent = "Who's that Pokémon?";
+
+          const answer  = pickRandom(allPokemon);
+          const choices = [answer];
+          while (choices.length < 4) {
+            const maybe = pickRandom(allPokemon);
+            if (!choices.includes(maybe)) { choices.push(maybe); }
+          }
+          shuffle(choices);
+
+          sprite.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
+                     + idFromUrl(answer.url) + ".png";
+
+          // ---- TODO 2, done --------------------------------------
+          choicesEl.innerHTML = "";
+          choices.forEach(function (option) {
+            const btn = document.createElement("button");
+            btn.className   = "ics-choice";
+            btn.textContent = option.name;
+            btn.addEventListener("click", function () { guess(btn, option, answer); });
+            choicesEl.appendChild(btn);
+          });
+        }
+
+
+        function guess(button, picked, answer) {
+          sprite.classList.remove("hidden");
+          asked++;
+
+          // ---- TODO 3, done --------------------------------------
+          if (picked === answer) {
+            right++;
+            button.classList.add("right");
+            statusEl.className   = "ics-note success";
+            statusEl.textContent = "Correct!";
+          } else {
+            button.classList.add("wrong");
+            statusEl.className   = "ics-note error";
+            statusEl.textContent = "Not quite — it was " + answer.name + ".";
+          }
+
+          document.querySelectorAll(".ics-choice").forEach(function (b) {
+            b.disabled = true;
+            if (b.textContent === answer.name) { b.classList.add("right"); }
+          });
+
+          scoreEl.innerHTML = "SCORE <b>" + right + "</b> / " + asked;
+          nextBtn.disabled = false;
+        }
+
+
+        function pickRandom(list) { return list[Math.floor(Math.random() * list.length)]; }
+        function shuffle(list)    { list.sort(function () { return Math.random() - 0.5; }); }
+        function idFromUrl(url)   { return url.split("/")[6]; }
+
+        nextBtn.addEventListener("click", newRound);
+
+        load();
+      </script>
+
+
     </div>
 
+    <p class="sb-caption">
+      <strong>Reset</strong> puts the finished code back if you break it beyond repair.
+      The three answers are marked <code>TODO 1, done</code> and so on.
+    </p>
+
     <p class="ics-footer">
-      Press <strong>F12</strong> → Console to read your errors.
+      Same code on disk at <code>js/step-3-solution.js</code> ·
+      back to <a href="step-3-you-do.html">your version</a>
+      <br>Then: <a href="game.html">the complete game &rarr;</a>
     </p>
   </main>
 
-  <script src="js/step-3-solution.js"></script>
+  <script src="../../js/sandbox.js"></script>
 
 </body>
 </html>

@@ -48,22 +48,41 @@ Check as you go:
 
 ## 2. Fill in the three passes
 
+Each step page carries a **live sandbox**: an editor, a running preview, and a
+console. The code lives in the page as two blocks of plain text — the starter
+the student sees, and the answer behind the Solution button:
+
+```html
+<script type="text/plain" data-sb-js>        ... starter ...  </script>
+<script type="text/plain" data-sb-solution>  ... answer  ...  </script>
+```
+
+**Change `data-sb-storage` on every sandbox** from `TEMPLATE-rename-me/step-N`
+to `your-slug/step-N`. It's the key a student's work is saved under; leave it
+and your workshop fights the template for the same slot.
+
 The placeholder mechanic (pick one at random, hide it, guess it) is there so
-the files run. Replace the guts, keep the shape:
+everything runs before you touch it. Replace the guts, keep the shape:
 
-| File | Pass | Rule |
+| Page / file | Pass | Rule |
 |---|---|---|
-| `js/step-1.js` | I do | The smallest thing that works. Over ten lines means two workshops |
-| `js/step-2.js` | We do | **One** new idea. A `CHECKPOINT` comment at every stop |
-| `js/step-3.js` | You do | **Exactly three** TODOs, each 1–4 lines of typing |
-| `js/step-3-solution.js` | key | Must actually run. This file is the test |
+| `step-1-i-do.html` + `js/step-1.js` | I do | The smallest thing that works. Over ten lines means two workshops |
+| `step-2-we-do.html` + `js/step-2.js` | We do | **One** new idea. A `CHECKPOINT` comment at every stop |
+| `step-3-you-do.html` + `js/step-3.js` | You do | **Exactly three** TODOs, each 1–4 lines of typing |
+| `step-3-you-do-solution.html` + `js/step-3-solution.js` | key | Must actually play through. This is the test |
 
-- [ ] `step-3.js` still runs with all three TODOs unfinished, and says in plain
-      English which one to go do. A white screen plus a console error is how you
-      lose somebody for the night
+Keep the `js/` files matching the blocks in the pages. Students should end up
+editing real files in VS Code; the sandbox is there so night one isn't spent on
+file paths. Full sandbox contract is in the root `CONTRIBUTING.md`.
+
+- [ ] The step-3 starter still runs with all three TODOs unfinished, and says in
+      plain English which one to go do. A white screen plus a console error is
+      how you lose somebody for the night
 - [ ] Every TODO is a move they watched twice already this session
-- [ ] You did your own TODOs cold, in under nine minutes, from your own
-      instructions. If you couldn't, they're too big
+- [ ] You did your own TODOs cold, in the sandbox, in under nine minutes, from
+      your own instructions. If you couldn't, they're too big
+- [ ] `data-sb-storage` renamed on all four pages
+- [ ] Every id your code reaches for exists in that page's `data-sb-html` block
 
 ## 3. Rewrite the pages
 

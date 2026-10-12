@@ -35,19 +35,22 @@
       <a class="link" href="step-1-i-do.html">
         <span class="pass">I do</span>
         <b>Step 1 — One Pokémon</b>
-        <span>The three lines. Name, weight, type, and its picture on the page.</span>
+        <span>The three lines. Name, weight, type, and its picture on the page.
+          <strong>Live editor</strong> — four EDIT slots, typed in front of the room.</span>
       </a>
 
       <a class="link" href="step-2-we-do.html">
         <span class="pass">We do</span>
         <b>Step 2 — The mystery silhouette</b>
-        <span>A list of 151, a random pick, and one line of CSS that hides it.</span>
+        <span>A list of 151, a random pick, and one line of CSS that hides it.
+          <strong>Live editor</strong> — three blanks, with a checkpoint at each.</span>
       </a>
 
       <a class="link" href="step-3-you-do.html">
         <span class="pass">You do</span>
         <b>Step 3 — Make it a game</b>
-        <span>Three TODOs: four guess buttons and a score.
+        <span>Three TODOs: four guess buttons and a score. <strong>Live editor</strong> —
+          runs with the TODOs unfinished and tells you which one to go do.
           (<a href="step-3-you-do-solution.html">solution</a>)</span>
       </a>
 
@@ -67,8 +70,9 @@
 
     <h2 style="margin-top:36px;font-size:1.2rem">The source tree</h2>
     <p class="ics-sub" style="color:var(--grey-dark)">
-      Standard static-site layout: pages in this folder, styles in <code>css/</code>,
-      scripts in <code>js/</code>. No build step, no npm.
+      The three step pages each carry a <strong>Code Sandbox</strong> — an editor, a live
+      preview and a console — so nobody loses ten minutes to a file path. The same code sits
+      in <code>js/</code> for anyone who would rather work in VS Code. No build step, no npm.
     </p>
 
     <div class="tree">workshops/01-hello-api/
@@ -88,8 +92,8 @@
 │   ├── extra-practice.js
 │   └── extra-practice-solution.js
 │
-├── step-1-i-do.html                  each page is markup only...
-├── step-2-we-do.html                 ...and loads one file from js/
+├── step-1-i-do.html                  prose + a live sandbox...
+├── step-2-we-do.html                 ...starter code and answer, inline
 ├── step-3-you-do.html
 ├── step-3-you-do-solution.html
 ├── game.html

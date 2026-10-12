@@ -26,9 +26,9 @@
 
     <p class="lib-lede">
       Nothing in here is a lecture. Each workshop is a <strong>deck you can present</strong>,
-      a <strong>set of files you can run</strong>, and a finished build to compare yours against.
-      No servers, no npm, no accounts &mdash; a browser and VS&nbsp;Code.
-      <strong>Walk out with the thing built.</strong>
+      a <strong>live editor you can type into</strong>, and a finished build to compare yours
+      against. No install, no npm, no accounts &mdash; if you can open this page you can do
+      the work. <strong>Walk out with the thing built.</strong>
     </p>
 
     <h2 class="lib-h2" id="shelf-heading">The shelf</h2>
@@ -66,6 +66,40 @@
       </div>
     </div>
 
+    <!-- ================= The sandbox ================= -->
+    <h2 class="lib-h2">The sandbox</h2>
+    <p class="lib-lede">
+      Every step page carries one: an editor on the left, the running page on the right, and a
+      console underneath. Students type real code and press <strong>Run</strong> &mdash; no
+      install, no file paths, no "it works on my machine" on night one. Your work is kept in
+      the browser, so a refresh doesn't cost you anything.
+    </p>
+
+    <div class="tree">┌─ step-1-i-do.html ─────────────────────────────────────┐
+│ JAVASCRIPT  js/step-1.js      <b>[ Run ▸ ]</b> [Reset] [Solution] │
+├────────────────────────────────┬───────────────────────┤
+│ 1  const API_URL =             │ RESULT                │
+│ 2    "https://pokeapi.co/..."; │                       │
+│ 3                              │     [ sprite ]        │
+│ 4  const response =            │                       │
+│ 5    await fetch(API_URL);     │  name:   pikachu      │
+│ 6  const pokemon =             │  weight: 60           │
+│ 7    await response.json();    │                       │
+│ 8                              ├───────────────────────┤
+│ 9  output.textContent =        │ CONSOLE               │
+│10    pokemon.name;             │ <b>line 7</b> Unexpected end   │
+│                                │         of input      │
+└────────────────────────────────┴───────────────────────┘
+   their code                        what it did, and
+   Ctrl+Enter to run                 what went wrong</div>
+
+    <p class="lib-lede">
+      Errors land in the console pane in red, with the line number counted from
+      <strong>line 1 of their code</strong> &mdash; not line 1 of some generated file they never
+      saw. Every run rebuilds the preview from scratch, so nobody debugs state left over from
+      the last attempt. It's about 300 lines in <code>js/sandbox.js</code>, with no dependencies.
+    </p>
+
     <!-- ================= Adding the next one ================= -->
     <h2 class="lib-h2" id="add">Add the next workshop</h2>
     <p class="lib-lede">
@@ -79,8 +113,9 @@
       <li>Rewrite <code>REF-deck.html</code>. Arrow keys drive it, <code>Ctrl+P</code> saves it
         as a PDF. <strong>Do not touch the <code>&lt;style&gt;</code> block</strong> &mdash; the
         palette is the house palette.</li>
-      <li>Fill in the three step pages and their files in <code>js/</code>. Leave exactly three
-        TODOs in the <em>You do</em> step.</li>
+      <li>Fill in the three step pages. Each one is a sandbox: a block of starter code and a
+        block of answer code, as plain text. Leave exactly three TODOs in the
+        <em>You do</em> step.</li>
       <li>Write the answer key. If you can't finish your own TODOs in nine minutes, they're too big.</li>
       <li>Add one object to <code>js/workshops.js</code>. The card builds itself.</li>
       <li>Teach it to real people, then change <code>status</code> to <code>"ready"</code>.
@@ -106,10 +141,12 @@
 │
 ├── css/
 │   ├── theme.css           the house theme. Shared by every workshop.
+│   ├── sandbox.css         the live editor's styling
 │   └── library.css         front-door-only styling
 │
 ├── js/
-│   └── workshops.js        <b>THE CATALOG — add your workshop here</b>
+│   ├── workshops.js        <b>THE CATALOG — add your workshop here</b>
+│   └── sandbox.js          <b>the live editor. No dependencies.</b>
 │
 └── workshops/
     ├── _template/          copy this to start

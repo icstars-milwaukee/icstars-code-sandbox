@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Step 1 · I Do — One Pokémon</title>
   <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/sandbox.css">
 </head>
 <body>
 
@@ -17,29 +18,140 @@
     </div>
   </header>
 
-  <div class="ics-stage">
-    <img id="sprite" class="ics-sprite" alt="">
-  </div>
-
   <main class="ics-wrap">
     <span class="ics-step">Step 1 · I do</span>
 
     <p>Goal: click a button, ask another computer for <strong>one Pokémon</strong>, put it on the page.</p>
 
-    <div class="ics-row">
-      <button class="ics-btn" id="loadBtn">Get Pokémon #25</button>
+    <p class="ics-sub" style="color:var(--grey-dark)">
+      The editor below is live. The instructor fills in the four
+      <strong>EDIT</strong> slots in order and presses <strong>Run</strong> after each one, so the
+      page gets more alive four times. Nothing is installed and nothing is saved to a server —
+      your edits stay in this browser.
+    </p>
+
+    <div data-sb
+         data-sb-file="js/step-1.js"
+         data-sb-storage="01-hello-api/step-1">
+
+      <script type="text/plain" data-sb-html>
+        <div class="ics-stage">
+          <img id="sprite" class="ics-sprite" alt="">
+        </div>
+        <div class="ics-row">
+          <button class="ics-btn" id="loadBtn">Get Pokémon #25</button>
+        </div>
+        <div class="ics-out" id="output">Nothing yet. Click the button.</div>
+      </script>
+
+      <script type="text/plain" data-sb-js>
+        /* STEP 1 · I DO — four edits, in order.
+           Everything that isn't an EDIT slot is already here. */
+
+        // The parts of the page we control. Grab them once, at the top.
+        const button = document.getElementById("loadBtn");
+        const output = document.getElementById("output");
+        const sprite = document.getElementById("sprite");
+
+
+        // >>>>>>>>>>>>>>>>>>>> EDIT 1 — the URL <<<<<<<<<<<<<<<<<<<<
+        // The exact address we just tested in Postman. Same address —
+        // the browser can ask for it too.
+
+        const API_URL = "";
+
+
+        // "When the button is clicked, run this function."
+        // async = "there is a wait inside this function."
+        button.addEventListener("click", async function () {
+          output.textContent = "Loading...";
+
+
+          // >>>>>>>>>>>> EDIT 2 — ASK, then UNWRAP <<<<<<<<<<<<
+          // The two lines. They never change — not tonight, not in React.
+          // await = "pause right here until the data comes back."
+
+
+
+
+          // >>>>>>>>>>>> EDIT 3 — SHOW the text <<<<<<<<<<<<
+          // Put the data on the page. One field at a time, and Run
+          // between them, so you watch each one appear.
+
+
+
+
+          // >>>>>>>>>>>> EDIT 4 — SHOW the picture <<<<<<<<<<<<
+          // The picture is NOT special. It's a field holding a URL,
+          // handed to an <img>. Count the dots out loud.
+
+
+
+        });
+      </script>
+
+      <script type="text/plain" data-sb-solution>
+        /* STEP 1 · I DO — finished. Three lines do the work:
+           ASK, UNWRAP, SHOW. */
+
+        const button = document.getElementById("loadBtn");
+        const output = document.getElementById("output");
+        const sprite = document.getElementById("sprite");
+
+
+        // >>>>>>>>>>>>>>>>>>>> EDIT 1 — the URL <<<<<<<<<<<<<<<<<<<<
+        const API_URL = "https://pokeapi.co/api/v2/pokemon/25";
+
+
+        button.addEventListener("click", async function () {
+          output.textContent = "Loading...";
+
+
+          // >>>>>>>>>>>> EDIT 2 — ASK, then UNWRAP <<<<<<<<<<<<
+          const response = await fetch(API_URL);     // 1. ASK    — go get it
+          const pokemon  = await response.json();    // 2. UNWRAP — open the envelope
+
+
+          // >>>>>>>>>>>> EDIT 3 — SHOW the text <<<<<<<<<<<<
+          output.textContent =
+            "name:   " + pokemon.name + "\n" +
+            "id:     " + pokemon.id + "\n" +
+            "weight: " + pokemon.weight + "\n" +
+            "type:   " + pokemon.types[0].type.name;
+
+
+          // >>>>>>>>>>>> EDIT 4 — SHOW the picture <<<<<<<<<<<<
+          // sprites, then front_default. That's NESTING — and this one
+          // line becomes the game's silhouette in Step 2.
+          sprite.src = pokemon.sprites.front_default;
+          sprite.alt = pokemon.name;
+        });
+      </script>
+
     </div>
 
-    <!-- Empty on purpose. JavaScript fills these in. -->
-    <div class="ics-out" id="output">Nothing yet. Click the button.</div>
+    <p class="sb-caption">
+      <strong>Instructor:</strong> fill the slots in order, Run after each.
+      <strong>Solution</strong> shows the finished file; <strong>Reset</strong> puts the blanks back.
+      Break it on purpose too — change the <code>25</code> to <code>99999</code> and read the 404
+      together, so the first error anyone meets happens in company.
+    </p>
+
+    <h2 style="margin-top:36px;font-size:1.2rem">Prefer VS Code?</h2>
+    <p class="ics-sub" style="color:var(--grey-dark)">
+      The same code is on disk at <code>js/step-1.js</code>, with the same EDIT markers.
+      The sandbox is here so nobody loses ten minutes to a file path on night one —
+      it isn't a replacement for working in an editor.
+    </p>
 
     <p class="ics-footer">
       Data from <a href="https://pokeapi.co/api/v2/pokemon/25">pokeapi.co/api/v2/pokemon/25</a>
       — free, no key, no signup. We did not make this data; we borrowed it.
+      <br>Next: <a href="step-2-we-do.html">Step 2 — the mystery silhouette &rarr;</a>
     </p>
   </main>
 
-  <script src="js/step-1.js"></script>
+  <script src="../../js/sandbox.js"></script>
 
 </body>
 </html>

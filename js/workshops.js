@@ -22,6 +22,9 @@
               "a working game out of data you never typed" (alive).
      teaches  five tags maximum. Nine tags is a syllabus.
      deck     filename of the slide deck, or null if there isn't one
+     live     true if the step pages carry a Code Sandbox — a live
+              editor and preview, so the student can work without
+              installing anything. See js/sandbox.js
      extras   optional [{ label, file }] — homework, answer keys,
               a finished build to compare against
    ============================================================ */
@@ -40,6 +43,7 @@ const WORKSHOPS = [
           "typed. One game, three passes: ask, unwrap, show.",
     teaches: ["fetch", "JSON", "async / await", "Postman", "DOM"],
     deck: "REF-deck.html",
+    live: true,
     extras: [
       { label: "The finished game", file: "game.html" },
       { label: "Homework", file: "extra-practice-posts.html" }
@@ -97,7 +101,14 @@ const WORKSHOPS = [
 
     const top = el("div", "wcard-top");
     top.appendChild(el("span", "wnum", w.n));
-    top.appendChild(el("span", "chip " + w.status, w.status === "soon" ? "coming soon" : w.status));
+
+    const chips = el("div", "wchips");
+    chips.appendChild(el("span", "chip " + w.status,
+                         w.status === "soon" ? "coming soon" : w.status));
+    /* The signal that matters most to a student with no laptop
+       set up: can I do this right here, in the browser? */
+    if (w.live) chips.appendChild(el("span", "chip live", "live editor"));
+    top.appendChild(chips);
     c.appendChild(top);
 
     c.appendChild(el("h3", null, w.title));
@@ -138,7 +149,9 @@ const WORKSHOPS = [
     const c = el("article", "wcard ghost");
     const top = el("div", "wcard-top");
     top.appendChild(el("span", "wnum", "+"));
-    top.appendChild(el("span", "chip soon", "template"));
+    const chips = el("div", "wchips");
+    chips.appendChild(el("span", "chip soon", "template"));
+    top.appendChild(chips);
     c.appendChild(top);
     c.appendChild(el("h3", null, "The next workshop"));
     c.appendChild(el("p", "wmeta", "workshops/_template/"));

@@ -4,10 +4,15 @@ A growing library of guided tech learning workshops from **i.c.stars Milwaukee**
 
 **Live site:** https://icstars-milwaukee.github.io/icstars-code-sandbox/
 
-Every workshop in here is three things: a **deck you can present**, a **set of
-files that run in a browser**, and a **finished build** to compare against. No
-servers, no npm, no build step, no accounts — a browser and VS Code. Each one
-ends with the student holding something that works.
+Every workshop in here is three things: a **deck you can present**, a **live
+editor** the student types real code into, and a **finished build** to compare
+against. No install, no npm, no build step, no accounts. Each one ends with the
+student holding something that works.
+
+Each step page carries a **Code Sandbox** — editor on the left, the running page
+on the right, a console underneath — so the first ten minutes of a session go to
+the lesson instead of to a file path. The same code sits on disk in each
+workshop's `js/` folder for anyone working in VS Code.
 
 ---
 
@@ -15,7 +20,7 @@ ends with the student holding something that works.
 
 | # | Workshop | Track | Time | Status |
 |---|---|---|---|---|
-| 01 | [Hello, API](workshops/01-hello-api/) — a Pokémon guessing game built out of `fetch` | Front-end | 30 min | ready |
+| 01 | [Hello, API](workshops/01-hello-api/) — a Pokémon guessing game built out of `fetch` | Front-end | 30 min | ready · live editor |
 
 The front page builds this list from [`js/workshops.js`](js/workshops.js), which
 is the single file you edit to add a workshop.
@@ -41,8 +46,10 @@ CONTRIBUTING.md         how to add a workshop, and the house rules
 .nojekyll               keeps GitHub Pages from hiding workshops/_template/
 
 css/theme.css           the house theme — shared by every workshop
+css/sandbox.css         the live editor's styling
 css/library.css         front-door-only styling
 js/workshops.js         THE CATALOG — add your workshop here
+js/sandbox.js           the live editor. ~300 lines, no dependencies.
 
 workshops/_template/    copy this to start a new one (it runs as-is)
 workshops/01-hello-api/ fetch, JSON, async/await, DOM
@@ -55,7 +62,8 @@ The short version:
 
 1. Copy the template folder to `workshops/0N-your-slug/`
 2. Rewrite `REF-deck.html` — **don't touch its `<style>` block**
-3. Fill in the three passes (I do → We do → You do) and the answer key
+3. Fill in the three passes (I do → We do → You do) and the answer key. Each
+   step page is a sandbox: a starter block and an answer block, as plain text
 4. Add one object to `js/workshops.js`
 5. Teach it to real people, then set `status: "ready"`
 

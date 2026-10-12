@@ -57,6 +57,56 @@ and the next person to teach it needs to see it.
 `theme.css` so the next workshop gets it too. A workshop-local stylesheet is
 for genuinely one-off things (see `workshops/01-hello-api/css/game.css`).
 
+## The sandbox
+
+Every step page carries a live editor: code on the left, the running page on
+the right, a console underneath. It exists because the first ten minutes of a
+workshop are the ones you lose — to a file path, a wrong folder, an editor
+nobody has opened before. The sandbox removes that and leaves the lesson.
+
+You write three blocks of plain text; `js/sandbox.js` builds the rest.
+
+```html
+<div data-sb data-sb-file="js/step-1.js" data-sb-storage="0N-your-slug/step-1">
+
+  <script type="text/plain" data-sb-html>
+    <div class="ics-out" id="output">Nothing yet.</div>
+  </script>
+
+  <script type="text/plain" data-sb-js>
+    // the starter code the student sees
+  </script>
+
+  <script type="text/plain" data-sb-solution>
+    // the answer. Omit this block and the Solution button disappears.
+  </script>
+
+</div>
+<script src="../../js/sandbox.js"></script>
+```
+
+Link `css/sandbox.css` in the `<head>` alongside `theme.css`, and that's the
+whole integration.
+
+- **`type="text/plain"`** means the browser neither runs nor parses the block,
+  so angle brackets and quotes survive exactly as typed. The one thing you
+  cannot put inside is the text `</script>`
+- **`data-sb-storage`** must be unique per sandbox — it is the localStorage key
+  that keeps a student's work across a refresh. Use `your-slug/step-N`. If you
+  copy the template and forget to change it, two workshops fight over one key
+- **Indent the blocks** to match your markup; the common indent is stripped
+- **The starter must run.** Every run rebuilds the preview from scratch, so a
+  student never debugs leftover state — but a starter that throws on load
+  teaches nothing. Have it say what to go do instead
+- **Errors report the student's own line number**, counted from line 1 of their
+  code. Don't defeat that by wrapping their code in anything
+- The `data-sb-html` block is shown under the editor behind a "the markup this
+  code runs against" toggle, because *"where does `sprite` come from?"* is the
+  most common question at a sandbox
+
+The sandbox is not a replacement for VS Code. Keep the same code on disk in
+`js/`, and say so on the page — students need to end up editing real files.
+
 ## Writing rules that are worth more than they look
 
 - **No build step.** No npm, no bundler, no framework. The student must be able

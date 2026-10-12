@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Step 1 · I Do — SMALLEST VERSION</title>
+  <title>Step 1 &middot; I Do &mdash; SMALLEST VERSION</title>
   <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/sandbox.css">
 </head>
 <body>
 
@@ -18,32 +19,103 @@
   </header>
 
   <main class="ics-wrap">
-
-    <span class="ics-step">Step 1 · I do</span>
+    <span class="ics-step">Step 1 &middot; I do</span>
 
     <p>
-      One sentence on what this page will do when it works. Then get out of the way &mdash;
+      One sentence on what this page does when it works. Then get out of the way &mdash;
       the room is here to watch something happen, not to read.
     </p>
 
-    <div class="ics-row">
-      <button class="ics-btn" id="goBtn">DO THE THING</button>
-      <span class="ics-count" id="count"></span>
+    <p class="ics-sub" style="color:var(--grey-dark)">
+      The editor below is live. Fill the <strong>EDIT</strong> slots in order and press
+      <strong>Run</strong> after each one. Nothing is installed; edits stay in this browser.
+    </p>
+
+    <div data-sb
+         data-sb-file="js/step-1.js"
+         data-sb-storage="TEMPLATE-rename-me/step-1">
+
+      <script type="text/plain" data-sb-html>
+        <div class="ics-row">
+          <button class="ics-btn" id="goBtn">DO THE THING</button>
+          <span class="ics-count" id="count"></span>
+        </div>
+        <div class="ics-note" id="status">Nothing yet. Click the button.</div>
+        <div class="ics-out" id="out">(output appears here)</div>
+      </script>
+
+      <script type="text/plain" data-sb-js>
+        /* STEP 1 - I DO - the smallest version that works.
+           Three EDIT slots. Fill them in order, pressing Run after each,
+           so the room watches the page come alive three times. */
+
+        // ---- 1. WHERE THE DATA COMES FROM ------------------------
+        // EDIT 1: in a real workshop this is a URL or a filename.
+        const SOURCE = [];
+
+        // ---- 2. THE PAGE -----------------------------------------
+        // Grab every element once, at the top, by its id. Students who
+        // learn this habit stop writing getElementById inside loops.
+        const goBtn    = document.getElementById("goBtn");
+        const statusEl = document.getElementById("status");
+        const outEl    = document.getElementById("out");
+        const countEl  = document.getElementById("count");
+
+        // ---- 3. THE WORK -----------------------------------------
+        function show() {
+          // EDIT 2: the three-ish lines that ARE this workshop. If this
+          // function runs past ten lines, you are teaching two workshops.
+
+
+        }
+
+        // ---- 4. WIRE IT UP ---------------------------------------
+        // EDIT 3: the one line that connects the button to the work.
+
+
+        statusEl.textContent = "Ready. Click the button.";
+      </script>
+
+      <script type="text/plain" data-sb-solution>
+        /* STEP 1 - I DO - finished. */
+
+        const SOURCE = ["first thing", "second thing", "third thing"];
+
+        const goBtn    = document.getElementById("goBtn");
+        const statusEl = document.getElementById("status");
+        const outEl    = document.getElementById("out");
+        const countEl  = document.getElementById("count");
+
+        function show() {
+          const item = SOURCE[0];                 // 1. GET
+          outEl.textContent = item;               // 2. SHOW
+
+          statusEl.className   = "ics-note success";
+          statusEl.textContent = "That worked. Nothing clever happened - that's the point.";
+          countEl.textContent  = SOURCE.length + " available";
+        }
+
+        goBtn.addEventListener("click", show);
+
+        statusEl.textContent = "Ready. Click the button.";
+        countEl.textContent  = SOURCE.length + " available";
+      </script>
+
     </div>
 
-    <div class="ics-note" id="status">Nothing yet. Click the button.</div>
-
-    <!-- The output box. Use it to show raw data while learning —
-         seeing the shape of the real thing beats describing it. -->
-    <div class="ics-out" id="out">(output appears here)</div>
+    <p class="sb-caption">
+      <strong>Instructor:</strong> fill the slots in order, Run after each.
+      <strong>Solution</strong> shows the finished file, <strong>Reset</strong> puts the blanks
+      back. Break it on purpose at least once while they watch.
+    </p>
 
     <p class="ics-footer">
-      The code is in <code>js/step-1.js</code>, marked <code>EDIT 1</code>&ndash;<code>EDIT N</code>
-      so it can be typed live in order. Press <strong>F12</strong> &rarr; Console to read errors.
+      The same code is on disk at <code>js/step-1.js</code> for anyone working in VS Code.
+      <br>Next: <a href="step-2-we-do.html">Step 2 &rarr;</a>
     </p>
   </main>
 
-  <script src="js/step-1.js"></script>
+  <script src="../../js/sandbox.js"></script>
 
 </body>
 </html>
