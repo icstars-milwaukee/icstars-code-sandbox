@@ -5,10 +5,11 @@
    project runs. Click a file and it opens in the editor. Edit it,
    press Run, and watch what you changed.
 
-   This is the "break it and see" surface. The step pages give a
-   student one file at a time with blanks in it (js/sandbox.js);
-   this gives them everything at once, already working, to take
-   apart. Both are the same engine underneath (js/preview-core.js).
+   This is the whole live-code surface. There is no second one: the
+   real files are real files, in workshops/<slug>/projects/, and each
+   folder opens and runs on its own straight off disk. This page is
+   how you browse and break them without a server.
+   The engine is js/preview-core.js.
 
    HOW TO PUT ONE ON A PAGE
    ------------------------
@@ -16,18 +17,19 @@
    of each path is the project — that's what becomes a folder you
    can click to run.
 
+     <link rel="stylesheet" href="../../css/theme.css">
      <link rel="stylesheet" href="../../css/playground.css">
 
      <div data-pg data-pg-storage="01-hello-api">
 
        <script type="application/json" data-pg-labels>
-         { "step-1-i-do": "Step 1 · I do", "game": "The finished game" }
+         { "1-one-pokemon": "Step 1 · I do — One Pokémon" }
        </script>
 
-       <script type="text/plain" data-pg-file="step-1-i-do/index.html">
+       <script type="text/plain" data-pg-file="1-one-pokemon/index.html">
          ...
        </script>
-       <script type="text/plain" data-pg-file="step-1-i-do/js/step-1.js">
+       <script type="text/plain" data-pg-file="1-one-pokemon/js/main.js">
          ...
        </script>
 
@@ -42,8 +44,9 @@
    and inlined, so the preview is one self-contained document and
    needs no server.
 
-   These pages are generated from the real workshop files by
-   tools/build-playground.py. Edit the workshop, re-run the tool.
+   A browser on a file:// path cannot read a folder, so these blocks
+   are written by tools/build-playground.py from the projects/ folders.
+   Edit the real files, then re-run the tool.
    ============================================================ */
 
 (function () {
@@ -128,13 +131,13 @@
     bar.appendChild(crumb);
 
     const actions   = el("div", "pg-actions");
-    const runBtn    = btn("sb-btn sb-run", "Run ▸", "Ctrl + Enter");
-    const resetOne  = btn("sb-btn", "Reset file", "Undo your changes to this file");
-    const resetAll  = btn("sb-btn", "Reset all", "Undo your changes to every file here");
+    const runBtn    = btn("pg-btn pg-run", "Run ▸", "Ctrl + Enter");
+    const resetOne  = btn("pg-btn", "Reset file", "Undo your changes to this file");
+    const resetAll  = btn("pg-btn", "Reset all", "Undo your changes to every file here");
     actions.appendChild(runBtn);
     actions.appendChild(resetOne);
     actions.appendChild(resetAll);
-    actions.appendChild(el("span", "sb-key", "Ctrl + Enter"));
+    actions.appendChild(el("span", "pg-key", "Ctrl + Enter"));
     bar.appendChild(actions);
     root.appendChild(bar);
 
@@ -146,8 +149,8 @@
     body.appendChild(tree);
 
     const editorWrap = el("div", "pg-editor");
-    const gutter = el("div", "sb-gutter");
-    const code   = el("textarea", "sb-code");
+    const gutter = el("div", "pg-gutter");
+    const code   = el("textarea", "pg-code");
     code.spellcheck = false;
     code.wrap = "off";
     code.setAttribute("aria-label", "File editor");
@@ -157,20 +160,20 @@
 
     const right  = el("div", "pg-right");
 
-    const result = el("div", "sb-result");
-    result.appendChild(el("div", "sb-pane-label", "Result"));
+    const result = el("div", "pg-result");
+    result.appendChild(el("div", "pg-pane-label", "Result"));
     const frame = document.createElement("iframe");
-    frame.className = "sb-frame";
+    frame.className = "pg-frame";
     frame.title = "Live preview";
     result.appendChild(frame);
     right.appendChild(result);
 
-    const consoleWrap = el("div", "sb-console");
-    const consoleHead = el("div", "sb-pane-label", "Console");
-    const clearBtn    = btn("sb-clear", "clear", "Empty the console");
+    const consoleWrap = el("div", "pg-console");
+    const consoleHead = el("div", "pg-pane-label", "Console");
+    const clearBtn    = btn("pg-clear", "clear", "Empty the console");
     consoleHead.appendChild(clearBtn);
     consoleWrap.appendChild(consoleHead);
-    const log = el("div", "sb-log");
+    const log = el("div", "pg-log");
     consoleWrap.appendChild(log);
     right.appendChild(consoleWrap);
 
@@ -183,8 +186,8 @@
 
     const preview = CORE.createPreview(frame, log, {
       lineCount: function () { return code.value.split("\n").length; },
-      onStart: function () { root.classList.add("sb-running"); },
-      onReady: function () { root.classList.remove("sb-running"); }
+      onStart: function () { root.classList.add("pg-running"); },
+      onReady: function () { root.classList.remove("pg-running"); }
     });
 
     /* ---------- assembling a runnable document -------------

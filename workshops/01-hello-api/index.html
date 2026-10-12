@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello, API — i.c.stars Week 6 Tutorial</title>
+  <title>Hello, API — i.c.stars Code Sandbox</title>
   <link rel="stylesheet" href="../../css/theme.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
       <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span> Milwaukee</div>
       <h1 class="ics-title">Hello, API</h1>
       <p class="ics-sub">
-        Week 6 · 30 minutes · one game, three passes. Build "Who's That Pokémon?"
+        30 minutes · one game, three passes. Build "Who's That Pokémon?"
         out of data you never typed.
       </p>
     </div>
@@ -28,86 +28,91 @@
       <a class="link" href="playground.html">
         <span class="pass">Live editor</span>
         <b>The playground &rarr;</b>
-        <span>Every file in this workshop in a tree, already running. Click a folder to
-          run it, click a file to open it, then <strong>break it on purpose</strong> and
-          find out what each line was holding up. Reset puts it all back.</span>
+        <span>All six projects in a tree, already running. Click a folder to run it,
+          click a file to open it, then <strong>break it on purpose</strong>.
+          Nothing to install.</span>
       </a>
 
       <a class="link" href="REF-deck.html">
         <span class="pass">Instructor</span>
         <b>The workshop deck &rarr;</b>
-        <span>16 slides with three <strong>live</strong> demos built in. Arrow keys to drive.
+        <span>16 slides with three live demos built in. Arrow keys to drive.
           Ctrl+P saves it as a PDF.</span>
       </a>
+    </div>
 
-      <a class="link" href="step-1-i-do.html">
+    <h2 style="margin-top:36px;font-size:1.2rem">The projects</h2>
+    <p class="ics-sub" style="color:var(--grey-dark)">
+      Six folders. Each one is an <code>index.html</code> and a <code>js/main.js</code>,
+      and each one opens and runs on its own &mdash; no server, no build step, nothing
+      installed. Open them from the <a href="playground.html">playground</a>, or just
+      double-click the file.
+    </p>
+
+    <div class="links">
+      <a class="link" href="projects/1-one-pokemon/index.html">
         <span class="pass">I do</span>
-        <b>Step 1 — One Pokémon</b>
-        <span>The three lines. Name, weight, type, and its picture on the page.
-          <strong>Live editor</strong> — four EDIT slots, typed in front of the room.</span>
+        <b>1 &mdash; One Pokémon</b>
+        <span>The three lines: <strong>ask, unwrap, show</strong>. Name, weight, type,
+          and its picture on the page.</span>
       </a>
 
-      <a class="link" href="step-2-we-do.html">
+      <a class="link" href="projects/2-the-mystery/index.html">
         <span class="pass">We do</span>
-        <b>Step 2 — The mystery silhouette</b>
-        <span>A list of 151, a random pick, and one line of CSS that hides it.
-          <strong>Live editor</strong> — three blanks, with a checkpoint at each.</span>
+        <b>2 &mdash; The mystery silhouette</b>
+        <span>A list of 151, a random pick, and one line of CSS that hides it.</span>
       </a>
 
-      <a class="link" href="step-3-you-do.html">
+      <a class="link" href="projects/3-the-game/index.html">
         <span class="pass">You do</span>
-        <b>Step 3 — Make it a game</b>
-        <span>Three TODOs: four guess buttons and a score. <strong>Live editor</strong> —
-          runs with the TODOs unfinished and tells you which one to go do.
-          (<a href="step-3-you-do-solution.html">solution</a>)</span>
+        <b>3 &mdash; Make it a game</b>
+        <span>Three TODOs: four guess buttons and a score. It runs with all three
+          unfinished and tells you which one to go do.
+          (<a href="projects/3-the-game-solution/index.html">answer key</a>)</span>
       </a>
 
-      <a class="link" href="game.html">
-        <span class="pass">Finished</span>
-        <b>The complete game</b>
-        <span>Score, streak, personal best, keys 1&ndash;4, loading and error states.</span>
-      </a>
-
-      <a class="link" href="extra-practice-posts.html">
+      <a class="link" href="projects/4-another-api/index.html">
         <span class="pass">Homework</span>
-        <b>Extra practice — a different API</b>
-        <span>Same three lines, somebody else's data. Proof the move transfers.
-          (<a href="extra-practice-posts-solution.html">solution</a>)</span>
+        <b>4 &mdash; Another API</b>
+        <span>Same three lines, somebody else's data. If it works against an API you
+          have never seen, you didn't memorise this &mdash; you learned it.
+          (<a href="projects/4-another-api-solution/index.html">answer key</a>)</span>
       </a>
     </div>
 
     <h2 style="margin-top:36px;font-size:1.2rem">The source tree</h2>
     <p class="ics-sub" style="color:var(--grey-dark)">
-      The three step pages each carry a <strong>Code Sandbox</strong> — an editor, a live
-      preview and a console — so nobody loses ten minutes to a file path. The same code sits
-      in <code>js/</code> for anyone who would rather work in VS Code. No build step, no npm.
+      Every <code>js/main.js</code> ends with a short <strong>BREAK IT ON PURPOSE</strong>
+      list &mdash; a few things to change, and what each one teaches when it goes wrong.
+      That list is the point of the playground.
     </p>
 
     <div class="tree">workshops/01-hello-api/
-├── <b>index.html</b>                        you are here
-├── playground.html                   every file, in a tree, running
-├── REF-deck.html                     the deck (self-contained)
+├── <b>index.html</b>              you are here
+├── REF-deck.html           the deck (self-contained)
+├── playground.html         GENERATED — all six projects, in a tree
 │
-├── css/
-│   └── game.css                      a few extras for the finished game
-│                                     (the shared theme is ../../css/theme.css)
-│
-├── js/
-│   ├── step-1.js                     I DO   · marked EDIT 1-4 for the live demo
-│   ├── step-2.js                     WE DO  · list + random + silhouette
-│   ├── step-3.js                     YOU DO · 3 TODOs
-│   ├── step-3-solution.js            answer key
-│   ├── game.js                       the finished game: state -> render -> load
-│   ├── extra-practice.js
-│   └── extra-practice-solution.js
-│
-├── step-1-i-do.html                  prose + a live sandbox...
-├── step-2-we-do.html                 ...starter code and answer, inline
-├── step-3-you-do.html
-├── step-3-you-do-solution.html
-├── game.html
-├── extra-practice-posts.html
-└── extra-practice-posts-solution.html</div>
+└── projects/
+    ├── 1-one-pokemon/          <b>I DO</b>   · one Pokémon, three lines
+    │   ├── index.html
+    │   └── js/main.js
+    ├── 2-the-mystery/          <b>WE DO</b>  · a list, a random pick, a silhouette
+    │   ├── index.html
+    │   └── js/main.js
+    ├── 3-the-game/             <b>YOU DO</b> · 3 TODOs
+    │   ├── index.html
+    │   └── js/main.js
+    ├── 3-the-game-solution/    the answer key — and it plays
+    │   ├── index.html
+    │   └── js/main.js
+    ├── 4-another-api/          homework · JSONPlaceholder
+    │   ├── index.html
+    │   └── js/main.js
+    └── 4-another-api-solution/
+        ├── index.html
+        └── js/main.js
+
+the shared theme is ../../css/theme.css — read it, don't fork it</div>
 
     <p class="ics-footer">
       Sample data from <a href="https://pokeapi.co/">PokeAPI</a> and

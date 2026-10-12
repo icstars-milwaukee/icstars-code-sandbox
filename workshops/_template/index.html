@@ -14,7 +14,7 @@
       <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span> Milwaukee</div>
       <h1 class="ics-title">Workshop Title</h1>
       <p class="ics-sub">
-        Week N · NN minutes · one ARTIFACT, three passes.
+        NN minutes · one ARTIFACT, three passes.
         Say what they walk out holding, not what the topic is called.
       </p>
     </div>
@@ -23,10 +23,10 @@
   <main class="ics-wrap">
 
     <div class="ics-note">
-      <strong>This is the template.</strong> Copy this whole folder to
+      <strong>This is the template.</strong> Copy the whole folder to
       <code>workshops/0N-your-slug/</code> before you change anything, then work through
-      <code>README.md</code> in the copy. Everything here already opens and runs — including
-      the deck — so you are editing a working workshop, never a blank page.
+      <code>README.md</code> in the copy. Every project already opens and runs &mdash;
+      you are editing a working workshop, never a blank page.
     </div>
 
     <span class="ics-step">Start here</span>
@@ -35,68 +35,82 @@
       <a class="link" href="playground.html">
         <span class="pass">Live editor</span>
         <b>The playground &rarr;</b>
-        <span>Every file in this workshop in a tree, already running.
+        <span>All four projects in a tree, already running.
           <strong>Generated</strong> &mdash; run <code>python tools/build-playground.py</code>
-          after you change a step page, and this rebuilds itself.</span>
+          after you change anything under <code>projects/</code>.</span>
       </a>
 
       <a class="link" href="REF-deck.html">
         <span class="pass">Instructor</span>
         <b>The workshop deck &rarr;</b>
-        <span>12 slides, already laid out. Arrow keys drive it, Ctrl+P saves it as a PDF.
-          The <code>&lt;style&gt;</code> block is the house palette &mdash; don't touch it.</span>
+        <span>12 slides, already laid out, placeholders marked. Arrow keys drive it,
+          Ctrl+P saves it as a PDF. The <code>&lt;style&gt;</code> block is the house
+          palette &mdash; don't touch it.</span>
       </a>
+    </div>
 
-      <a class="link" href="step-1-i-do.html">
+    <h2 style="margin-top:36px;font-size:1.2rem">The projects</h2>
+    <p class="ics-sub" style="color:var(--grey-dark)">
+      One folder per pass. Each is an <code>index.html</code> and a <code>js/main.js</code>
+      that opens and runs on its own. Replace the guts; keep the shape.
+    </p>
+
+    <div class="links">
+      <a class="link" href="projects/1-smallest-version/index.html">
         <span class="pass">I do</span>
-        <b>Step 1 &mdash; SMALLEST VERSION THAT WORKS</b>
-        <span>What the instructor builds while everyone watches. Hands off keyboards.</span>
+        <b>1 &mdash; Smallest version</b>
+        <span>What the instructor builds while everyone watches. Hands off keyboards.
+          Over ten lines of work means two workshops.</span>
       </a>
 
-      <a class="link" href="step-2-we-do.html">
+      <a class="link" href="projects/2-next-layer/index.html">
         <span class="pass">We do</span>
-        <b>Step 2 &mdash; THE NEXT LAYER</b>
-        <span>Built together, with a checkpoint after every step.</span>
+        <b>2 &mdash; The next layer</b>
+        <span><strong>One</strong> new idea, built together, with a
+          <code>CHECKPOINT</code> comment at every stop.</span>
       </a>
 
-      <a class="link" href="step-3-you-do.html">
+      <a class="link" href="projects/3-the-real-thing/index.html">
         <span class="pass">You do</span>
-        <b>Step 3 &mdash; THE REAL THING</b>
-        <span>Exactly three TODOs in a file that already runs.
-          (<a href="step-3-you-do-solution.html">solution</a>)</span>
+        <b>3 &mdash; The real thing</b>
+        <span>Exactly three TODOs, and it still runs with all three unfinished.
+          (<a href="projects/3-the-real-thing-solution/index.html">answer key</a>)</span>
       </a>
     </div>
 
     <h2 style="margin-top:36px;font-size:1.2rem">What to fill in, and in what order</h2>
     <p class="ics-sub" style="color:var(--grey-dark)">
-      The full checklist is in <code>README.md</code>. The short version: deck first, because
+      Full checklist in <code>README.md</code>. The short version: deck first, because
       writing the slides is what tells you whether the workshop is actually one workshop.
     </p>
 
     <div class="tree">workshops/_template/
-├── README.md                the checklist. Read it first.
-├── <b>index.html</b>               this page — rewrite the links and the title
-├── playground.html          GENERATED. Don't hand-edit it.
-├── REF-deck.html            <b>start here.</b> 12 slides, placeholders marked
+├── README.md               the checklist. Read it first.
+├── <b>index.html</b>              this page — rewrite the links and the title
+├── REF-deck.html           <b>start here.</b> 12 slides, placeholders marked
+├── playground.html         GENERATED. Don't hand-edit it.
 │
-├── step-1-i-do.html         markup only...
-├── step-2-we-do.html        ...each page loads one file from js/
-├── step-3-you-do.html
-├── step-3-you-do-solution.html
-│
-└── js/
-    ├── step-1.js            I DO   · the smallest thing that works
-    ├── step-2.js            WE DO  · one more layer
-    ├── step-3.js            YOU DO · exactly 3 TODOs
-    └── step-3-solution.js   the answer key, and it must actually run
+└── projects/
+    ├── 1-smallest-version/         <b>I DO</b>
+    │   ├── index.html                 markup only
+    │   └── js/main.js                 four blocks: source, page, work, wire
+    ├── 2-next-layer/               <b>WE DO</b>  · one new idea, CHECKPOINTs
+    │   ├── index.html
+    │   └── js/main.js
+    ├── 3-the-real-thing/           <b>YOU DO</b> · exactly 3 TODOs
+    │   ├── index.html
+    │   └── js/main.js
+    └── 3-the-real-thing-solution/  the answer key, and it must run
+        ├── index.html
+        └── js/main.js
 
-the shared theme lives at  ../../css/theme.css   — read it, don't fork it
-the catalog lives at       ../../js/workshops.js — add your entry last</div>
+the shared theme is ../../css/theme.css — read it, don't fork it
+the catalog is      ../../js/workshops.js — add your entry last</div>
 
     <p class="ics-footer">
       Part of the <a href="../../index.html">i.c.stars Code Sandbox</a>.
-      Workshops should use free, no-key sample data wherever possible &mdash; a signup wall
-      on night one costs you half the room.
+      Use free, no-key sample data wherever possible &mdash; a signup wall on night one
+      costs you half the room.
     </p>
   </main>
 

@@ -22,11 +22,14 @@
               "a working game out of data you never typed" (alive).
      teaches  five tags maximum. Nine tags is a syllabus.
      deck     filename of the slide deck, or null if there isn't one
-     live     true if the step pages carry a Code Sandbox — a live
-              editor and preview, so the student can work without
-              installing anything. See js/sandbox.js
-     extras   optional [{ label, file }] — homework, answer keys,
-              a finished build to compare against
+     live     true if the workshop has a playground.html — the
+              projects/ folders in a live editor, so a student can
+              run and break them without installing anything.
+              Built by tools/build-playground.py
+
+   There is deliberately no field for "extra pages". A workshop is
+   its projects/ folders; anything that is not one of those is not
+   on the shelf.
    ============================================================ */
 
 const WORKSHOPS = [
@@ -43,11 +46,7 @@ const WORKSHOPS = [
           "typed. One game, three passes: ask, unwrap, show.",
     teaches: ["fetch", "JSON", "async / await", "Postman", "DOM"],
     deck: "REF-deck.html",
-    live: true,
-    extras: [
-      { label: "The finished game", file: "game.html" },
-      { label: "Homework", file: "extra-practice-posts.html" }
-    ]
+    live: true
   }
 
   /* ---- Copy this block to add the next one -------------------
@@ -62,7 +61,7 @@ const WORKSHOPS = [
     hook: "What the student walks out holding.",
     teaches: ["thing", "thing", "thing"],
     deck: "REF-deck.html",
-    extras: []
+    live: true
   }
   ------------------------------------------------------------ */
 
@@ -141,9 +140,6 @@ const WORKSHOPS = [
       links.appendChild(link("Start the workshop", base + "index.html", true));
       if (w.live) links.appendChild(link("Live editor ▸", base + "playground.html"));
       if (w.deck) links.appendChild(link("Deck", base + w.deck));
-      (w.extras || []).forEach(function (x) {
-        links.appendChild(link(x.label, base + x.file));
-      });
     }
     c.appendChild(links);
 

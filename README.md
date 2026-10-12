@@ -4,24 +4,9 @@ A growing library of guided tech learning workshops from **i.c.stars Milwaukee**
 
 **Live site:** https://icstars-milwaukee.github.io/icstars-code-sandbox/
 
-Every workshop in here is three things: a **deck you can present**, a **live
-editor** the student types real code into, and a **finished build** to compare
-against. No install, no npm, no build step, no accounts. Each one ends with the
-student holding something that works.
-
-Nobody installs anything to do a workshop. There are two live-code surfaces:
-
-- **The sandbox** — on every step page. One file, with the blanks still in it:
-  editor on the left, the running page on the right, a console underneath.
-- **The playground** — one per workshop (`playground.html`). The whole file tree
-  down the left side, already working. Click a folder and it runs; click a file
-  and it opens; delete a line and press Run to find out what it was holding up.
-  **Reset all** puts everything back. Open it from the red **live editor** chip
-  on any card on the front page.
-
-The same code sits on disk in each workshop's `js/` folder for anyone working in
-VS Code — that's still where students should end up. The editors exist so the
-first ten minutes of a session go to the lesson instead of to a file path.
+A workshop here is two things: a **deck you can present**, and a handful of
+**project folders that already run**. One folder per pass, each small enough to
+read in a sitting. No server, no npm, no build step, no accounts.
 
 ---
 
@@ -34,6 +19,53 @@ first ten minutes of a session go to the lesson instead of to a file path.
 The front page builds this list from [`js/workshops.js`](js/workshops.js), which
 is the single file you edit to add a workshop.
 
+## The shape of a workshop
+
+```
+workshops/01-hello-api/
+├── index.html          the landing page
+├── REF-deck.html       the deck — self-contained, arrow keys drive it
+├── playground.html     GENERATED — the projects in a live editor
+└── projects/
+    ├── 1-one-pokemon/          I DO    · index.html + js/main.js
+    ├── 2-the-mystery/          WE DO
+    ├── 3-the-game/             YOU DO  · exactly 3 TODOs
+    ├── 3-the-game-solution/    the answer key, and it plays
+    ├── 4-another-api/          homework
+    └── 4-another-api-solution/
+```
+
+**The project folders are the workshop.** Each one opens and runs on its own —
+double-click `index.html` and it works. That is the source of truth, and it is
+what students should end up editing in VS Code.
+
+Each `js/main.js` ends with a short **BREAK IT ON PURPOSE** list: a few things
+to change, and what each one teaches when it goes wrong. Delete an `await` and
+you get `[object Promise]` — you printed the waiting instead of the thing.
+Better than a paragraph about promises, and it costs one keystroke.
+
+## The playground
+
+`playground.html` puts a workshop's folders in a tree with an editor and a live
+preview. Click a folder and it runs; click a file and it opens; edit and press
+**Run**. Every run rebuilds the preview from scratch, errors land in the console
+with the line number from *your* line 1, edits are kept per file across a
+refresh, and **Reset all** puts everything back.
+
+It is generated, because a browser on a `file://` path cannot read a folder — so
+the page cannot discover those files at runtime.
+`tools/build-playground.py` copies them in:
+
+```bash
+python tools/build-playground.py              # build every workshop
+python tools/build-playground.py 01-hello-api # build one
+python tools/build-playground.py --check      # exits 1 if any is stale
+```
+
+That is one generated file, derived from the real folders — not a second copy
+of the code to maintain. **Re-run it after you change anything under
+`projects/`.**
+
 ## Running it locally
 
 Clone it and open `index.html`. That's the whole setup.
@@ -44,8 +76,10 @@ cd icstars-code-sandbox
 start index.html        # Windows.  macOS: open index.html
 ```
 
-Every path in the repo is relative, so the site works identically from a
-`file://` URL and from GitHub Pages. Students can be handed a zip.
+Every path is relative, so the site works identically from a `file://` URL and
+from GitHub Pages. Students can be handed a zip. Note that Windows often
+associates `.html` with the legacy `htmlfile` handler rather than a browser — if
+double-clicking does nothing, drag the file onto Chrome.
 
 ## Layout
 
@@ -55,13 +89,13 @@ CONTRIBUTING.md         how to add a workshop, and the house rules
 .nojekyll               keeps GitHub Pages from hiding workshops/_template/
 
 css/theme.css           the house theme — shared by every workshop
-css/sandbox.css         the one-file editor
-css/playground.css      the file tree
+css/playground.css      the file tree, editor and console
 css/library.css         front-door-only styling
+
 js/workshops.js         THE CATALOG — add your workshop here
-js/preview-core.js      the shared engine — no dependencies
-js/sandbox.js           one editor, one file  (step pages)
-js/playground.js        a file tree, many files (per workshop)
+js/preview-core.js      the engine — no dependencies
+js/playground.js        the file tree, built from the paths
+
 tools/build-playground.py   regenerates each playground.html
 
 workshops/_template/    copy this to start a new one (it runs as-is)
@@ -75,9 +109,8 @@ The short version:
 
 1. Copy the template folder to `workshops/0N-your-slug/`
 2. Rewrite `REF-deck.html` — **don't touch its `<style>` block**
-3. Fill in the three passes (I do → We do → You do) and the answer key. Each
-   step page is a sandbox: a starter block and an answer block, as plain text
-4. Run `python tools/build-playground.py` — it builds your `playground.html`
+3. Fill in the `projects/` folders (I do → We do → You do, plus the answer key)
+4. Run `python tools/build-playground.py 0N-your-slug`
 5. Add one object to `js/workshops.js`, with `live: true`
 6. Teach it to real people, then set `status: "ready"`
 
@@ -95,16 +128,13 @@ on the student. Nobody gets handed forty new words on night one.
 ## Deploying
 
 GitHub Pages, serving `main` from the repository root. Nothing to build, so a
-push is a deploy. `tools/build-playground.py` is an *authoring* tool, not part
-of serving the site — it writes a file you commit. Run it with `--check` in
-review to catch a `playground.html` that has gone stale:
-
-```bash
-python tools/build-playground.py --check   # exits 1 if any is out of date
-```
- `.nojekyll` is required — without it Pages hides any directory
+push is a deploy. `.nojekyll` is required — without it Pages hides any directory
 whose name starts with an underscore, which would make `workshops/_template/`
 a 404.
+
+`tools/build-playground.py` is an *authoring* tool, not part of serving the
+site. Run it with `--check` in review so a stale `playground.html` cannot slip
+through.
 
 ---
 

@@ -1,14 +1,16 @@
 /* ============================================================
    THE PLAYGROUND — styling
-   Loaded by any page with a [data-pg] block. It builds on
-   sandbox.css: the toolbar buttons, the editor, the result frame
-   and the console pane are the same components, so link BOTH:
+   The only live-code surface in the repo. Loaded by any page with
+   a [data-pg] block, alongside the house theme:
 
      <link rel="stylesheet" href="../../css/theme.css">
-     <link rel="stylesheet" href="../../css/sandbox.css">
      <link rel="stylesheet" href="../../css/playground.css">
 
-   What's new here is the file tree and the three-column body.
+   Tokens come from theme.css. No new colors live here.
+
+   The editor is ink, the result is paper. That is the same contrast
+   the decks use for "the code" versus "the screen", so the panes
+   read correctly before anybody explains them.
    ============================================================ */
 
 .pg {
@@ -17,7 +19,7 @@
   background: var(--ink);
 }
 
-/* 1. Toolbar — same furniture as the sandbox, plus a breadcrumb */
+/* 1. Toolbar ------------------------------------------------ */
 .pg-bar {
   display: flex;
   flex-wrap: wrap;
@@ -59,14 +61,43 @@
   margin-left: auto;
 }
 
+.pg-btn {
+  font: inherit;
+  font-size: .78rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px 13px;
+  color: var(--paper);
+  background: transparent;
+  border: 2px solid var(--grey);
+}
+.pg-btn:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.pg-btn:focus-visible { outline: 3px solid var(--red); outline-offset: 2px; }
+.pg-run {
+  color: var(--paper);
+  background: var(--red);
+  border-color: var(--red);
+}
+.pg-run:hover { background: var(--red-deep); border-color: var(--red-deep); color: var(--paper); }
+
+/* The keyboard hint. Also the escape route out of the Tab trap,
+   which is why it names Esc. */
+.pg-key {
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .1em;
+  color: var(--grey);
+}
+.pg-key::after { content: " · Esc to leave the editor"; }
+
 /* 2. The three columns ------------------------------------- */
 .pg-body {
   display: grid;
-  grid-template-columns: 210px minmax(0, 1.1fr) minmax(0, 1fr);
+  grid-template-columns: 215px minmax(0, 1.1fr) minmax(0, 1fr);
   min-height: 430px;
 }
 @media (max-width: 1020px) {
-  .pg-body { grid-template-columns: 180px minmax(0, 1fr); }
+  .pg-body { grid-template-columns: 185px minmax(0, 1fr); }
   .pg-right { grid-column: 1 / -1; border-left: none;
               border-top: 1px solid rgba(154, 144, 149, .3); }
 }
@@ -121,8 +152,8 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-/* The run affordance, so "click the folder" is discoverable
-   rather than something you have to be told. */
+/* The run affordance, so "click the folder" is discoverable rather
+   than something you have to be told. */
 .pg-folder-run {
   margin-left: auto;
   font-family: var(--mono);
@@ -183,26 +214,129 @@
   font-weight: 700;
 }
 
-/* 4. The editor column ------------------------------------- */
+/* 4. The editor -------------------------------------------- */
 .pg-editor {
   display: flex;
   min-width: 0;
   background: var(--ink-soft);
 }
+.pg-gutter,
+.pg-code {
+  font-family: var(--mono);
+  font-size: .84rem;
+  line-height: 1.6;
+  padding: 12px 0;
+  border: none;
+  background: transparent;
+}
+.pg-gutter {
+  flex: 0 0 auto;
+  width: 3.2em;
+  padding-right: .8em;
+  text-align: right;
+  white-space: pre;
+  overflow: hidden;
+  color: var(--grey);
+  opacity: .55;
+  user-select: none;
+  border-right: 1px solid rgba(154, 144, 149, .25);
+}
+.pg-code {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-left: .9em;
+  padding-right: .9em;
+  color: var(--paper);
+  resize: vertical;
+  overflow: auto;
+  white-space: pre;
+  tab-size: 2;
+}
+.pg-code:focus { outline: none; box-shadow: inset 3px 0 0 var(--red); }
 
-/* 5. The right column — result over console ---------------- */
+/* 5. Result over console ----------------------------------- */
 .pg-right {
   display: grid;
   grid-template-rows: 1fr auto;
   min-width: 0;
   border-left: 1px solid rgba(154, 144, 149, .3);
 }
-.pg .sb-frame  { min-height: 280px; }
-.pg .sb-log    { height: 120px; }
 
-/* 6. The caption under a playground ------------------------ */
+.pg-pane-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  font-family: var(--mono);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--grey);
+  background: var(--ink);
+  border-bottom: 1px solid rgba(154, 144, 149, .25);
+}
+
+.pg-result { display: flex; flex-direction: column; min-height: 0; }
+.pg-frame {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 280px;
+  border: none;
+  background: var(--paper);
+  transition: opacity .18s ease;
+}
+/* While a run is in flight the preview dims, so Run visibly does
+   something even when the code prints nothing. */
+.pg-running .pg-frame { opacity: .35; }
+@media (prefers-reduced-motion: reduce) { .pg-frame { transition: none; } }
+
+/* 6. The console ------------------------------------------- */
+.pg-console { display: flex; flex-direction: column; min-height: 0; }
+.pg-clear {
+  font: inherit;
+  font-size: .66rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-left: auto;
+  padding: 2px 8px;
+  color: var(--grey);
+  background: transparent;
+  border: 1px solid var(--grey);
+}
+.pg-clear:hover { color: var(--paper); border-color: var(--paper); }
+
+.pg-log {
+  font-family: var(--mono);
+  font-size: .79rem;
+  line-height: 1.5;
+  height: 120px;
+  overflow: auto;
+  padding: 8px 12px;
+  color: var(--paper);
+  background: var(--ink-soft);
+}
+.pg-log.has-error { box-shadow: inset 4px 0 0 var(--red); }
+
+.pg-line { display: flex; gap: .7em; padding: 2px 0; }
+.pg-line + .pg-line { border-top: 1px solid rgba(154, 144, 149, .15); }
+.pg-text   { white-space: pre-wrap; word-break: break-word; min-width: 0; }
+.pg-lineno {
+  flex: 0 0 auto;
+  color: var(--paper);
+  background: var(--red);
+  padding: 0 .45em;
+  font-size: .86em;
+}
+.pg-warn  .pg-text { color: #FFD9E2; }
+.pg-error .pg-text { color: #FF7D9E; }
+.pg-meta  .pg-text { color: var(--grey); }
+
+/* 7. The caption under a playground ------------------------ */
 .pg-note {
-  margin: 8px 0 0;
-  font-size: .86rem;
+  margin: 18px 0 0;
+  font-size: .93rem;
+  max-width: 68ch;
   color: var(--grey-dark);
 }

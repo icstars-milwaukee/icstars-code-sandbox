@@ -14,14 +14,14 @@ Every workshop is **three passes at the same artifact**:
 |---|---|---|
 | **I do** | instructor | Hands off keyboards. Typing along means debugging instead of watching |
 | **We do** | together | Keyboards up, nobody types ahead. A checkpoint after every step |
-| **You do** | student | Exactly three TODOs in a file that already runs |
+| **You do** | student | Exactly three TODOs in a folder that already runs |
 
 Not three different topics — the **same thing**, three times, getting more real
 each pass. Pass 3 fails the moment it asks for a move they haven't already
 watched twice.
 
 A workshop is 30 minutes of guided time. If yours needs 90, it is three
-workshops and should be three folders.
+workshops and should be three folders under `workshops/`.
 
 ## Things that are not up for redesign
 
@@ -52,25 +52,60 @@ They stay readable in the PDF and anybody can edit them.
 presenter-notes panel on purpose — what you say out loud is part of the deck,
 and the next person to teach it needs to see it.
 
-**The theme is shared, not forked.** Workshop pages link
-`../../css/theme.css`. If a component you need is missing, add it to
-`theme.css` so the next workshop gets it too. A workshop-local stylesheet is
-for genuinely one-off things (see `workshops/01-hello-api/css/game.css`).
+**The theme is shared, not forked.** Project pages link
+`../../../../css/theme.css`. If a component you need is missing, add it to
+`theme.css` so the next workshop gets it too, and say so in your PR. A
+project-local `css/` is for when the lesson itself is about CSS.
 
-## The two live-code surfaces
+## The project folders ARE the workshop
 
-Both run on one engine, `js/preview-core.js`. They exist because the first ten
-minutes of a workshop are the ones you lose — to a file path, a wrong folder, an
-editor nobody has opened before. These remove that and leave the lesson.
+```
+workshops/0N-your-slug/projects/
+├── 1-smallest-version/         I DO
+│   ├── index.html                 markup only
+│   └── js/main.js                 the lesson
+├── 2-next-layer/               WE DO
+├── 3-the-real-thing/           YOU DO · exactly 3 TODOs
+└── 3-the-real-thing-solution/  the answer key, and it must run
+```
 
-| | Where | What it holds |
-|---|---|---|
-| **Sandbox** | every step page | one file, with the blanks still in it |
-| **Playground** | one per workshop | the whole file tree, already working |
+Rules for a project folder:
 
-The playground is the "break it and see" surface: folders down the left, click
-one and it runs, click a file and it opens. It is **generated** from the
-workshop's own pages — you never hand-write it:
+- **It opens and runs on its own.** Double-click `index.html` and it works, off
+  disk, with no server. If it needs a server it does not belong here
+- **One `index.html`, one `js/main.js`.** Add a `css/` only if the lesson is
+  about CSS. The shared theme is `../../../../css/theme.css` — link it, never
+  fork it
+- **Only the lesson's code.** No score streaks, no personal bests, no loading
+  spinners, no keyboard shortcuts, unless one of those IS the lesson. Every
+  extra feature is a thing a student has to read past to find the point
+- **Numbered folders.** `1-`, `2-`, `3-`, `3-...-solution`, `4-`. The number is
+  the teaching order, and the playground sorts on it
+- **The `<title>` is the label** the playground shows. Write it like a label:
+  `Step 2 · We do — The Mystery Silhouette`
+- **The you-do folder still runs with all three TODOs unfinished**, and says in
+  plain English which one to go do. A white screen plus a console error is how
+  you lose somebody for the night
+- **End every `js/main.js` with a BREAK IT ON PURPOSE list** — a few things to
+  change and what each one teaches when it goes wrong. Three or four lines.
+  This is the single highest-value thing in the file, because it turns a working
+  example into something a student can interrogate:
+
+```js
+/* BREAK IT ON PURPOSE:
+
+   change 25 to 99999       there is no Pokémon 99999. A 404 is the API
+                            telling you so, clearly. Meet one here.
+   delete the first `await`  you get "[object Promise]" — the wait never
+                            happened, so you printed the waiting.       */
+```
+
+## The playground
+
+`playground.html` puts those folders in a tree with an editor, a live preview
+and a console. Click a folder and it runs; click a file and it opens.
+
+It is **generated** — you never hand-write or hand-edit it:
 
 ```bash
 python tools/build-playground.py                # build all
@@ -78,66 +113,21 @@ python tools/build-playground.py 0N-your-slug   # build yours
 python tools/build-playground.py --check        # fail if stale
 ```
 
-Each runnable folder comes from a page that already exists: a sandbox step page
-becomes an `index.html` built from its `data-sb-html` block plus its starter
-code, and a plain runnable page (a finished build, a homework page) comes in
-whole with the `js/` and `css/` files it references. Project order follows the
-order your workshop's `index.html` links them in, so fix the order there.
+A browser on a `file://` path cannot read a folder, so the page cannot discover
+your files at runtime. The tool copies every text file under `projects/` into
+plain-text blocks it can read. That is one generated file derived from the real
+folders — the alternative was three hand-maintained copies of the same code,
+which is what this repo used to have.
 
-Re-run the tool after you touch a step page, and run `--check` before you ask
-for review.
+Re-run it after you touch anything under `projects/`, and run `--check` before
+you ask for review.
 
-## The sandbox
-
-Code on the left, the running page on the right, a console underneath.
-
-You write three blocks of plain text; `js/sandbox.js` builds the rest.
-
-```html
-<div data-sb data-sb-file="js/step-1.js" data-sb-storage="0N-your-slug/step-1">
-
-  <script type="text/plain" data-sb-html>
-    <div class="ics-out" id="output">Nothing yet.</div>
-  </script>
-
-  <script type="text/plain" data-sb-js>
-    // the starter code the student sees
-  </script>
-
-  <script type="text/plain" data-sb-solution>
-    // the answer. Omit this block and the Solution button disappears.
-  </script>
-
-</div>
-
-<script src="../../js/preview-core.js"></script>
-<script src="../../js/sandbox.js"></script>
-```
-
-Link `css/sandbox.css` in the `<head>` alongside `theme.css`, load
-`js/preview-core.js` **before** `js/sandbox.js`, and that's the whole
-integration.
-
-- **`type="text/plain"`** means the browser neither runs nor parses the block,
-  so angle brackets and quotes survive exactly as typed
-- **`data-sb-storage`** must be unique per sandbox — it is the localStorage key
-  that keeps a student's work across a refresh. Use `your-slug/step-N`. If you
-  copy the template and forget to change it, two workshops fight over one key
-- **Indent the blocks** to match your markup; the common indent is stripped
-- **The starter must run.** Every run rebuilds the preview from scratch, so a
-  student never debugs leftover state — but a starter that throws on load
-  teaches nothing. Have it say what to go do instead
-- **Errors report the student's own line number**, counted from line 1 of their
-  code. Don't defeat that by wrapping their code in anything
-- The `data-sb-html` block is shown under the editor behind a "the markup this
-  code runs against" toggle, because *"where does `sprite` come from?"* is the
-  most common question at a sandbox
-- A block that must *contain* the text `</script>` writes it as `<\/script>` —
-  the HTML parser ends a `<script>` element at the first one regardless of
-  `type`. That is the only escape in the format, and the generator handles it
-
-The sandbox is not a replacement for VS Code. Keep the same code on disk in
-`js/`, and say so on the page — students need to end up editing real files.
+Two details if you ever need to read the generated file: each block is a
+`<script type="text/plain" data-pg-file="...">`, so angle brackets and quotes
+survive as typed; and a block that must *contain* the text `</script>` has it
+written as `<\/script>`, because the HTML parser ends a script element at the
+first one regardless of `type`. The tool handles that, and
+`js/preview-core.js` puts the slash back.
 
 ## Writing rules that are worth more than they look
 
@@ -190,11 +180,11 @@ Then, before you request review, open these yourself:
 
 - [ ] `index.html` at the repo root — your card is on the shelf and its links work
 - [ ] Your `REF-deck.html` — arrows drive it, `Ctrl+P` gives clean pages
-- [ ] Your `step-3-you-do.html` — runs with the TODOs unfinished and says which one to do
-- [ ] Your `step-3-you-do-solution.html` — actually plays through
+- [ ] **Every project folder, opened directly off disk** — each one runs on its own
+- [ ] Your you-do folder — runs with all three TODOs unfinished and says which one to do
+- [ ] Your answer-key folder — actually plays through
 - [ ] Your `playground.html` — every folder runs when clicked
 - [ ] `python tools/build-playground.py --check` is clean
-- [ ] The whole folder from a `file://` path, not just a local server
 
 ---
 

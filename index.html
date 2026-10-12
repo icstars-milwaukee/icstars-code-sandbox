@@ -25,10 +25,10 @@
   <main class="ics-wrap">
 
     <p class="lib-lede">
-      Nothing in here is a lecture. Each workshop is a <strong>deck you can present</strong>,
-      a <strong>live editor you can type into</strong>, and a finished build to compare yours
-      against. No install, no npm, no accounts &mdash; if you can open this page you can do
-      the work. <strong>Walk out with the thing built.</strong>
+      Nothing in here is a lecture. A workshop is a <strong>deck you can present</strong> and
+      a handful of <strong>project folders that already run</strong> &mdash; one per pass, each
+      one small enough to read in a sitting. No install, no npm, no accounts: if you can open
+      this page you can do the work. <strong>Walk out with the thing built.</strong>
     </p>
 
     <h2 class="lib-h2" id="shelf-heading">The shelf</h2>
@@ -66,87 +66,50 @@
       </div>
     </div>
 
-    <!-- ================= The sandbox ================= -->
-    <h2 class="lib-h2">Two ways to write the code</h2>
+    <!-- ================= The playground ================= -->
+    <h2 class="lib-h2">The playground</h2>
     <p class="lib-lede">
-      Nobody installs anything to do a workshop here. Every step page carries a
-      <strong>sandbox</strong> &mdash; one file, with the blanks still in it. And every workshop
-      has a <strong>playground</strong>: the whole file tree, already working, for taking apart.
-      Click the red <strong>live editor</strong> chip on any card above to open one. Your work is
-      kept in the browser, so a refresh doesn't cost you anything.
-    </p>
-
-    <div class="rail">
-      <div class="rail-step">
-        <b>On a step page</b>
-        <h4>The sandbox</h4>
-        <p>One file, one job. The blanks are where the lesson is. Run rebuilds the preview from
-          scratch, so you never debug leftovers.</p>
-      </div>
-      <div class="rail-step">
-        <b>Per workshop</b>
-        <h4>The playground</h4>
-        <p>Folders down the left. Click one and it runs; click a file and it opens. Delete a
-          line, press Run, see what broke. Reset all undoes everything.</p>
-      </div>
-      <div class="rail-step">
-        <b>Always</b>
-        <h4>Real files too</h4>
-        <p>The same code sits on disk in each workshop's <code>js/</code>. The point is to end
-          up editing real files &mdash; the editors just buy back night one.</p>
-      </div>
-    </div>
-
-    <p class="lib-lede">
-      The playground is what "break it and play with it" looks like when nothing can actually
-      break: it runs in your browser, nobody else sees it, and one button puts it all back.
+      A workshop is a handful of <strong>project folders</strong>. Each one is an
+      <code>index.html</code> and a <code>js/main.js</code> that opens and runs on its own
+      &mdash; no server, no build step, nothing installed. The playground puts those folders
+      in a tree with an editor and a live preview, so you can run them and take them apart
+      without leaving the browser. Click the red <strong>live editor</strong> chip on any card
+      above.
     </p>
 
     <div class="tree">┌─ playground.html ──────────────────────────────────────────────────┐
 │ i.c.stars · Hello, API        <b>[ Run ▸ ]</b> [Reset file] [Reset all] │
 ├──────────────────┬─────────────────────────┬───────────────────────┤
-│ WORKSHOP FILES   │ js/step-3.js            │ RESULT                │
-│ ▾ step-1-i-do/   │  1  const API_URL =     │                       │
+│ WORKSHOP FILES   │ js/main.js              │ RESULT                │
+│ ▾ 1-one-pokemon/ │  1  const API_URL =     │                       │
 │     index.html   │  2    "https://poke..." │    [ silhouette ]     │
-│     js/step-1.js │  3                      │                       │
-│ ▾ step-2-we-do/  │  4  const sprite =      │  [bulbasaur][pidgey]  │
+│     js/main.js   │  3                      │                       │
+│ ▾ 2-the-mystery/ │  4  const sprite =      │  [bulbasaur][pidgey]  │
 │     index.html   │  5    document.get...   │  [pikachu ][ eevee ]  │
-│     js/step-2.js │  6                      │                       │
-│ <b>▾ step-3-you-do/</b> │  7  // TODO 1: the two  │  SCORE <b>3</b> / 4          │
+│     js/main.js   │  6                      │                       │
+│ <b>▾ 3-the-game/</b>    │  7  // TODO 1: the two  │  SCORE <b>3</b> / 4          │
 │     index.html   │  8  //   lines you've   │                       │
-│     <b>js/step-3.js</b>  │  9  //   written twice  ├───────────────────────┤
-│ ▸ game/          │ 10                      │ CONSOLE               │
-│ ▸ extra-practice/│ 11  async function      │ <b>line 9</b> answer is not    │
+│     <b>js/main.js</b>    │  9  //   written twice  ├───────────────────────┤
+│ ▸ 3-the-game-... │ 10                      │ CONSOLE               │
+│ ▸ 4-another-api/ │ 11  async function      │ <b>line 9</b> answer is not    │
 │                  │ 12    load() {          │        defined        │
 └──────────────────┴─────────────────────────┴───────────────────────┘
    click a folder,     the file you clicked,     what it did, and
-   it runs             Ctrl+Enter to run         what went wrong
-
-┌─ step-1-i-do.html ─────────────────────────────────────┐
-│ JAVASCRIPT  js/step-1.js      <b>[ Run ▸ ]</b> [Reset] [Solution] │
-├────────────────────────────────┬───────────────────────┤
-│ 1  const API_URL =             │ RESULT                │
-│ 2    "https://pokeapi.co/..."; │                       │
-│ 3                              │     [ sprite ]        │
-│ 4  const response =            │                       │
-│ 5    await fetch(API_URL);     │  name:   pikachu      │
-│ 6  const pokemon =             │  weight: 60           │
-│ 7    await response.json();    │                       │
-│ 8                              ├───────────────────────┤
-│ 9  output.textContent =        │ CONSOLE               │
-│10    pokemon.name;             │ <b>line 7</b> Unexpected end   │
-│                                │         of input      │
-└────────────────────────────────┴───────────────────────┘
-   their code                        what it did, and
-   Ctrl+Enter to run                 what went wrong</div>
+   it runs             Ctrl+Enter to run         what went wrong</div>
 
     <p class="lib-lede">
-      Errors land in the console pane in red, with the line number counted from
-      <strong>line 1 of the file you are editing</strong> &mdash; not line 1 of some generated
-      document you never saw. Both surfaces share one engine in
-      <code>js/preview-core.js</code>, with no dependencies and nothing to install.
-      A workshop's <code>playground.html</code> is generated from its own files by
-      <code>tools/build-playground.py</code>, so there is nothing to keep in sync by hand.
+      Every run rebuilds the preview from scratch, so nobody debugs state left over from the
+      last attempt. Errors land in the console in red, with the line number counted from
+      <strong>line 1 of the file you are editing</strong>. Your edits are kept per file, so a
+      refresh costs nothing &mdash; and <strong>Reset all</strong> puts everything back.
+    </p>
+
+    <p class="lib-lede">
+      Every <code>js/main.js</code> ends with a short <strong>BREAK IT ON PURPOSE</strong>
+      list: a few things to change, and what each one teaches when it goes wrong. Delete an
+      <code>await</code> and you get <code>[object Promise]</code> &mdash; you printed the
+      waiting instead of the thing. That is a better lesson than a paragraph about promises,
+      and it costs one keystroke.
     </p>
 
     <!-- ================= Adding the next one ================= -->
@@ -162,12 +125,15 @@
       <li>Rewrite <code>REF-deck.html</code>. Arrow keys drive it, <code>Ctrl+P</code> saves it
         as a PDF. <strong>Do not touch the <code>&lt;style&gt;</code> block</strong> &mdash; the
         palette is the house palette.</li>
-      <li>Fill in the three step pages. Each one is a sandbox: a block of starter code and a
-        block of answer code, as plain text. Leave exactly three TODOs in the
-        <em>You do</em> step.</li>
-      <li>Write the answer key. If you can't finish your own TODOs in nine minutes, they're too big.</li>
-      <li>Run <code>python tools/build-playground.py</code>. It reads your step pages and
-        writes <code>playground.html</code> for you &mdash; nothing to maintain by hand.</li>
+      <li>Fill in the project folders under <code>projects/</code> &mdash; one per pass, each an
+        <code>index.html</code> and a <code>js/main.js</code>. Leave exactly three TODOs in the
+        <em>You do</em> one, and make sure it still runs with all three unfinished.</li>
+      <li>Write the answer key folder. If you can't finish your own TODOs in nine minutes,
+        they're too big.</li>
+      <li>End each <code>js/main.js</code> with a <strong>BREAK IT ON PURPOSE</strong> list.</li>
+      <li>Run <code>python tools/build-playground.py</code>. It reads your
+        <code>projects/</code> folders and writes <code>playground.html</code> &mdash; nothing
+        to maintain by hand.</li>
       <li>Add one object to <code>js/workshops.js</code>, with <code>live: true</code>.
         The card and the <strong>live editor</strong> chip build themselves.</li>
       <li>Teach it to real people, then change <code>status</code> to <code>"ready"</code>.
@@ -193,15 +159,13 @@
 │
 ├── css/
 │   ├── theme.css           the house theme. Shared by every workshop.
-│   ├── sandbox.css         the one-file editor
-│   ├── playground.css      the file tree
+│   ├── playground.css      the file tree, editor and console
 │   └── library.css         front-door-only styling
 │
 ├── js/
 │   ├── workshops.js        <b>THE CATALOG — add your workshop here</b>
-│   ├── preview-core.js     <b>the shared engine. No dependencies.</b>
-│   ├── sandbox.js          one editor, one file  (step pages)
-│   └── playground.js       a file tree, many files
+│   ├── preview-core.js     the engine. No dependencies.
+│   └── playground.js       the file tree, built from the paths
 │
 ├── tools/
 │   └── build-playground.py regenerates each playground.html
@@ -210,22 +174,21 @@
     ├── _template/          copy this to start
     │   ├── README.md       the checklist
     │   ├── index.html      workshop landing page
-    │   ├── playground.html GENERATED by the tool above
     │   ├── REF-deck.html   the house deck, empty
-    │   ├── step-1-i-do.html
-    │   ├── step-2-we-do.html
-    │   ├── step-3-you-do.html
-    │   ├── step-3-you-do-solution.html
-    │   └── js/             one file per step
+    │   ├── playground.html GENERATED by the tool above
+    │   └── projects/       <b>one folder per pass — the real code</b>
     │
     └── 01-hello-api/       Pokémon guessing game · fetch, JSON, async
         ├── index.html
-        ├── playground.html GENERATED — every file, in a tree
         ├── REF-deck.html   16 slides, three live demos
-        ├── step-*.html
-        ├── game.html       the finished build
-        ├── css/game.css
-        └── js/</div>
+        ├── playground.html
+        └── projects/
+            ├── 1-one-pokemon/        I DO
+            ├── 2-the-mystery/        WE DO
+            ├── 3-the-game/           YOU DO · 3 TODOs
+            ├── 3-the-game-solution/
+            ├── 4-another-api/        homework
+            └── 4-another-api-solution/</div>
 
     <p class="ics-footer">
       i.c.stars<span class="star" style="color:var(--red)">*</span> Milwaukee &middot;

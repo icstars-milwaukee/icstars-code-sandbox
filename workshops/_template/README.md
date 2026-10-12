@@ -1,8 +1,9 @@
 # Workshop template — the checklist
 
 You are looking at a **working workshop with the words taken out.** Open
-`index.html` right now: every page runs, the deck drives with arrow keys, and
-`step-3-you-do-solution.html` plays a round. Nothing here is a blank file.
+`index.html` right now: all four project folders run, the deck drives with arrow
+keys, and `projects/3-the-real-thing-solution/` plays a round. Nothing here is a
+blank file.
 
 Copy the folder first:
 
@@ -46,55 +47,63 @@ Check as you go:
 - [ ] Diagrams are ASCII inside a `.code` block. Not SVG, not an image
 - [ ] `Ctrl+P` gives you one slide per PDF page with nothing cut off
 
-## 2. Fill in the three passes
+## 2. Fill in the project folders
 
-Each step page carries a **live sandbox**: an editor, a running preview, and a
-console. The code lives in the page as two blocks of plain text — the starter
-the student sees, and the answer behind the Solution button:
-
-```html
-<script type="text/plain" data-sb-js>        ... starter ...  </script>
-<script type="text/plain" data-sb-solution>  ... answer  ...  </script>
+```
+projects/
+├── 1-smallest-version/         I DO
+├── 2-next-layer/               WE DO
+├── 3-the-real-thing/           YOU DO · exactly 3 TODOs
+└── 3-the-real-thing-solution/  the answer key
 ```
 
-**Change `data-sb-storage` on every sandbox** from `TEMPLATE-rename-me/step-N`
-to `your-slug/step-N`. It's the key a student's work is saved under; leave it
-and your workshop fights the template for the same slot. Same for
-`data-pg-storage` in `playground.html` — though the tool sets that one for you.
+Each is an `index.html` (markup only) and a `js/main.js` (the lesson). Each one
+**opens and runs on its own** — double-click `index.html` and it works. The
+placeholder mechanic (pick one at random, hide it, guess it) is there so that is
+true before you touch anything. Replace the guts, keep the shape.
 
-The placeholder mechanic (pick one at random, hide it, guess it) is there so
-everything runs before you touch it. Replace the guts, keep the shape:
+`js/main.js` in `1-smallest-version/` shows the shape every project uses:
 
-| Page / file | Pass | Rule |
-|---|---|---|
-| `step-1-i-do.html` + `js/step-1.js` | I do | The smallest thing that works. Over ten lines means two workshops |
-| `step-2-we-do.html` + `js/step-2.js` | We do | **One** new idea. A `CHECKPOINT` comment at every stop |
-| `step-3-you-do.html` + `js/step-3.js` | You do | **Exactly three** TODOs, each 1–4 lines of typing |
-| `step-3-you-do-solution.html` + `js/step-3-solution.js` | key | Must actually play through. This is the test |
+| Block | What goes in it |
+|---|---|
+| 1. the source | a URL, a list, a file — where the data comes from |
+| 2. the page | every `getElementById`, once, at the top |
+| 3. the work | **the lines that ARE the lesson.** Over ten and you have two workshops |
+| 4. wire it up | the listener, and a line saying what the page is waiting for |
 
-Keep the `js/` files matching the blocks in the pages. Students should end up
-editing real files in VS Code; the sandbox is there so night one isn't spent on
-file paths. Full sandbox contract is in the root `CONTRIBUTING.md`.
+Rules, in order of how much they matter:
 
-- [ ] The step-3 starter still runs with all three TODOs unfinished, and says in
+- [ ] **Only the lesson's code.** No score streaks, no personal bests, no
+      loading spinners, unless one of those IS your lesson. Every extra feature
+      is something a student reads past to find the point
+- [ ] **The you-do folder runs with all three TODOs unfinished**, and says in
       plain English which one to go do. A white screen plus a console error is
       how you lose somebody for the night
-- [ ] Every TODO is a move they watched twice already this session
-- [ ] You did your own TODOs cold, in the sandbox, in under nine minutes, from
-      your own instructions. If you couldn't, they're too big
-- [ ] `data-sb-storage` renamed on all four pages
-- [ ] Every id your code reaches for exists in that page's `data-sb-html` block
+- [ ] **Exactly three TODOs.** Not two, not five. Each 1–4 lines of typing, and
+      each a move they watched twice already tonight
+- [ ] **The answer-key folder plays through.** It is the test — open it and play
+      a round before you ever teach from this folder
+- [ ] **Every `js/main.js` ends with a BREAK IT ON PURPOSE list** — a few things
+      to change and what each teaches when it goes wrong. The template has
+      placeholders; replace them with three real ones for your lesson. This is
+      the highest-value thing in the file
+- [ ] One `CHECKPOINT` comment per stop in `2-next-layer/`, each describing the
+      screen in one sentence
+- [ ] The `<title>` of each `index.html` is the label the playground shows.
+      Write it like one: `Step 2 · We do — The Next Layer`
+- [ ] You did your own TODOs cold, in under nine minutes, from your own
+      instructions. If you couldn't, they're too big
 
-## 3. Rewrite the pages
+## 3. Rewrite the landing page
 
-`index.html` and the four step pages. Markup only — the logic stays in `js/`.
-Keep the `../../css/theme.css` link; **do not fork the theme.** If a component
-is missing from it, add the component to `theme.css` and say so in your PR, so
-the next workshop gets it too.
+`index.html` — the title, the links, and the source tree so it matches the
+folders that are actually there. Keep the `../../css/theme.css` link; **do not
+fork the theme.** If a component is missing from it, add it to `theme.css` and
+say so in your PR, so the next workshop gets it too.
 
-- [ ] Titles, headers and the one-line description on every page
-- [ ] The source tree on `index.html` matches the files that are actually there
-- [ ] The breadcrumb at the top of each page points at your `index.html`
+- [ ] Title, header, and the one-line description
+- [ ] The project links point at your folder names
+- [ ] The source tree matches reality
 
 ## 4. Build the playground
 
@@ -104,17 +113,18 @@ the next workshop gets it too.
 python tools/build-playground.py 0N-your-slug
 ```
 
-It reads your step pages and writes the file tree: one runnable folder per page,
-built from the blocks you already wrote. Re-run it whenever you change a step
-page, and check it before review:
+It copies every file under `projects/` into the page, because a browser on a
+`file://` path cannot read a folder. Re-run it whenever you change anything in
+`projects/`, and check it before review:
 
 ```bash
 python tools/build-playground.py --check
 ```
 
 - [ ] Every folder in the tree runs when you click it
-- [ ] The folder order matches your teaching order (it follows the link order in
-      your `index.html` — fix it there, not in the tool)
+- [ ] The folder order is your teaching order (it sorts on the number prefix,
+      which is why they are numbered)
+- [ ] `data-pg-storage` is your slug, not `_template` (the tool sets this)
 
 ## 5. Put it on the shelf
 

@@ -1,17 +1,16 @@
 /* ============================================================
    PREVIEW CORE
-   The machinery shared by the two live-code components:
+   The engine under js/playground.js. Nothing in here touches the
+   page: it builds preview documents out of a file set, and bridges
+   console output and errors back out of them.
 
-     js/sandbox.js     one editor, one file  (on a step page)
-     js/playground.js  a file tree, many files (the whole workshop)
+   It is a separate file because it is the part worth reading on its
+   own — and the part a second live-code surface would reuse rather
+   than copy.
 
-   Nothing in here touches the page. It builds preview documents,
-   bridges console output back out of them, and holds the three
-   helpers both components would otherwise copy.
-
-   Load it BEFORE either component:
+   Load it BEFORE the component:
      <script src="../../js/preview-core.js"></script>
-     <script src="../../js/sandbox.js"></script>
+     <script src="../../js/playground.js"></script>
    ============================================================ */
 
 window.ICS_PREVIEW = (function () {
@@ -24,8 +23,8 @@ window.ICS_PREVIEW = (function () {
      i.c.stars if css/theme.css never arrives (some browsers are
      strict about file:// subresources inside a frame). Same token
      values; theme.css loads after this and overrides all of it.
-     An unstyled preview on night one is the exact failure these
-     components exist to prevent. */
+     An unstyled preview on night one is the exact failure the
+     playground exists to prevent. */
   const FALLBACK_CSS = [
     ':root{--ink:#161217;--ink-soft:#231C24;--paper:#FAF6F2;--paper-dim:#EFE8E2;',
     '--red:#D6003C;--red-deep:#A00030;--grey:#9A9095;--grey-dark:#5C5458;',
@@ -96,7 +95,7 @@ window.ICS_PREVIEW = (function () {
     '  }',
     '  function send(kind, parts, line){',
     '    try {',
-    '      parent.postMessage({ __sb: true, kind: kind,',
+    '      parent.postMessage({ __ics: true, kind: kind,',
     '        text: parts.map(fmt).join(" "), line: (line || null) }, "*");',
     '    } catch (e) {}',
     '  }',
@@ -114,7 +113,7 @@ window.ICS_PREVIEW = (function () {
     '    const r = e.reason;',
     '    send("error", [(r && r.message) ? (r.name + ": " + r.message) : String(r)]);',
     '  });',
-    '  window.__sbError = function(e){ send("error", [e]); };',
+    '  window.__icsError = function(e){ send("error", [e]); };',
     '  send("ready", []);',
     '})();',
     '<\/script>'
@@ -139,7 +138,7 @@ window.ICS_PREVIEW = (function () {
     return lines.map(function (line) { return line.slice(indent); }).join("\n");
   }
 
-  /* A declared block lives inside <script type="text/plain">, and
+  /* A declared file block lives inside <script type="text/plain">, and
      the HTML parser ends that element at the first </script> no
      matter what type says. So a block that needs to CONTAIN one —
      any project page with a <script src=...> tag in it — writes
@@ -178,14 +177,14 @@ window.ICS_PREVIEW = (function () {
      that cannot remember is still usable, so never throw. */
   const store = {
     get: function (key) {
-      try { return window.localStorage.getItem("sb:" + key); }
+      try { return window.localStorage.getItem("ics:" + key); }
       catch (e) { return null; }
     },
     set: function (key, value) {
-      try { window.localStorage.setItem("sb:" + key, value); } catch (e) {}
+      try { window.localStorage.setItem("ics:" + key, value); } catch (e) {}
     },
     drop: function (key) {
-      try { window.localStorage.removeItem("sb:" + key); } catch (e) {}
+      try { window.localStorage.removeItem("ics:" + key); } catch (e) {}
     }
   };
 
@@ -205,9 +204,9 @@ window.ICS_PREVIEW = (function () {
     }
 
     function append(kind, text, line) {
-      const row = el("div", "sb-line sb-" + kind);
-      if (line) row.appendChild(el("span", "sb-lineno", "line " + line));
-      row.appendChild(el("span", "sb-text", text));
+      const row = el("div", "pg-line pg-" + kind);
+      if (line) row.appendChild(el("span", "pg-lineno", "line " + line));
+      row.appendChild(el("span", "pg-text", text));
       log.appendChild(row);
       log.scrollTop = log.scrollHeight;
       if (kind === "error") log.classList.add("has-error");
@@ -219,7 +218,7 @@ window.ICS_PREVIEW = (function () {
     window.addEventListener("message", function (e) {
       if (e.source !== frame.contentWindow) return;
       const msg = e.data;
-      if (!msg || msg.__sb !== true) return;
+      if (!msg || msg.__ics !== true) return;
 
       if (msg.kind === "ready") {
         if (opts.onReady) opts.onReady();
@@ -253,15 +252,15 @@ window.ICS_PREVIEW = (function () {
         + '\n<script>\n(async function () {\n';
 
       const suffix = '\n})().catch(function (e) {\n'
-        + '  window.__sbError(e instanceof Error ? (e.name + ": " + e.message) : String(e));\n'
+        + '  window.__icsError(e instanceof Error ? (e.name + ": " + e.message) : String(e));\n'
         + '});\n<\/script>\n</body></html>';
 
       prefixLines = prefix.split("\n").length - 1;
       frame.srcdoc = prefix + (js || "") + suffix;
     }
 
-    /* For the playground, where the document IS the student's file
-       set. The caller works out how many lines of the assembled
+    /* The document IS the student's file set. The caller works out
+       how many lines of the assembled
        document sit above the file currently open in the editor, so
        error lines still land on the line they actually edited. */
     function runDocument(doc, offsetLines) {
