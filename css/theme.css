@@ -142,7 +142,7 @@ body {
 code { font-family: var(--mono); background: var(--paper-dim); padding: 1px 5px; }
 
 /* ============================================================
-   11. GAME BITS — only step-3 (the game) uses these.
+   11. GAME BITS — the guessing-game app uses these.
    ============================================================ */
 
 /* The mystery picture. brightness(0) paints every pixel black
@@ -197,10 +197,10 @@ code { font-family: var(--mono); background: var(--paper-dim); padding: 1px 5px;
 .ics-score b { color: var(--red); font-size: 1.4rem; }
 
 /* ============================================================
-   12. WORKSHOP INDEX PAGE
-   Every workshop folder has an index.html that lists its passes.
-   These are the pieces that page is built from, so no workshop
-   has to carry its own copy in an inline <style> block.
+   12. LINK LISTS AND SOURCE TREES
+   Used by the front door and any page that needs to list things
+   or show a file tree, so nobody carries a copy in an inline
+   <style> block.
    ============================================================ */
 
 .links { display: grid; gap: 12px; margin-top: var(--gap); }

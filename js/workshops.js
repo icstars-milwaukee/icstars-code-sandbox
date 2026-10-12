@@ -22,14 +22,13 @@
               "a working game out of data you never typed" (alive).
      teaches  five tags maximum. Nine tags is a syllabus.
      deck     filename of the slide deck, or null if there isn't one
-     live     true if the workshop has a playground.html — the
-              projects/ folders in a live editor, so a student can
-              run and break them without installing anything.
+     live     true if the workshop has a playground.html — its app
+              in a live editor, so a student can run and break it
+              without installing anything.
               Built by tools/build-playground.py
 
    There is deliberately no field for "extra pages". A workshop is
-   its projects/ folders; anything that is not one of those is not
-   on the shelf.
+   one app and one deck. Anything else is not on the shelf.
    ============================================================ */
 
 const WORKSHOPS = [
@@ -113,7 +112,7 @@ const WORKSHOPS = [
     if (w.live && w.status !== "soon") {
       const chip = el("a", "chip live", "live editor");
       chip.href  = base + "playground.html";
-      chip.title = "Open every file in this workshop, already running";
+      chip.title = "Open the app's files in an editor, already running";
       chips.appendChild(chip);
     }
     top.appendChild(chips);
@@ -139,7 +138,9 @@ const WORKSHOPS = [
     if (w.status === "soon") {
       links.appendChild(el("span", "wmeta", "Nothing to open yet."));
     } else {
-      links.appendChild(link("Start the workshop", base + "index.html", true));
+      /* index.html at a workshop root IS the app — the card runs
+         the thing rather than landing on a page about it. */
+      links.appendChild(link("Run the app", base + "index.html", true));
       if (w.live) links.appendChild(link("Live editor ▸", base + "playground.html"));
       if (w.deck) links.appendChild(link("Deck", base + w.deck));
     }
@@ -162,7 +163,7 @@ const WORKSHOPS = [
     c.appendChild(el("h3", null, "The next workshop"));
     c.appendChild(el("p", "wmeta", "workshops/_template/"));
     c.appendChild(el("p", "whook",
-      "Copy the template folder, rename it, fill in the slides. " +
+      "Copy the template folder, rename it, rewrite the deck and the app. " +
       "The checklist inside tells you what good looks like."));
     const links = el("div", "wlinks");
     links.appendChild(link("Open the template", "workshops/_template/index.html"));

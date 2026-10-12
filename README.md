@@ -4,9 +4,9 @@ A growing library of guided tech learning workshops from **i.c.stars Milwaukee**
 
 **Live site:** https://icstars-milwaukee.github.io/icstars-code-sandbox/
 
-A workshop here is two things: a **deck you can present**, and a handful of
-**project folders that already run**. One folder per pass, each small enough to
-read in a sitting. No server, no npm, no build step, no accounts.
+A workshop here is two things: a **deck you can present**, and **one app that
+already runs**. Small enough to read in a sitting. No server, no npm, no build
+step, no accounts.
 
 ---
 
@@ -14,7 +14,7 @@ read in a sitting. No server, no npm, no build step, no accounts.
 
 | # | Workshop | Track | Time | Status |
 |---|---|---|---|---|
-| 01 | [Hello, API](workshops/01-hello-api/) — a Pokémon guessing game built out of `fetch` | Front-end | 30 min | ready · live editor |
+| 01 | [Who's That Pokemon?](workshops/01-hello-api/) — a guessing game built out of `fetch` | Front-end | 30 min | ready · live editor |
 
 The front page builds this list from [`js/workshops.js`](js/workshops.js), which
 is the single file you edit to add a workshop.
@@ -23,37 +23,35 @@ is the single file you edit to add a workshop.
 
 ```
 workshops/01-hello-api/
-├── index.html          the landing page
-├── REF-deck.html       the deck — self-contained, arrow keys drive it
-├── playground.html     GENERATED — the projects in a live editor
-└── projects/
-    ├── 1-one-pokemon/          I DO    · index.html + js/main.js
-    ├── 2-the-mystery/          WE DO
-    ├── 3-the-game/             YOU DO  · exactly 3 TODOs
-    ├── 3-the-game-solution/    the answer key, and it plays
-    ├── 4-another-api/          homework
-    └── 4-another-api-solution/
+├── index.html        THE APP
+├── js/main.js        THE APP'S CODE
+├── REF-deck.html     the deck — self-contained, arrow keys drive it
+└── playground.html   GENERATED — the app in a live editor
 ```
 
-**The project folders are the workshop.** Each one opens and runs on its own —
-double-click `index.html` and it works. That is the source of truth, and it is
-what students should end up editing in VS Code.
+**The workshop folder is the app.** Double-click `index.html` and it runs, off
+disk, no server. That is the source of truth and what students end up editing.
 
-Each `js/main.js` ends with a short **BREAK IT ON PURPOSE** list: a few things
-to change, and what each one teaches when it goes wrong. Delete an `await` and
-you get `[object Promise]` — you printed the waiting instead of the thing.
-Better than a paragraph about promises, and it costs one keystroke.
+Only the lesson's code belongs in it. No score streaks, no personal bests, no
+loading spinners, unless one of those *is* the lesson — every extra feature is
+something a student reads past to find the point.
 
-## The playground
+`js/main.js` ends with a **BREAK IT ON PURPOSE** list: a few things to change,
+and what each one teaches when it goes wrong. Delete an `await` and you get
+`[object Promise]` — you printed the waiting instead of the thing. Better than a
+paragraph about promises, and it costs one keystroke.
 
-`playground.html` puts a workshop's folders in a tree with an editor and a live
-preview. Click a folder and it runs; click a file and it opens; edit and press
-**Run**. Every run rebuilds the preview from scratch, errors land in the console
-with the line number from *your* line 1, edits are kept per file across a
-refresh, and **Reset all** puts everything back.
+## The live editor
+
+`playground.html` is a full-screen editor over the app: a sidebar you pull files
+from, the code in the middle, the running app on the right, a console under it.
+The sidebar searches both file names and file contents. Every run rebuilds the
+preview from scratch, errors land in the console with the line number from *your*
+line 1, edits are kept per file across a refresh, and **Reset all** puts
+everything back.
 
 It is generated, because a browser on a `file://` path cannot read a folder — so
-the page cannot discover those files at runtime.
+the page cannot discover the app's files at runtime.
 `tools/build-playground.py` copies them in:
 
 ```bash
@@ -62,9 +60,8 @@ python tools/build-playground.py 01-hello-api # build one
 python tools/build-playground.py --check      # exits 1 if any is stale
 ```
 
-That is one generated file, derived from the real folders — not a second copy
-of the code to maintain. **Re-run it after you change anything under
-`projects/`.**
+That is one generated file, derived from the real app — not a second copy of the
+code to maintain. **Re-run it after you change the app.**
 
 ## Running it locally
 
@@ -89,12 +86,12 @@ CONTRIBUTING.md         how to add a workshop, and the house rules
 .nojekyll               keeps GitHub Pages from hiding workshops/_template/
 
 css/theme.css           the house theme — shared by every workshop
-css/playground.css      the file tree, editor and console
+css/playground.css      the live editor
 css/library.css         front-door-only styling
 
 js/workshops.js         THE CATALOG — add your workshop here
 js/preview-core.js      the engine — no dependencies
-js/playground.js        the file tree, built from the paths
+js/playground.js        the sidebar, editor and console
 
 tools/build-playground.py   regenerates each playground.html
 
@@ -109,10 +106,11 @@ The short version:
 
 1. Copy the template folder to `workshops/0N-your-slug/`
 2. Rewrite `REF-deck.html` — **don't touch its `<style>` block**
-3. Fill in the `projects/` folders (I do → We do → You do, plus the answer key)
-4. Run `python tools/build-playground.py 0N-your-slug`
-5. Add one object to `js/workshops.js`, with `live: true`
-6. Teach it to real people, then set `status: "ready"`
+3. Rewrite the app: `index.html` and `js/main.js`, lesson code only
+4. End `js/main.js` with a BREAK IT ON PURPOSE list
+5. Run `python tools/build-playground.py 0N-your-slug`
+6. Add one object to `js/workshops.js`, with `live: true`
+7. Teach it to real people, then set `status: "ready"`
 
 Full rules, including the parts of the house style that are not up for
 redesign, are in [CONTRIBUTING.md](CONTRIBUTING.md).
@@ -120,10 +118,10 @@ redesign, are in [CONTRIBUTING.md](CONTRIBUTING.md).
 ## House style, in one paragraph
 
 Ink `#161217`, paper `#FAF6F2`, red `#D6003C`. Segoe UI for display, Consolas
-for code. Three slide backgrounds and no more. Every workshop is **I do → We do
-→ You do** against the *same artifact*, with a checkpoint after every we-do step
-and exactly three TODOs in the you-do. Errors are information, never a verdict
-on the student. Nobody gets handed forty new words on night one.
+for code. Three slide backgrounds and no more. The deck runs **I do → We do →
+You do** against the app; the app itself stays finished and small, so there is
+always something that works to take apart. Errors are information, never a
+verdict on the student. Nobody gets handed forty new words on night one.
 
 ## Deploying
 

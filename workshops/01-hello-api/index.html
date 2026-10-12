@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello, API — i.c.stars Code Sandbox</title>
+  <title>Who's That Pokémon? — i.c.stars Code Sandbox</title>
   <link rel="stylesheet" href="../../css/theme.css">
 </head>
 <body>
@@ -12,114 +12,39 @@
     <div class="ics-wrap">
       <a class="ics-back" href="../../index.html">&larr; Code Sandbox</a>
       <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span> Milwaukee</div>
-      <h1 class="ics-title">Hello, API</h1>
+      <h1 class="ics-title">Who's That Pokémon?</h1>
       <p class="ics-sub">
-        30 minutes · one game, three passes. Build "Who's That Pokémon?"
-        out of data you never typed.
+        A guessing game built out of data nobody typed. Three lines of JavaScript do
+        the work: <strong>ask, unwrap, show</strong>.
       </p>
     </div>
   </header>
 
+  <div class="ics-stage">
+    <img id="sprite" class="ics-sprite hidden" alt="Mystery Pokémon silhouette">
+  </div>
+
   <main class="ics-wrap">
-
-    <span class="ics-step">Start here</span>
-
-    <div class="links">
-      <a class="link" href="playground.html">
-        <span class="pass">Live editor</span>
-        <b>The playground &rarr;</b>
-        <span>All six projects in a tree, already running. Click a folder to run it,
-          click a file to open it, then <strong>break it on purpose</strong>.
-          Nothing to install.</span>
-      </a>
-
-      <a class="link" href="REF-deck.html">
-        <span class="pass">Instructor</span>
-        <b>The workshop deck &rarr;</b>
-        <span>16 slides with three live demos built in. Arrow keys to drive.
-          Ctrl+P saves it as a PDF.</span>
-      </a>
+    <div class="ics-row">
+      <span class="ics-score" id="score">SCORE <b>0</b> / 0</span>
     </div>
 
-    <h2 style="margin-top:36px;font-size:1.2rem">The projects</h2>
-    <p class="ics-sub" style="color:var(--grey-dark)">
-      Six folders. Each one is an <code>index.html</code> and a <code>js/main.js</code>,
-      and each one opens and runs on its own &mdash; no server, no build step, nothing
-      installed. Open them from the <a href="playground.html">playground</a>, or just
-      double-click the file.
-    </p>
+    <div class="ics-choices" id="choices"></div>
 
-    <div class="links">
-      <a class="link" href="projects/1-one-pokemon/index.html">
-        <span class="pass">I do</span>
-        <b>1 &mdash; One Pokémon</b>
-        <span>The three lines: <strong>ask, unwrap, show</strong>. Name, weight, type,
-          and its picture on the page.</span>
-      </a>
+    <div class="ics-note" id="status">Loading 151 Pokémon...</div>
 
-      <a class="link" href="projects/2-the-mystery/index.html">
-        <span class="pass">We do</span>
-        <b>2 &mdash; The mystery silhouette</b>
-        <span>A list of 151, a random pick, and one line of CSS that hides it.</span>
-      </a>
-
-      <a class="link" href="projects/3-the-game/index.html">
-        <span class="pass">You do</span>
-        <b>3 &mdash; Make it a game</b>
-        <span>Three TODOs: four guess buttons and a score. It runs with all three
-          unfinished and tells you which one to go do.
-          (<a href="projects/3-the-game-solution/index.html">answer key</a>)</span>
-      </a>
-
-      <a class="link" href="projects/4-another-api/index.html">
-        <span class="pass">Homework</span>
-        <b>4 &mdash; Another API</b>
-        <span>Same three lines, somebody else's data. If it works against an API you
-          have never seen, you didn't memorise this &mdash; you learned it.
-          (<a href="projects/4-another-api-solution/index.html">answer key</a>)</span>
-      </a>
+    <div class="ics-row">
+      <button class="ics-btn" id="nextBtn" disabled>Next &rarr;</button>
     </div>
-
-    <h2 style="margin-top:36px;font-size:1.2rem">The source tree</h2>
-    <p class="ics-sub" style="color:var(--grey-dark)">
-      Every <code>js/main.js</code> ends with a short <strong>BREAK IT ON PURPOSE</strong>
-      list &mdash; a few things to change, and what each one teaches when it goes wrong.
-      That list is the point of the playground.
-    </p>
-
-    <div class="tree">workshops/01-hello-api/
-├── <b>index.html</b>              you are here
-├── REF-deck.html           the deck (self-contained)
-├── playground.html         GENERATED — all six projects, in a tree
-│
-└── projects/
-    ├── 1-one-pokemon/          <b>I DO</b>   · one Pokémon, three lines
-    │   ├── index.html
-    │   └── js/main.js
-    ├── 2-the-mystery/          <b>WE DO</b>  · a list, a random pick, a silhouette
-    │   ├── index.html
-    │   └── js/main.js
-    ├── 3-the-game/             <b>YOU DO</b> · 3 TODOs
-    │   ├── index.html
-    │   └── js/main.js
-    ├── 3-the-game-solution/    the answer key — and it plays
-    │   ├── index.html
-    │   └── js/main.js
-    ├── 4-another-api/          homework · JSONPlaceholder
-    │   ├── index.html
-    │   └── js/main.js
-    └── 4-another-api-solution/
-        ├── index.html
-        └── js/main.js
-
-the shared theme is ../../css/theme.css — read it, don't fork it</div>
 
     <p class="ics-footer">
-      Sample data from <a href="https://pokeapi.co/">PokeAPI</a> and
-      <a href="https://jsonplaceholder.typicode.com/">JSONPlaceholder</a> — free, no key, no signup.
-      <br>Part of the <a href="../../index.html">i.c.stars Code Sandbox</a>.
+      Data from <a href="https://pokeapi.co/">PokeAPI</a> &mdash; free, no key, no signup.
+      The code is in <code>js/main.js</code>, and it ends with a few things worth breaking.
+      <br>Open it in the <a href="playground.html">live editor</a>.
     </p>
   </main>
+
+  <script src="js/main.js"></script>
 
 </body>
 </html>

@@ -14,14 +14,15 @@ Every workshop is **three passes at the same artifact**:
 |---|---|---|
 | **I do** | instructor | Hands off keyboards. Typing along means debugging instead of watching |
 | **We do** | together | Keyboards up, nobody types ahead. A checkpoint after every step |
-| **You do** | student | Exactly three TODOs in a folder that already runs |
+| **You do** | student | They change the app themselves — the BREAK IT ON PURPOSE list is the starting point |
 
 Not three different topics — the **same thing**, three times, getting more real
 each pass. Pass 3 fails the moment it asks for a move they haven't already
 watched twice.
 
 A workshop is 30 minutes of guided time. If yours needs 90, it is three
-workshops and should be three folders under `workshops/`.
+workshops and should be three folders under `workshops/`. The passes live in
+the deck; the app stays one finished thing.
 
 ## Things that are not up for redesign
 
@@ -52,58 +53,59 @@ They stay readable in the PDF and anybody can edit them.
 presenter-notes panel on purpose — what you say out loud is part of the deck,
 and the next person to teach it needs to see it.
 
-**The theme is shared, not forked.** Project pages link
-`../../../../css/theme.css`. If a component you need is missing, add it to
-`theme.css` so the next workshop gets it too, and say so in your PR. A
-project-local `css/` is for when the lesson itself is about CSS.
+**The theme is shared, not forked.** The app links `../../css/theme.css`. If a
+component you need is missing, add it to `theme.css` so the next workshop gets
+it too, and say so in your PR. An app-local `css/` is for when the lesson
+itself is about CSS.
 
-## The project folders ARE the workshop
+## The workshop folder IS the app
 
 ```
-workshops/0N-your-slug/projects/
-├── 1-smallest-version/         I DO
-│   ├── index.html                 markup only
-│   └── js/main.js                 the lesson
-├── 2-next-layer/               WE DO
-├── 3-the-real-thing/           YOU DO · exactly 3 TODOs
-└── 3-the-real-thing-solution/  the answer key, and it must run
+workshops/0N-your-slug/
+├── index.html        THE APP
+├── js/main.js        THE APP'S CODE
+├── REF-deck.html     the deck
+└── playground.html   GENERATED
 ```
 
-Rules for a project folder:
+Rules for the app:
 
 - **It opens and runs on its own.** Double-click `index.html` and it works, off
   disk, with no server. If it needs a server it does not belong here
 - **One `index.html`, one `js/main.js`.** Add a `css/` only if the lesson is
-  about CSS. The shared theme is `../../../../css/theme.css` — link it, never
-  fork it
+  about CSS. The shared theme is `../../css/theme.css` — link it, never fork it
 - **Only the lesson's code.** No score streaks, no personal bests, no loading
   spinners, no keyboard shortcuts, unless one of those IS the lesson. Every
-  extra feature is a thing a student has to read past to find the point
-- **Numbered folders.** `1-`, `2-`, `3-`, `3-...-solution`, `4-`. The number is
-  the teaching order, and the playground sorts on it
-- **The `<title>` is the label** the playground shows. Write it like a label:
-  `Step 2 · We do — The Mystery Silhouette`
-- **The you-do folder still runs with all three TODOs unfinished**, and says in
-  plain English which one to go do. A white screen plus a console error is how
-  you lose somebody for the night
-- **End every `js/main.js` with a BREAK IT ON PURPOSE list** — a few things to
-  change and what each one teaches when it goes wrong. Three or four lines.
-  This is the single highest-value thing in the file, because it turns a working
+  extra feature is something a student reads past to find the point
+- **It is finished and it works.** The app is the thing there is to take apart;
+  an app that does not run yet is a worksheet, and the deck already carries the
+  exercise
+- **The `<h1 class="ics-title">` is what it calls itself** — the live editor and
+  the shelf both read it. Write it like the name of a thing, not a topic
+- **End `js/main.js` with a BREAK IT ON PURPOSE list** — a few things to change
+  and what each one teaches when it goes wrong. Three or four lines. This is the
+  single highest-value thing in the file, because it is what turns a working
   example into something a student can interrogate:
 
 ```js
 /* BREAK IT ON PURPOSE:
 
-   change 25 to 99999       there is no Pokémon 99999. A 404 is the API
-                            telling you so, clearly. Meet one here.
-   delete the first `await`  you get "[object Promise]" — the wait never
-                            happened, so you printed the waiting.       */
+   delete  shuffle(choices)   the answer is always the first button.
+                              That one line is the whole difficulty.
+   delete the first  await    "[object Promise]" instead of a name. The
+                              wait never happened, so you printed the
+                              waiting.                                  */
 ```
 
-## The playground
+Where did I do / We do / You do go? Into the **deck**, which is where it was
+always taught from. The app stays one working thing, so there is always
+something that runs to break. Six folders of half-finished variants was three
+copies of the same code and a maintenance bill.
 
-`playground.html` puts those folders in a tree with an editor, a live preview
-and a console. Click a folder and it runs; click a file and it opens.
+## The live editor
+
+`playground.html` is a full-screen editor over the app: a sidebar you pull files
+from, the code in the middle, the running app on the right.
 
 It is **generated** — you never hand-write or hand-edit it:
 
@@ -114,20 +116,19 @@ python tools/build-playground.py --check        # fail if stale
 ```
 
 A browser on a `file://` path cannot read a folder, so the page cannot discover
-your files at runtime. The tool copies every text file under `projects/` into
-plain-text blocks it can read. That is one generated file derived from the real
-folders — the alternative was three hand-maintained copies of the same code,
-which is what this repo used to have.
+your files at runtime. The tool copies every text file in the workshop folder —
+except the deck, the README and `playground.html` itself — into plain-text
+blocks it can read. That is one generated file derived from the real app, rather
+than a second copy of the code to keep in sync.
 
-Re-run it after you touch anything under `projects/`, and run `--check` before
-you ask for review.
+Re-run it after you touch the app, and run `--check` before you ask for review.
 
-Two details if you ever need to read the generated file: each block is a
+Two details if you ever read the generated file: each block is a
 `<script type="text/plain" data-pg-file="...">`, so angle brackets and quotes
 survive as typed; and a block that must *contain* the text `</script>` has it
 written as `<\/script>`, because the HTML parser ends a script element at the
-first one regardless of `type`. The tool handles that, and
-`js/preview-core.js` puts the slash back.
+first one regardless of `type`. The tool handles that, and `js/preview-core.js`
+puts the slash back.
 
 ## Writing rules that are worth more than they look
 
@@ -180,10 +181,9 @@ Then, before you request review, open these yourself:
 
 - [ ] `index.html` at the repo root — your card is on the shelf and its links work
 - [ ] Your `REF-deck.html` — arrows drive it, `Ctrl+P` gives clean pages
-- [ ] **Every project folder, opened directly off disk** — each one runs on its own
-- [ ] Your you-do folder — runs with all three TODOs unfinished and says which one to do
-- [ ] Your answer-key folder — actually plays through
-- [ ] Your `playground.html` — every folder runs when clicked
+- [ ] **Your app, opened directly off disk** — double-clicked, not served
+- [ ] Your `playground.html` — it runs on load, and Run works after an edit
+- [ ] Every item on your BREAK IT ON PURPOSE list actually does what it says
 - [ ] `python tools/build-playground.py --check` is clean
 
 ---

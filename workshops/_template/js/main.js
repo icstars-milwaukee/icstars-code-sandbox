@@ -1,0 +1,83 @@
+/* ============================================================
+   THE APP
+
+   REPLACE THE GUTS, KEEP THE SHAPE. Every workshop app is the same
+   four blocks:
+
+     1. the source of truth   (a URL, a list, a file)
+     2. handles to the page   (grabbed once, at the top, by id)
+     3. the work              (the lines that ARE the lesson)
+     4. wire it up            (and say what the page is waiting for)
+
+   If block 3 runs past ten lines you are teaching two workshops.
+   Only the lesson's code belongs in here: no score streaks, no
+   personal bests, no loading spinners, unless one of those IS the
+   lesson. Every extra feature is something a student reads past to
+   find the point.
+   ============================================================ */
+
+// ---- 1. WHERE THE DATA COMES FROM --------------------------
+// In a real workshop this is a URL. Three strings here, so the
+// template runs before you have changed anything.
+const SOURCE = ["first thing", "second thing", "third thing", "fourth thing"];
+
+// ---- 2. THE PAGE -------------------------------------------
+const goBtn    = document.getElementById("goBtn");
+const statusEl = document.getElementById("status");
+const outEl    = document.getElementById("out");
+const countEl  = document.getElementById("count");
+
+// State lives in ONE place, named, at the top.
+let current  = null;
+let revealed = false;
+
+// ---- 3. THE WORK -------------------------------------------
+// Math.random() gives 0 to 0.999..., times the length, floored, is
+// a valid slot every time. Say this one out loud — they will reach
+// for it for the rest of their lives.
+function pickRandom(list) {
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function newRound() {
+  current = pickRandom(SOURCE);
+
+  outEl.textContent    = "? ? ?";          // hidden, on purpose
+  statusEl.className   = "ics-note";
+  statusEl.textContent = "Something is picked. You can't see which one yet.";
+  countEl.textContent  = "picked from " + SOURCE.length;
+}
+
+function reveal() {
+  outEl.textContent    = current;
+  statusEl.className   = "ics-note success";
+  statusEl.textContent = "It was: " + current;
+}
+
+// ---- 4. WIRE IT UP -----------------------------------------
+goBtn.addEventListener("click", function () {
+  revealed = !revealed;
+  if (revealed) { reveal(); } else { newRound(); }
+  goBtn.textContent = revealed ? "New one" : "Reveal";
+});
+
+newRound();
+goBtn.textContent = "Reveal";
+
+// Say what the page is waiting for. "Nothing happened" is the worst
+// error message there is.
+countEl.textContent = SOURCE.length + " to choose from";
+
+
+/* ============================================================
+   BREAK IT ON PURPOSE
+   Write three or four real ones for YOUR lesson. Each should break
+   a different thing and teach a different word. This list is the
+   highest-value part of the file: it turns a working example into
+   something a student can interrogate.
+
+   <change X to Y>          <what they see, and the idea it teaches>
+   <delete line N>          <what they see, and the idea it teaches>
+   <misspell an id>         "null is not an object" — the handle
+                            never found anything to hold.
+   ============================================================ */

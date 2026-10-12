@@ -224,6 +224,17 @@ body:not(.pg-page) .pg {
 /* The file name, which may need truncating, and how many times the
    search term appears inside that file. */
 .pg-name { overflow: hidden; text-overflow: ellipsis; }
+
+/* index.html is the entry point — the file Run actually loads. Worth
+   saying, since the file you are usually editing is js/main.js. */
+.pg-entry {
+  margin-left: auto;
+  padding-left: .6em;
+  font-size: .62rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--red);
+}
 .pg-hits {
   margin-left: .5em;
   font-size: .9em;
@@ -232,7 +243,7 @@ body:not(.pg-page) .pg {
 }
 
 /* Filtered out by the search. details needs this spelled out. */
-.pg-file[hidden], .pg-folder[hidden], .pg-subfolder[hidden] { display: none; }
+.pg-file[hidden], .pg-subfolder[hidden] { display: none; }
 
 /* The list is the only thing that scrolls, so the hint at the
    bottom stays put. */
@@ -247,54 +258,6 @@ body:not(.pg-page) .pg {
   border-top: 1px solid rgba(154, 144, 149, .2);
 }
 .pg-side-foot b { color: var(--paper); display: block; margin-bottom: 2px; }
-
-/* A project folder. Clicking it runs the project. */
-.pg-folder > summary {
-  display: flex;
-  align-items: baseline;
-  gap: .5em;
-  cursor: pointer;
-  padding: 8px 14px;
-  list-style: none;
-  border-left: 3px solid transparent;
-}
-.pg-folder > summary::-webkit-details-marker { display: none; }
-.pg-folder > summary:hover { background: var(--ink-soft); }
-.pg-folder > summary:focus-visible { outline: 2px solid var(--red); outline-offset: -2px; }
-
-.pg-folder-name {
-  font-family: var(--mono);
-  font-size: .83rem;
-  font-weight: 700;
-  color: var(--paper);
-}
-.pg-folder-label {
-  font-size: .67rem;
-  color: var(--grey);
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-/* The run affordance, so "click the folder" is discoverable rather
-   than something you have to be told. */
-.pg-folder-run {
-  margin-left: auto;
-  font-family: var(--mono);
-  font-size: .63rem;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--red);
-  opacity: 0;
-}
-.pg-folder > summary:hover .pg-folder-run { opacity: 1; }
-
-/* The project currently in the preview. */
-.pg-folder.is-running > summary {
-  border-left-color: var(--red);
-  background: var(--ink-soft);
-}
-.pg-folder.is-running .pg-folder-run { opacity: 1; }
 
 .pg-children { padding-left: 14px; }
 
@@ -313,7 +276,8 @@ body:not(.pg-page) .pg {
 
 /* A file you can grab. */
 .pg-file {
-  display: block;
+  display: flex;
+  align-items: baseline;
   width: 100%;
   text-align: left;
   font: inherit;

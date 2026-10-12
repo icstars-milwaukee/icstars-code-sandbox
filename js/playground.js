@@ -1,14 +1,14 @@
 /* ============================================================
-   THE PLAYGROUND  —  a sidebar of workshop files, full screen
+   THE LIVE EDITOR  —  the workshop's app, full screen
 
-   The workshop's files live in a sidebar down the left. Click a
-   folder and that project runs. Click a file and you pull it into
-   the editor. Edit it, press Run, and watch what you changed.
+   A sidebar of the app's files down the left. Click one and you
+   pull it into the editor. Edit it, press Run, and watch what you
+   changed in the pane on the right.
 
-   This is the whole live-code surface. There is no second one: the
-   real files are real files, in workshops/<slug>/projects/, and each
-   folder opens and runs on its own straight off disk. This page is
-   how you browse and break them without a server.
+   A workshop IS its app: index.html at the workshop root, its code
+   in js/. That folder opens and runs on its own straight off disk,
+   and it is what students end up editing. This page is how you
+   browse and break it without a server.
    The engine is js/preview-core.js.
 
    It takes the entire viewport on purpose. An editor in a 980px
@@ -17,9 +17,8 @@
 
    HOW TO PUT ONE ON A PAGE
    ------------------------
-   One container, one plain-text block per file. The first segment
-   of each path is the project — that's what becomes a folder you
-   can click to run.
+   One container, one plain-text block per file. One of them must be
+   index.html — that is the app's entry point.
 
      <link rel="stylesheet" href="../../css/theme.css">
      <link rel="stylesheet" href="../../css/playground.css">
@@ -27,18 +26,14 @@
 
      <div data-pg
           data-pg-storage="01-hello-api"
-          data-pg-title="Hello, API"
+          data-pg-title="Who's That Pokémon?"
           data-pg-back="index.html"
-          data-pg-root="workshops/01-hello-api/projects/">
+          data-pg-root="workshops/01-hello-api/">
 
-       <script type="application/json" data-pg-labels>
-         { "1-one-pokemon": "Step 1 · I do — One Pokémon" }
-       </script>
-
-       <script type="text/plain" data-pg-file="1-one-pokemon/index.html">
+       <script type="text/plain" data-pg-file="index.html">
          ...
        </script>
-       <script type="text/plain" data-pg-file="1-one-pokemon/js/main.js">
+       <script type="text/plain" data-pg-file="js/main.js">
          ...
        </script>
 
@@ -47,14 +42,12 @@
      <script src="../../js/preview-core.js"></script>
      <script src="../../js/playground.js"></script>
 
-   Each project needs an index.html — that's its entry point. When a
-   project runs, every local <link> and <script src> in its
-   index.html is resolved against the other files in that project
-   and inlined, so the preview is one self-contained document and
-   needs no server.
+   When it runs, every local <link> and <script src> in index.html is
+   resolved against the other declared files and inlined, so the
+   preview is one self-contained document and needs no server.
 
    A browser on a file:// path cannot read a folder, so these blocks
-   are written by tools/build-playground.py from the projects/ folders.
+   are written by tools/build-playground.py from the real app files.
    Edit the real files, then re-run the tool.
    ============================================================ */
 
@@ -71,6 +64,7 @@
   const SCRIPT_URL = document.currentScript ? document.currentScript.src : "";
   const THEME_HREF = CORE.themeHref(SCRIPT_URL);
 
+  const ENTRY  = "index.html";
   const NARROW = 860;          // below this, start with the sidebar closed
 
   /* Which language the toolbar announces. Label only. */
@@ -81,13 +75,12 @@
     return "Text";
   }
 
-  /* "step-1/js/a.js" + "../../css/theme.css" -> "css/theme.css"
-     Enough path resolution for one folder of files, including the
-     ../ that project pages use to reach the shared theme. */
-  function resolve(projectRoot, href) {
-    const parts = (projectRoot + "/" + href).split("/");
+  /* "js/../css/a.css" -> "css/a.css". Enough path resolution for one
+     app folder, including the ../ its pages use to reach the shared
+     theme — which resolves outside the app and so stays external. */
+  function resolve(href) {
     const out = [];
-    parts.forEach(function (part) {
+    href.split("/").forEach(function (part) {
       if (!part || part === ".") return;
       if (part === "..") { out.pop(); return; }
       out.push(part);
@@ -102,16 +95,9 @@
       pristine[node.dataset.pgFile] = CORE.readBlock(node);
     });
 
-    let labels = {};
-    const labelNode = root.querySelector("[data-pg-labels]");
-    if (labelNode) {
-      try { labels = JSON.parse(labelNode.textContent); }
-      catch (e) { console.warn("playground: data-pg-labels is not valid JSON"); }
-    }
-
     const paths = Object.keys(pristine).sort();
     if (!paths.length) {
-      root.textContent = "No files declared in this playground.";
+      root.textContent = "No files declared in this editor.";
       return;
     }
 
@@ -126,22 +112,10 @@
       files[p] = (saved !== null && saved !== undefined) ? saved : pristine[p];
     });
 
-    /* Projects, in path order, each with its own file list. */
-    const projects = [];
-    paths.forEach(function (p) {
-      const name = p.split("/")[0];
-      let project = projects.filter(function (x) { return x.name === name; })[0];
-      if (!project) { project = { name: name, files: [] }; projects.push(project); }
-      project.files.push(p);
-    });
-
     root.textContent = "";
     root.classList.add("pg");
 
     /* ---------- the bar ------------------------------------- */
-    /* Everything the page used to say in a header and three
-       paragraphs now lives in one strip, because the panes are
-       worth more than the prose. */
     const bar = el("div", "pg-bar");
 
     const sideBtn = btn("pg-icon", "☰", "Show or hide the file sidebar");
@@ -168,7 +142,7 @@
     const actions  = el("div", "pg-actions");
     const runBtn   = btn("pg-btn pg-run", "Run ▸", "Ctrl + Enter");
     const resetOne = btn("pg-btn", "Reset file", "Undo your changes to this file");
-    const resetAll = btn("pg-btn", "Reset all", "Undo your changes to every file here");
+    const resetAll = btn("pg-btn", "Reset all", "Undo your changes to every file");
     actions.appendChild(runBtn);
     actions.appendChild(resetOne);
     actions.appendChild(resetAll);
@@ -180,17 +154,17 @@
     const body = el("div", "pg-body");
 
     const side = el("nav", "pg-side");
-    side.setAttribute("aria-label", "Workshop files");
-    side.appendChild(el("div", "pg-side-head", "Workshop files"));
+    side.setAttribute("aria-label", "App files");
+    side.appendChild(el("div", "pg-side-head", "The app"));
 
-    /* Search the workshop. Matches a path OR what is inside the
-       file, because "where did we write fetch?" is the question
-       people actually have, and the filename never answers it. */
+    /* Search the app. Matches a path OR what is inside the file,
+       because "where did we write fetch?" is the question people
+       actually have, and the filename never answers it. */
     const searchWrap = el("div", "pg-search");
     const search = document.createElement("input");
     search.type = "search";
     search.className = "pg-search-input";
-    search.placeholder = "Search this workshop…";
+    search.placeholder = "Search these files…";
     search.setAttribute("aria-label", "Search file names and file contents");
     searchWrap.appendChild(search);
     const searchCount = el("div", "pg-search-count", "");
@@ -199,12 +173,13 @@
 
     const sideList = el("div", "pg-side-list");
     side.appendChild(sideList);
+
     const foot = el("div", "pg-side-foot");
-    foot.appendChild(el("b", null, "Click a folder to run it."));
+    foot.appendChild(el("b", null, "Break it on purpose."));
     foot.appendChild(el("span", null,
-      diskRoot ? " These are real files, in " + diskRoot + " — each folder also opens "
-               + "and runs on its own. Every js/main.js ends with a few things to break."
-               : " Every js/main.js ends with a few things to break."));
+      diskRoot ? " These are real files, in " + diskRoot + " — the folder also opens and "
+               + "runs on its own. js/main.js ends with a list of things worth breaking."
+               : " js/main.js ends with a list of things worth breaking."));
     side.appendChild(foot);
     body.appendChild(side);
 
@@ -243,8 +218,7 @@
     root.appendChild(body);
 
     /* ---------- state -------------------------------------- */
-    let openPath    = null;                // the file in the editor
-    let openProject = null;                // the project being run
+    let openPath = null;                   // the file in the editor
 
     const preview = CORE.createPreview(frame, log, {
       lineCount: function () { return code.value.split("\n").length; },
@@ -253,16 +227,14 @@
     });
 
     /* ---------- assembling a runnable document -------------
-       Take the project's index.html and fold its own CSS and JS
-       into it, so the preview is one self-contained document that
-       needs no server and no relative paths. */
-    function assemble(project) {
-      const entry = project.name + "/index.html";
-      let doc = files[entry];
+       Take index.html and fold the app's own CSS and JS into it, so
+       the preview is one self-contained document that needs no
+       server and no relative paths. */
+    function assemble() {
+      let doc = files[ENTRY];
       if (doc === undefined) {
-        return { doc: "<p>This folder has no <code>index.html</code>, so there is "
-                    + "nothing to run. Open a file on the left to read it.</p>",
-                 offset: 0 };
+        return { doc: "<p>There is no <code>index.html</code> here, so there is nothing "
+                    + "to run. Open a file on the left to read it.</p>", offset: 0 };
       }
 
       /* Stylesheets: ours get inlined, the shared theme gets an
@@ -270,7 +242,7 @@
          pointing at a path that cannot resolve in a preview. */
       doc = doc.replace(/<link\b[^>]*href="([^"]+)"[^>]*>/gi, function (tag, href) {
         if (/^(https?:)?\/\//i.test(href)) return tag;
-        const target = resolve(project.name, href);
+        const target = resolve(href);
         if (files[target] !== undefined) {
           return '<style>\n' + files[target] + '\n</style>';
         }
@@ -284,17 +256,17 @@
       doc = doc.replace(/<script\b[^>]*\bsrc="([^"]+)"[^>]*>\s*<\/script>/gi,
         function (tag, src) {
           if (/^(https?:)?\/\//i.test(src)) return tag;
-          const target = resolve(project.name, src);
+          const target = resolve(src);
           if (files[target] !== undefined) {
             return '<script>\n' + files[target] + '\n<\/script>';
           }
           return "";
         });
 
-      /* The fallback stylesheet and the console bridge go at the
-         top of <head>: the fallback so the real theme (which comes
-         later in the document) still wins, the bridge so it is
-         installed before any of the project's own scripts run. */
+      /* The fallback stylesheet and the console bridge go at the top
+         of <head>: the fallback so the real theme (which comes later
+         in the document) still wins, the bridge so it is installed
+         before any of the app's own scripts run. */
       const inject = '<style>' + CORE.FALLBACK_CSS + '</style>\n' + CORE.BRIDGE + '\n';
       if (/<head[^>]*>/i.test(doc)) {
         doc = doc.replace(/<head[^>]*>/i, function (m) { return m + "\n" + inject; });
@@ -305,7 +277,7 @@
       /* How many lines sit above the open file's content, so an
          error in it still reports the line the student edited. */
       let offset = 0;
-      if (openPath && openPath !== entry && files[openPath]) {
+      if (openPath && openPath !== ENTRY && files[openPath]) {
         const at = doc.indexOf(files[openPath]);
         if (at > -1) offset = doc.slice(0, at).split("\n").length - 1;
       }
@@ -313,8 +285,7 @@
     }
 
     function run() {
-      if (!openProject) return;
-      const built = assemble(openProject);
+      const built = assemble();
       preview.runDocument(built.doc, built.offset);
     }
 
@@ -334,17 +305,10 @@
         if (on) { b.setAttribute("aria-current", "true"); }
         else    { b.removeAttribute("aria-current"); }
       });
-      sideList.querySelectorAll(".pg-folder").forEach(function (d) {
-        d.classList.toggle("is-running",
-          openProject && d.dataset.project === openProject.name);
-      });
     }
 
     function openFile(path, andRun) {
-      openPath    = path;
-      openProject = projects.filter(function (p) {
-        return p.name === path.split("/")[0];
-      })[0] || null;
+      openPath = path;
 
       code.value = files[path];
       paintGutter();
@@ -356,17 +320,10 @@
       crumb.classList.toggle("is-dirty", files[path] !== pristine[path]);
 
       markSide();
-      /* On a phone the sidebar covers the editor, so choosing a
-         file should get out of the way. */
+      /* On a phone the sidebar covers the editor, so choosing a file
+         should get out of the way. */
       if (window.innerWidth < NARROW) closeSide();
       if (andRun) run();
-    }
-
-    function openProjectByName(name, andRun) {
-      const project = projects.filter(function (p) { return p.name === name; })[0];
-      if (!project) return;
-      const entry = name + "/index.html";
-      openFile(files[entry] !== undefined ? entry : project.files[0], andRun);
     }
 
     code.addEventListener("input", function () {
@@ -396,15 +353,15 @@
     });
 
     /* ---------- the sidebar -------------------------------- */
-    /* Nested folders, built from the paths themselves, so adding a
-       css/ folder to a project makes one appear here. */
-    function nest(fileList, projectName) {
+    /* Folders are built from the paths themselves, so adding a css/
+       folder to the app makes one appear here. */
+    function nest(fileList) {
       const top = { dirs: {}, files: [] };
       fileList.forEach(function (path) {
-        const rest = path.slice(projectName.length + 1).split("/");
+        const parts = path.split("/");
         let node = top;
-        rest.forEach(function (part, i) {
-          if (i === rest.length - 1) { node.files.push({ name: part, path: path }); return; }
+        parts.forEach(function (part, i) {
+          if (i === parts.length - 1) { node.files.push({ name: part, path: path }); return; }
           node.dirs[part] = node.dirs[part] || { dirs: {}, files: [] };
           node = node.dirs[part];
         });
@@ -413,6 +370,22 @@
     }
 
     function renderNode(node, into) {
+      /* Files before subfolders, so index.html is the first thing
+         in the sidebar rather than buried under js/. */
+      node.files.slice().sort(function (a, b) {
+        if (a.name === ENTRY) return -1;
+        if (b.name === ENTRY) return 1;
+        return a.name.localeCompare(b.name);
+      }).forEach(function (f) {
+        const b = btn("pg-file", "", f.path);
+        b.appendChild(el("span", "pg-name", f.name));
+        b.appendChild(el("span", "pg-hits", ""));   // filled in by the search
+        b.dataset.path = f.path;
+        if (f.path === ENTRY) b.appendChild(el("span", "pg-entry", "runs"));
+        b.addEventListener("click", function () { openFile(f.path, true); });
+        into.appendChild(b);
+      });
+
       Object.keys(node.dirs).sort().forEach(function (name) {
         const d = document.createElement("details");
         d.className = "pg-subfolder";
@@ -425,51 +398,13 @@
         d.appendChild(kids);
         into.appendChild(d);
       });
-      node.files.slice().sort(function (a, b) {
-        /* index.html first — it is the entry point. */
-        if (a.name === "index.html") return -1;
-        if (b.name === "index.html") return 1;
-        return a.name.localeCompare(b.name);
-      }).forEach(function (f) {
-        const b = btn("pg-file", "", f.path);
-        b.appendChild(el("span", "pg-name", f.name));
-        b.appendChild(el("span", "pg-hits", ""));   // filled in by the search
-        b.dataset.path = f.path;
-        b.addEventListener("click", function () { openFile(f.path, true); });
-        into.appendChild(b);
-      });
     }
 
-    projects.forEach(function (project, i) {
-      const d = document.createElement("details");
-      d.className = "pg-folder";
-      d.dataset.project = project.name;
-      d.open = i === 0;
+    renderNode(nest(paths), sideList);
 
-      const s = document.createElement("summary");
-      s.appendChild(el("span", "pg-folder-name", project.name + "/"));
-      if (labels[project.name]) {
-        s.appendChild(el("span", "pg-folder-label", labels[project.name]));
-      }
-      s.appendChild(el("span", "pg-folder-run", "run ▸"));
-      s.title = "Click to run " + project.name;
-      /* Clicking the folder runs the project. The <details> toggle
-         happens too, which is what you want — it opens and runs. */
-      s.addEventListener("click", function () { openProjectByName(project.name, true); });
-      d.appendChild(s);
-
-      const kids = el("div", "pg-children");
-      renderNode(nest(project.files, project.name), kids);
-      d.appendChild(kids);
-
-      sideList.appendChild(d);
-    });
-
-    /* ---------- searching the workshop -------------------- */
-    /* Matches a path OR the text inside the file. "Where did we
-       write fetch?" is the question people actually have, and a
-       filename never answers it. Twelve small files, so this runs
-       straight through on every keystroke — no debounce needed. */
+    /* ---------- searching the app ------------------------- */
+    /* A couple of small files, so this runs straight through on
+       every keystroke — no debounce needed. */
     function countHits(haystack, needle) {
       let hits = 0, at = haystack.indexOf(needle);
       while (at > -1) { hits++; at = haystack.indexOf(needle, at + needle.length); }
@@ -486,39 +421,24 @@
         return;
       }
 
-      let shownTotal = 0;
+      let shown = 0;
+      sideList.querySelectorAll(".pg-file").forEach(function (b) {
+        const path = b.dataset.path;
+        const hits = countHits((files[path] || "").toLowerCase(), term);
+        const show = path.toLowerCase().indexOf(term) > -1 || hits > 0;
 
-      sideList.querySelectorAll(".pg-folder").forEach(function (folder) {
-        const project = folder.dataset.project;
-        /* A folder whose own name or label matches keeps all of its
-           files, so searching "mystery" shows you that project
-           rather than an empty folder. */
-        const nameMatch = project.toLowerCase().indexOf(term) > -1
-                       || (labels[project] || "").toLowerCase().indexOf(term) > -1;
-        let shown = 0;
-
-        folder.querySelectorAll(".pg-file").forEach(function (b) {
-          const path = b.dataset.path;
-          const hits = countHits((files[path] || "").toLowerCase(), term);
-          const show = nameMatch || path.toLowerCase().indexOf(term) > -1 || hits > 0;
-
-          b.hidden = !show;
-          b.querySelector(".pg-hits").textContent = hits ? "×" + hits : "";
-          if (show) shown++;
-        });
-
-        /* A subfolder with nothing left in it goes too. */
-        folder.querySelectorAll(".pg-subfolder").forEach(function (sub) {
-          sub.hidden = !sub.querySelector(".pg-file:not([hidden])");
-        });
-
-        folder.hidden = shown === 0;
-        if (shown) folder.open = true;        // show what matched
-        shownTotal += shown;
+        b.hidden = !show;
+        b.querySelector(".pg-hits").textContent = hits ? "×" + hits : "";
+        if (show) shown++;
       });
 
-      searchCount.textContent = shownTotal
-        ? shownTotal + (shownTotal === 1 ? " file matches" : " files match")
+      /* A subfolder with nothing left in it goes too. */
+      sideList.querySelectorAll(".pg-subfolder").forEach(function (sub) {
+        sub.hidden = !sub.querySelector(".pg-file:not([hidden])");
+      });
+
+      searchCount.textContent = shown
+        ? shown + (shown === 1 ? " file matches" : " files match")
         : "nothing matches that";
     }
 
@@ -555,7 +475,7 @@
     });
 
     resetAll.addEventListener("click", function () {
-      if (!window.confirm("Put every file in this playground back how it started?")) return;
+      if (!window.confirm("Put every file back how it started?")) return;
       paths.forEach(function (p) {
         files[p] = pristine[p];
         if (storeKey) store.drop(storeKey + ":" + p);
@@ -563,11 +483,12 @@
       openFile(openPath || paths[0], true);
     });
 
-    /* Open the first project, running. On a narrow screen the
-       sidebar would eat the editor, so start it closed — the ☰
-       button is right there. openFile() closes it anyway, so set
-       the flag after the first open to keep the two in step. */
-    openProjectByName(projects[0].name, true);
+    /* Open the code, not the markup: js/main.js is where the lesson
+       is, and index.html is markup they did not come here to read.
+       Then run. */
+    const firstJs = paths.filter(function (p) { return /\.js$/i.test(p); })[0];
+    openFile(firstJs || ENTRY, true);
+
     if (window.innerWidth >= NARROW) {
       root.classList.remove("side-closed");
       sideBtn.setAttribute("aria-expanded", "true");

@@ -25,10 +25,10 @@
   <main class="ics-wrap">
 
     <p class="lib-lede">
-      Nothing in here is a lecture. A workshop is a <strong>deck you can present</strong> and
-      a handful of <strong>project folders that already run</strong> &mdash; one per pass, each
-      one small enough to read in a sitting. No install, no npm, no accounts: if you can open
-      this page you can do the work. <strong>Walk out with the thing built.</strong>
+      Nothing in here is a lecture. A workshop is two things: a <strong>deck you can
+      present</strong>, and <strong>one app that already runs</strong> &mdash; small enough to
+      read in a sitting. No install, no npm, no accounts: if you can open this page you can do
+      the work. <strong>Walk out with the thing built.</strong>
     </p>
 
     <h2 class="lib-h2" id="shelf-heading">The shelf</h2>
@@ -72,36 +72,34 @@
       </div>
     </div>
 
-    <!-- ================= The playground ================= -->
-    <h2 class="lib-h2">The playground</h2>
+    <!-- ================= The live editor ================= -->
+    <h2 class="lib-h2">The live editor</h2>
     <p class="lib-lede">
-      A workshop is a handful of <strong>project folders</strong>. Each one is an
-      <code>index.html</code> and a <code>js/main.js</code> that opens and runs on its own
-      &mdash; no server, no build step, nothing installed. The playground is a
-      <strong>full-screen editor</strong> over those folders: a sidebar you pull files from,
-      the code in the middle, the running page on the right. Click the red
-      <strong>live editor</strong> chip on any card above.
+      A workshop folder <em>is</em> the app: an <code>index.html</code> and a
+      <code>js/main.js</code> that open and run straight off disk &mdash; no server, no build
+      step, nothing installed. The live editor is a <strong>full-screen editor</strong> over
+      those files: a sidebar you pull files from, the code in the middle, the running app on
+      the right. Click the red <strong>live editor</strong> chip on any card above.
     </p>
 
-    <div class="tree">┌─ playground.html ──────────────────────────────────────────────────┐
-│ i.c.stars · Hello, API        <b>[ Run ▸ ]</b> [Reset file] [Reset all] │
-├──────────────────┬─────────────────────────┬───────────────────────┤
-│ WORKSHOP FILES   │ js/main.js              │ RESULT                │
-│ ▾ 1-one-pokemon/ │  1  const API_URL =     │                       │
-│     index.html   │  2    "https://poke..." │    [ silhouette ]     │
-│     js/main.js   │  3                      │                       │
-│ ▾ 2-the-mystery/ │  4  const sprite =      │  [bulbasaur][pidgey]  │
-│     index.html   │  5    document.get...   │  [pikachu ][ eevee ]  │
-│     js/main.js   │  6                      │                       │
-│ <b>▾ 3-the-game/</b>    │  7  // TODO 1: the two  │  SCORE <b>3</b> / 4          │
-│     index.html   │  8  //   lines you've   │                       │
-│     <b>js/main.js</b>    │  9  //   written twice  ├───────────────────────┤
-│ ▸ 3-the-game-... │ 10                      │ CONSOLE               │
-│ ▸ 4-another-api/ │ 11  async function      │ <b>line 9</b> answer is not    │
-│                  │ 12    load() {          │        defined        │
-└──────────────────┴─────────────────────────┴───────────────────────┘
-   click a folder,     the file you clicked,     what it did, and
-   it runs             Ctrl+Enter to run         what went wrong</div>
+    <div class="tree">┌─ live editor ─────────────────────────────────────────┐
+│ ☰ i.c.stars|* ← the app       <b>[ Run ▸ ]</b> [Reset file] [Reset all] │
+├──────────────────┬───────────────────────┬──────────────────────┤
+│ THE APP          │ JS  js/main.js          │ RESULT                │
+│ [ search… ]      │  1  const API_URL =     │                       │
+│                  │  2    "https://poke…"   │    [ silhouette ]     │
+│ index.html  runs │  3                      │                       │
+│ ▾ js/            │  4  const sprite =      │  [bulbasaur][pidgey]  │
+│     <b>main.js</b>       │  5    document.get…    │  [pikachu ][ eevee ]  │
+│                  │  6                      │                       │
+│                  │  7  async function      │  SCORE <b>3</b> / 4          │
+│                  │  8    load() {           ├──────────────────────┤
+├──────────────────┤  9    const response =  │ CONSOLE               │
+│ Break it on      │ 10      await fetch(…   │ <b>line 9</b> answer is not    │
+│ purpose.         │ 11                      │         defined       │
+└──────────────────┴───────────────────────┴──────────────────────┘
+   the app's files      the file you grabbed,     what it did, and
+   (search them)        Ctrl+Enter to run         what went wrong</div>
 
     <p class="lib-lede">
       Every run rebuilds the preview from scratch, so nobody debugs state left over from the
@@ -111,8 +109,8 @@
     </p>
 
     <p class="lib-lede">
-      Every <code>js/main.js</code> ends with a short <strong>BREAK IT ON PURPOSE</strong>
-      list: a few things to change, and what each one teaches when it goes wrong. Delete an
+      Every <code>js/main.js</code> ends with a <strong>BREAK IT ON PURPOSE</strong> list: a
+      few things to change, and what each one teaches when it goes wrong. Delete an
       <code>await</code> and you get <code>[object Promise]</code> &mdash; you printed the
       waiting instead of the thing. That is a better lesson than a paragraph about promises,
       and it costs one keystroke.
@@ -122,24 +120,20 @@
     <h2 class="lib-h2" id="add">Add the next workshop</h2>
     <p class="lib-lede">
       Fifteen minutes of setup, then you're writing content. The template is a working
-      workshop with the words taken out &mdash; it opens and runs before you change a thing.
+      app with the words taken out &mdash; it opens and runs before you change a thing.
     </p>
 
     <ol class="howto">
-      <li>Copy <code>workshops/_template/</code> to <code>workshops/0N-your-slug/</code>.
-        Numbers are shelf order, not week order.</li>
+      <li>Copy <code>workshops/_template/</code> to <code>workshops/0N-your-slug/</code>.</li>
       <li>Rewrite <code>REF-deck.html</code>. Arrow keys drive it, <code>Ctrl+P</code> saves it
         as a PDF. <strong>Do not touch the <code>&lt;style&gt;</code> block</strong> &mdash; the
         palette is the house palette.</li>
-      <li>Fill in the project folders under <code>projects/</code> &mdash; one per pass, each an
-        <code>index.html</code> and a <code>js/main.js</code>. Leave exactly three TODOs in the
-        <em>You do</em> one, and make sure it still runs with all three unfinished.</li>
-      <li>Write the answer key folder. If you can't finish your own TODOs in nine minutes,
-        they're too big.</li>
-      <li>End each <code>js/main.js</code> with a <strong>BREAK IT ON PURPOSE</strong> list.</li>
-      <li>Run <code>python tools/build-playground.py</code>. It reads your
-        <code>projects/</code> folders and writes <code>playground.html</code> &mdash; nothing
-        to maintain by hand.</li>
+      <li>Rewrite the app: <code>index.html</code> and <code>js/main.js</code>.
+        <strong>Only the lesson's code</strong> &mdash; if a feature is not the lesson, it is
+        something a student reads past to find the point.</li>
+      <li>End <code>js/main.js</code> with a <strong>BREAK IT ON PURPOSE</strong> list.</li>
+      <li>Run <code>python tools/build-playground.py</code>. It reads your app and writes
+        <code>playground.html</code> &mdash; nothing to maintain by hand.</li>
       <li>Add one object to <code>js/workshops.js</code>, with <code>live: true</code>.
         The card and the <strong>live editor</strong> chip build themselves.</li>
       <li>Teach it to real people, then change <code>status</code> to <code>"ready"</code>.
@@ -165,13 +159,13 @@
 │
 ├── css/
 │   ├── theme.css           the house theme. Shared by every workshop.
-│   ├── playground.css      the file tree, editor and console
+│   ├── playground.css      the live editor
 │   └── library.css         front-door-only styling
 │
 ├── js/
 │   ├── workshops.js        <b>THE CATALOG — add your workshop here</b>
 │   ├── preview-core.js     the engine. No dependencies.
-│   └── playground.js       the file tree, built from the paths
+│   └── playground.js       the sidebar, editor and console
 │
 ├── tools/
 │   └── build-playground.py regenerates each playground.html
@@ -179,22 +173,16 @@
 └── workshops/
     ├── _template/          copy this to start
     │   ├── README.md       the checklist
-    │   ├── index.html      workshop landing page
+    │   ├── <b>index.html      THE APP</b>
+    │   ├── <b>js/main.js      THE APP'S CODE</b>
     │   ├── REF-deck.html   the house deck, empty
-    │   ├── playground.html GENERATED by the tool above
-    │   └── projects/       <b>one folder per pass — the real code</b>
+    │   └── playground.html GENERATED by the tool above
     │
-    └── 01-hello-api/       Pokémon guessing game · fetch, JSON, async
-        ├── index.html
+    └── 01-hello-api/       Who's That Pokémon? · fetch, JSON, async
+        ├── <b>index.html      THE APP</b>
+        ├── <b>js/main.js      THE APP'S CODE</b>
         ├── REF-deck.html   16 slides, three live demos
-        ├── playground.html
-        └── projects/
-            ├── 1-one-pokemon/        I DO
-            ├── 2-the-mystery/        WE DO
-            ├── 3-the-game/           YOU DO · 3 TODOs
-            ├── 3-the-game-solution/
-            ├── 4-another-api/        homework
-            └── 4-another-api-solution/</div>
+        └── playground.html GENERATED</div>
 
     <p class="ics-footer">
       i.c.stars<span class="star" style="color:var(--red)">*</span> Milwaukee &middot;

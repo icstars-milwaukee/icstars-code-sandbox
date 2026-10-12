@@ -1,9 +1,8 @@
 # Workshop template — the checklist
 
-You are looking at a **working workshop with the words taken out.** Open
-`index.html` right now: all four project folders run, the deck drives with arrow
-keys, and `projects/3-the-real-thing-solution/` plays a round. Nothing here is a
-blank file.
+You are looking at a **working app with the words taken out.** Open
+`index.html` right now: it runs, and the deck drives with arrow keys. Nothing
+here is a blank file.
 
 Copy the folder first:
 
@@ -18,7 +17,8 @@ Then work down this list. It is ordered on purpose.
 ## 1. Write the deck first
 
 `REF-deck.html`. Not because the deck is the deliverable — because writing
-twelve slides is what tells you whether you have one workshop or three.
+twelve slides is what tells you whether you have one workshop or three. The
+**I do → We do → You do** passes live here, against the app.
 
 Every placeholder is in CAPS and every slide has an HTML comment above it
 saying what belongs there. Work top to bottom.
@@ -47,22 +47,10 @@ Check as you go:
 - [ ] Diagrams are ASCII inside a `.code` block. Not SVG, not an image
 - [ ] `Ctrl+P` gives you one slide per PDF page with nothing cut off
 
-## 2. Fill in the project folders
+## 2. Rewrite the app
 
-```
-projects/
-├── 1-smallest-version/         I DO
-├── 2-next-layer/               WE DO
-├── 3-the-real-thing/           YOU DO · exactly 3 TODOs
-└── 3-the-real-thing-solution/  the answer key
-```
-
-Each is an `index.html` (markup only) and a `js/main.js` (the lesson). Each one
-**opens and runs on its own** — double-click `index.html` and it works. The
-placeholder mechanic (pick one at random, hide it, guess it) is there so that is
-true before you touch anything. Replace the guts, keep the shape.
-
-`js/main.js` in `1-smallest-version/` shows the shape every project uses:
+`index.html` (markup) and `js/main.js` (the lesson). The whole workshop is these
+two files. `js/main.js` shows the shape to keep:
 
 | Block | What goes in it |
 |---|---|
@@ -76,36 +64,20 @@ Rules, in order of how much they matter:
 - [ ] **Only the lesson's code.** No score streaks, no personal bests, no
       loading spinners, unless one of those IS your lesson. Every extra feature
       is something a student reads past to find the point
-- [ ] **The you-do folder runs with all three TODOs unfinished**, and says in
-      plain English which one to go do. A white screen plus a console error is
-      how you lose somebody for the night
-- [ ] **Exactly three TODOs.** Not two, not five. Each 1–4 lines of typing, and
-      each a move they watched twice already tonight
-- [ ] **The answer-key folder plays through.** It is the test — open it and play
-      a round before you ever teach from this folder
-- [ ] **Every `js/main.js` ends with a BREAK IT ON PURPOSE list** — a few things
-      to change and what each teaches when it goes wrong. The template has
-      placeholders; replace them with three real ones for your lesson. This is
-      the highest-value thing in the file
-- [ ] One `CHECKPOINT` comment per stop in `2-next-layer/`, each describing the
-      screen in one sentence
-- [ ] The `<title>` of each `index.html` is the label the playground shows.
-      Write it like one: `Step 2 · We do — The Next Layer`
-- [ ] You did your own TODOs cold, in under nine minutes, from your own
-      instructions. If you couldn't, they're too big
+- [ ] **It opens and runs off disk.** Double-click `index.html`. If it needs a
+      server, it does not belong here
+- [ ] **It is finished.** The app is the thing there is to take apart. The
+      exercise lives in the deck and in the list below
+- [ ] **End `js/main.js` with a BREAK IT ON PURPOSE list** — a few things to
+      change and what each teaches when it goes wrong. The template has
+      placeholders; replace them with three or four real ones. This is the
+      highest-value thing in the file
+- [ ] Every item on that list actually does what you claim. Try them
+- [ ] The `<h1 class="ics-title">` is what the app calls itself — the live
+      editor and the shelf both read it
+- [ ] Delete the `.ics-note` box that says "this is the template"
 
-## 3. Rewrite the landing page
-
-`index.html` — the title, the links, and the source tree so it matches the
-folders that are actually there. Keep the `../../css/theme.css` link; **do not
-fork the theme.** If a component is missing from it, add it to `theme.css` and
-say so in your PR, so the next workshop gets it too.
-
-- [ ] Title, header, and the one-line description
-- [ ] The project links point at your folder names
-- [ ] The source tree matches reality
-
-## 4. Build the playground
+## 3. Build the live editor
 
 `playground.html` is **generated** — don't hand-edit it. From the repo root:
 
@@ -113,20 +85,19 @@ say so in your PR, so the next workshop gets it too.
 python tools/build-playground.py 0N-your-slug
 ```
 
-It copies every file under `projects/` into the page, because a browser on a
-`file://` path cannot read a folder. Re-run it whenever you change anything in
-`projects/`, and check it before review:
+It copies your app's files into the page, because a browser on a `file://` path
+cannot read a folder. Re-run it whenever you change the app, and check it before
+review:
 
 ```bash
 python tools/build-playground.py --check
 ```
 
-- [ ] Every folder in the tree runs when you click it
-- [ ] The folder order is your teaching order (it sorts on the number prefix,
-      which is why they are numbered)
-- [ ] `data-pg-storage` is your slug, not `_template` (the tool sets this)
+- [ ] It runs the app on load
+- [ ] Editing `js/main.js` and pressing Run changes what you see
+- [ ] `data-pg-storage` is your slug (the tool sets this)
 
-## 5. Put it on the shelf
+## 4. Put it on the shelf
 
 One object in `../../js/workshops.js`. Field-by-field notes are in the comment
 at the top of that file.
@@ -137,10 +108,12 @@ at the top of that file.
 - [ ] `teaches` is five tags at most
 - [ ] `status` is `"draft"` — it is not `"ready"` until a cohort has survived it
 
-## 6. Teach it, then come back
+## 5. Teach it, then come back
 
 - [ ] Taught start to finish, with real people, on the clock
 - [ ] Every error anybody actually hit is now on the "When it breaks" slide
+- [ ] Anything they broke by accident that taught them something is now on the
+      BREAK IT ON PURPOSE list
 - [ ] `status` changed to `"ready"`
 
 That last step is the one that matters. `"ready"` means *survived a cohort*,
