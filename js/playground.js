@@ -1,15 +1,19 @@
 /* ============================================================
-   THE PLAYGROUND  —  a file tree, the whole workshop
+   THE PLAYGROUND  —  a sidebar of workshop files, full screen
 
-   The workshop's folders down the left. Click a folder and the
-   project runs. Click a file and it opens in the editor. Edit it,
-   press Run, and watch what you changed.
+   The workshop's files live in a sidebar down the left. Click a
+   folder and that project runs. Click a file and you pull it into
+   the editor. Edit it, press Run, and watch what you changed.
 
    This is the whole live-code surface. There is no second one: the
    real files are real files, in workshops/<slug>/projects/, and each
    folder opens and runs on its own straight off disk. This page is
    how you browse and break them without a server.
    The engine is js/preview-core.js.
+
+   It takes the entire viewport on purpose. An editor in a 980px
+   column with a page header above it reads as a widget you are
+   allowed to glance at. This is the page.
 
    HOW TO PUT ONE ON A PAGE
    ------------------------
@@ -19,8 +23,13 @@
 
      <link rel="stylesheet" href="../../css/theme.css">
      <link rel="stylesheet" href="../../css/playground.css">
+     <body class="pg-page">
 
-     <div data-pg data-pg-storage="01-hello-api">
+     <div data-pg
+          data-pg-storage="01-hello-api"
+          data-pg-title="Hello, API"
+          data-pg-back="index.html"
+          data-pg-root="workshops/01-hello-api/projects/">
 
        <script type="application/json" data-pg-labels>
          { "1-one-pokemon": "Step 1 · I do — One Pokémon" }
@@ -38,8 +47,8 @@
      <script src="../../js/preview-core.js"></script>
      <script src="../../js/playground.js"></script>
 
-   Each project needs an index.html — that's its entry point. When
-   a project runs, every local <link> and <script src> in its
+   Each project needs an index.html — that's its entry point. When a
+   project runs, every local <link> and <script src> in its
    index.html is resolved against the other files in that project
    and inlined, so the preview is one self-contained document and
    needs no server.
@@ -62,7 +71,9 @@
   const SCRIPT_URL = document.currentScript ? document.currentScript.src : "";
   const THEME_HREF = CORE.themeHref(SCRIPT_URL);
 
-  /* Which editor mode a path implies. Only used for the label. */
+  const NARROW = 860;          // below this, start with the sidebar closed
+
+  /* Which language the toolbar announces. Label only. */
   function kindOf(path) {
     if (/\.html?$/i.test(path)) return "HTML";
     if (/\.css$/i.test(path))   return "CSS";
@@ -70,9 +81,9 @@
     return "Text";
   }
 
-  /* "step-1/js/a.js" + "css/b.css" -> "step-1/css/b.css"
+  /* "step-1/js/a.js" + "../../css/theme.css" -> "css/theme.css"
      Enough path resolution for one folder of files, including the
-     ../ that workshop pages use to reach the shared theme. */
+     ../ that project pages use to reach the shared theme. */
   function resolve(projectRoot, href) {
     const parts = (projectRoot + "/" + href).split("/");
     const out = [];
@@ -105,13 +116,17 @@
     }
 
     const storeKey = root.dataset.pgStorage || "";
+    const title    = root.dataset.pgTitle   || "Workshop";
+    const backHref = root.dataset.pgBack    || "";
+    const diskRoot = root.dataset.pgRoot    || "";
+
     const files = {};                      // path -> current text
     paths.forEach(function (p) {
       const saved = storeKey ? store.get(storeKey + ":" + p) : null;
       files[p] = (saved !== null && saved !== undefined) ? saved : pristine[p];
     });
 
-    /* Projects, in declared order, each with its own file list. */
+    /* Projects, in path order, each with its own file list. */
     const projects = [];
     paths.forEach(function (p) {
       const name = p.split("/")[0];
@@ -123,17 +138,37 @@
     root.textContent = "";
     root.classList.add("pg");
 
-    /* ---------- toolbar ------------------------------------- */
-    const bar   = el("div", "pg-bar");
-    const crumb = el("span", "pg-crumb", "");
+    /* ---------- the bar ------------------------------------- */
+    /* Everything the page used to say in a header and three
+       paragraphs now lives in one strip, because the panes are
+       worth more than the prose. */
+    const bar = el("div", "pg-bar");
+
+    const sideBtn = btn("pg-icon", "☰", "Show or hide the file sidebar");
+    sideBtn.setAttribute("aria-expanded", "true");
+    bar.appendChild(sideBtn);
+
+    const brand = el("span", "pg-brand");
+    brand.innerHTML = 'i.c.stars<span class="pipe">|</span><span class="star">*</span>';
+    bar.appendChild(brand);
+
+    if (backHref) {
+      const back = el("a", "pg-back", "← " + title);
+      back.href = backHref;
+      bar.appendChild(back);
+    } else {
+      bar.appendChild(el("span", "pg-back", title));
+    }
+
     const kind  = el("span", "pg-kind", "");
+    const crumb = el("span", "pg-crumb", "");
     bar.appendChild(kind);
     bar.appendChild(crumb);
 
-    const actions   = el("div", "pg-actions");
-    const runBtn    = btn("pg-btn pg-run", "Run ▸", "Ctrl + Enter");
-    const resetOne  = btn("pg-btn", "Reset file", "Undo your changes to this file");
-    const resetAll  = btn("pg-btn", "Reset all", "Undo your changes to every file here");
+    const actions  = el("div", "pg-actions");
+    const runBtn   = btn("pg-btn pg-run", "Run ▸", "Ctrl + Enter");
+    const resetOne = btn("pg-btn", "Reset file", "Undo your changes to this file");
+    const resetAll = btn("pg-btn", "Reset all", "Undo your changes to every file here");
     actions.appendChild(runBtn);
     actions.appendChild(resetOne);
     actions.appendChild(resetAll);
@@ -141,12 +176,22 @@
     bar.appendChild(actions);
     root.appendChild(bar);
 
-    /* ---------- three panes -------------------------------- */
+    /* ---------- sidebar, editor, result -------------------- */
     const body = el("div", "pg-body");
 
-    const tree = el("nav", "pg-tree");
-    tree.setAttribute("aria-label", "Workshop files");
-    body.appendChild(tree);
+    const side = el("nav", "pg-side");
+    side.setAttribute("aria-label", "Workshop files");
+    side.appendChild(el("div", "pg-side-head", "Workshop files"));
+    const sideList = el("div", "pg-side-list");
+    side.appendChild(sideList);
+    const foot = el("div", "pg-side-foot");
+    foot.appendChild(el("b", null, "Click a folder to run it."));
+    foot.appendChild(el("span", null,
+      diskRoot ? " These are real files, in " + diskRoot + " — each folder also opens "
+               + "and runs on its own. Every js/main.js ends with a few things to break."
+               : " Every js/main.js ends with a few things to break."));
+    side.appendChild(foot);
+    body.appendChild(side);
 
     const editorWrap = el("div", "pg-editor");
     const gutter = el("div", "pg-gutter");
@@ -171,7 +216,9 @@
     const consoleWrap = el("div", "pg-console");
     const consoleHead = el("div", "pg-pane-label", "Console");
     const clearBtn    = btn("pg-clear", "clear", "Empty the console");
+    const foldBtn     = btn("pg-clear", "hide", "Collapse the console");
     consoleHead.appendChild(clearBtn);
+    consoleHead.appendChild(foldBtn);
     consoleWrap.appendChild(consoleHead);
     const log = el("div", "pg-log");
     consoleWrap.appendChild(log);
@@ -232,7 +279,7 @@
       /* The fallback stylesheet and the console bridge go at the
          top of <head>: the fallback so the real theme (which comes
          later in the document) still wins, the bridge so it is
-         installed before any of the workshop's own scripts run. */
+         installed before any of the project's own scripts run. */
       const inject = '<style>' + CORE.FALLBACK_CSS + '</style>\n' + CORE.BRIDGE + '\n';
       if (/<head[^>]*>/i.test(doc)) {
         doc = doc.replace(/<head[^>]*>/i, function (m) { return m + "\n" + inject; });
@@ -265,14 +312,14 @@
       gutter.scrollTop = code.scrollTop;
     }
 
-    function markTree() {
-      tree.querySelectorAll(".pg-file").forEach(function (b) {
+    function markSide() {
+      sideList.querySelectorAll(".pg-file").forEach(function (b) {
         const on = b.dataset.path === openPath;
         b.classList.toggle("is-open", on);
         if (on) { b.setAttribute("aria-current", "true"); }
         else    { b.removeAttribute("aria-current"); }
       });
-      tree.querySelectorAll(".pg-folder").forEach(function (d) {
+      sideList.querySelectorAll(".pg-folder").forEach(function (d) {
         d.classList.toggle("is-running",
           openProject && d.dataset.project === openProject.name);
       });
@@ -293,7 +340,10 @@
          Reset exists and why their work survived the refresh. */
       crumb.classList.toggle("is-dirty", files[path] !== pristine[path]);
 
-      markTree();
+      markSide();
+      /* On a phone the sidebar covers the editor, so choosing a
+         file should get out of the way. */
+      if (window.innerWidth < NARROW) closeSide();
       if (andRun) run();
     }
 
@@ -330,9 +380,9 @@
       if (e.key === "Escape") code.blur();
     });
 
-    /* ---------- the tree ----------------------------------- */
-    /* Nested folders, built from the paths themselves, so adding
-       a css/ folder to a workshop makes one appear here. */
+    /* ---------- the sidebar -------------------------------- */
+    /* Nested folders, built from the paths themselves, so adding a
+       css/ folder to a project makes one appear here. */
     function nest(fileList, projectName) {
       const top = { dirs: {}, files: [] };
       fileList.forEach(function (path) {
@@ -373,8 +423,6 @@
       });
     }
 
-    tree.appendChild(el("div", "pg-tree-head", "Workshop files"));
-
     projects.forEach(function (project, i) {
       const d = document.createElement("details");
       d.className = "pg-folder";
@@ -397,12 +445,28 @@
       renderNode(nest(project.files, project.name), kids);
       d.appendChild(kids);
 
-      tree.appendChild(d);
+      sideList.appendChild(d);
     });
 
     /* ---------- buttons ----------------------------------- */
+    function closeSide() {
+      root.classList.add("side-closed");
+      sideBtn.setAttribute("aria-expanded", "false");
+    }
+
     runBtn.addEventListener("click", run);
     clearBtn.addEventListener("click", preview.clear);
+
+    sideBtn.addEventListener("click", function () {
+      const closed = root.classList.toggle("side-closed");
+      sideBtn.setAttribute("aria-expanded", String(!closed));
+    });
+
+    foldBtn.addEventListener("click", function () {
+      const closed = root.classList.toggle("console-closed");
+      foldBtn.textContent = closed ? "show" : "hide";
+      foldBtn.title = closed ? "Show the console" : "Collapse the console";
+    });
 
     resetOne.addEventListener("click", function () {
       if (!openPath) return;
@@ -420,8 +484,15 @@
       openFile(openPath || paths[0], true);
     });
 
-    /* Open the first project, running. */
+    /* Open the first project, running. On a narrow screen the
+       sidebar would eat the editor, so start it closed — the ☰
+       button is right there. openFile() closes it anyway, so set
+       the flag after the first open to keep the two in step. */
     openProjectByName(projects[0].name, true);
+    if (window.innerWidth >= NARROW) {
+      root.classList.remove("side-closed");
+      sideBtn.setAttribute("aria-expanded", "true");
+    }
   }
 
   document.querySelectorAll("[data-pg]").forEach(build);

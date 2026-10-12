@@ -5,37 +5,96 @@
 
      <link rel="stylesheet" href="../../css/theme.css">
      <link rel="stylesheet" href="../../css/playground.css">
+     <body class="pg-page">
 
    Tokens come from theme.css. No new colors live here.
 
-   The editor is ink, the result is paper. That is the same contrast
-   the decks use for "the code" versus "the screen", so the panes
-   read correctly before anybody explains them.
+   IT TAKES THE WHOLE VIEWPORT. That is the point: an editor inside
+   a 980px column with a page header above it reads as a widget you
+   are allowed to glance at. Nothing scrolls except the panes.
+
+   The sidebar and editor are ink, the result is paper. That is the
+   same contrast the decks use for "the code" versus "the screen",
+   so the panes read correctly before anybody explains them.
    ============================================================ */
 
-.pg {
-  margin-top: var(--gap);
-  border: 1px solid var(--ink);
+/* 0. The page itself ---------------------------------------- */
+body.pg-page {
+  height: 100vh;
+  height: 100dvh;              /* dodges mobile browser chrome */
+  margin: 0;
+  overflow: hidden;            /* the page never scrolls; panes do */
   background: var(--ink);
 }
 
-/* 1. Toolbar ------------------------------------------------ */
+.pg {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100%;
+  background: var(--ink);
+}
+
+/* Embedded rather than full-page? Still works — it just gets a
+   border and a sensible height instead of the viewport. */
+body:not(.pg-page) .pg {
+  height: 78vh;
+  min-height: 460px;
+  margin-top: var(--gap);
+  border: 1px solid var(--ink);
+}
+
+/* 1. The top bar -------------------------------------------- */
 .pg-bar {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
+  gap: 12px;
+  padding: 0 12px;
+  min-height: 46px;
   background: var(--ink);
   border-bottom: 3px solid var(--red);
 }
+
+.pg-icon {
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 7px 10px;
+  color: var(--paper);
+  background: transparent;
+  border: 1px solid transparent;
+}
+.pg-icon:hover { background: var(--ink-soft); border-color: var(--grey); }
+.pg-icon:focus-visible { outline: 3px solid var(--red); outline-offset: -1px; }
+
+.pg-brand {
+  font-weight: 900;
+  font-size: .95rem;
+  letter-spacing: -.01em;
+  color: var(--paper);
+  white-space: nowrap;
+}
+.pg-brand .pipe { font-weight: 400; opacity: .55; margin: 0 .12em; }
+.pg-brand .star { color: var(--red); }
+
+.pg-back {
+  font-size: .85rem;
+  text-decoration: none;
+  color: var(--grey);
+  white-space: nowrap;
+  padding-right: 12px;
+  border-right: 1px solid rgba(154, 144, 149, .35);
+}
+.pg-back:hover { color: var(--paper); }
+
 .pg-kind {
   font-family: var(--mono);
-  font-size: .7rem;
+  font-size: .68rem;
   font-weight: 700;
-  letter-spacing: .2em;
+  letter-spacing: .18em;
   text-transform: uppercase;
   color: var(--red);
+  white-space: nowrap;
 }
 .pg-crumb {
   font-family: var(--mono);
@@ -53,18 +112,20 @@
   color: var(--red);
   font-weight: 700;
 }
+
 .pg-actions {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 7px;
   margin-left: auto;
+  padding-left: 12px;
 }
 
 .pg-btn {
   font: inherit;
   font-size: .78rem;
   font-weight: 700;
+  white-space: nowrap;
   cursor: pointer;
   padding: 6px 13px;
   color: var(--paper);
@@ -81,48 +142,58 @@
 .pg-run:hover { background: var(--red-deep); border-color: var(--red-deep); color: var(--paper); }
 
 /* The keyboard hint. Also the escape route out of the Tab trap,
-   which is why it names Esc. */
+   which is why it names Esc. First thing dropped when it is tight. */
 .pg-key {
   font-family: var(--mono);
   font-size: .68rem;
   letter-spacing: .1em;
   color: var(--grey);
+  white-space: nowrap;
 }
 .pg-key::after { content: " · Esc to leave the editor"; }
 
-/* 2. The three columns ------------------------------------- */
+/* 2. Sidebar | editor | result ------------------------------ */
 .pg-body {
   display: grid;
-  grid-template-columns: 215px minmax(0, 1.1fr) minmax(0, 1fr);
-  min-height: 430px;
+  grid-template-columns: 250px minmax(0, 1.05fr) minmax(0, 1fr);
+  min-height: 0;
+  position: relative;          /* the phone sidebar overlays this */
 }
-@media (max-width: 1020px) {
-  .pg-body { grid-template-columns: 185px minmax(0, 1fr); }
-  .pg-right { grid-column: 1 / -1; border-left: none;
-              border-top: 1px solid rgba(154, 144, 149, .3); }
-}
-@media (max-width: 680px) {
-  .pg-body { grid-template-columns: 1fr; }
-  .pg-tree { max-height: 190px; border-right: none;
-             border-bottom: 1px solid rgba(154, 144, 149, .3); }
-}
+.pg.side-closed .pg-body { grid-template-columns: 0 minmax(0, 1.05fr) minmax(0, 1fr); }
+.pg.side-closed .pg-side { display: none; }
 
-/* 3. The file tree ----------------------------------------- */
-.pg-tree {
-  overflow: auto;
-  padding: 8px 0 12px;
+/* 3. The sidebar -------------------------------------------- */
+.pg-side {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   background: var(--ink);
   border-right: 1px solid rgba(154, 144, 149, .3);
 }
-.pg-tree-head {
-  padding: 4px 12px 10px;
+.pg-side-head {
+  flex: 0 0 auto;
+  padding: 11px 14px 9px;
   font-family: var(--mono);
   font-size: .66rem;
   font-weight: 700;
   letter-spacing: .2em;
   text-transform: uppercase;
   color: var(--grey);
+  border-bottom: 1px solid rgba(154, 144, 149, .2);
 }
+/* The list is the only thing that scrolls, so the hint at the
+   bottom stays put. */
+.pg-side-list { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 6px 0 10px; }
+.pg-side-foot {
+  flex: 0 0 auto;
+  padding: 10px 14px;
+  font-size: .72rem;
+  line-height: 1.45;
+  color: var(--grey);
+  background: var(--ink-soft);
+  border-top: 1px solid rgba(154, 144, 149, .2);
+}
+.pg-side-foot b { color: var(--paper); display: block; margin-bottom: 2px; }
 
 /* A project folder. Clicking it runs the project. */
 .pg-folder > summary {
@@ -130,7 +201,7 @@
   align-items: baseline;
   gap: .5em;
   cursor: pointer;
-  padding: 7px 12px;
+  padding: 8px 14px;
   list-style: none;
   border-left: 3px solid transparent;
 }
@@ -140,12 +211,12 @@
 
 .pg-folder-name {
   font-family: var(--mono);
-  font-size: .82rem;
+  font-size: .83rem;
   font-weight: 700;
   color: var(--paper);
 }
 .pg-folder-label {
-  font-size: .68rem;
+  font-size: .67rem;
   color: var(--grey);
   min-width: 0;
   overflow: hidden;
@@ -157,7 +228,7 @@
 .pg-folder-run {
   margin-left: auto;
   font-family: var(--mono);
-  font-size: .64rem;
+  font-size: .63rem;
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--red);
@@ -172,11 +243,11 @@
 }
 .pg-folder.is-running .pg-folder-run { opacity: 1; }
 
-.pg-children { padding-left: 12px; }
+.pg-children { padding-left: 14px; }
 
 .pg-subfolder > summary {
   cursor: pointer;
-  padding: 4px 12px;
+  padding: 4px 14px;
   font-family: var(--mono);
   font-size: .76rem;
   color: var(--grey);
@@ -187,16 +258,16 @@
 .pg-subfolder:not([open]) > summary::before { content: "▸ "; }
 .pg-subfolder > summary:hover { color: var(--paper); }
 
-/* A file. */
+/* A file you can grab. */
 .pg-file {
   display: block;
   width: 100%;
   text-align: left;
   font: inherit;
   font-family: var(--mono);
-  font-size: .77rem;
+  font-size: .78rem;
   cursor: pointer;
-  padding: 4px 12px 4px 20px;
+  padding: 5px 14px 5px 22px;
   color: var(--grey);
   background: transparent;
   border: none;
@@ -218,12 +289,14 @@
 .pg-editor {
   display: flex;
   min-width: 0;
+  min-height: 0;
+  overflow: hidden;
   background: var(--ink-soft);
 }
 .pg-gutter,
 .pg-code {
   font-family: var(--mono);
-  font-size: .84rem;
+  font-size: .85rem;
   line-height: 1.6;
   padding: 12px 0;
   border: none;
@@ -231,7 +304,7 @@
 }
 .pg-gutter {
   flex: 0 0 auto;
-  width: 3.2em;
+  width: 3.4em;
   padding-right: .8em;
   text-align: right;
   white-space: pre;
@@ -247,7 +320,7 @@
   padding-left: .9em;
   padding-right: .9em;
   color: var(--paper);
-  resize: vertical;
+  resize: none;                /* the grid sizes it now */
   overflow: auto;
   white-space: pre;
   tab-size: 2;
@@ -257,8 +330,9 @@
 /* 5. Result over console ----------------------------------- */
 .pg-right {
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: minmax(0, 1fr) auto;
   min-width: 0;
+  min-height: 0;
   border-left: 1px solid rgba(154, 144, 149, .3);
 }
 
@@ -268,7 +342,7 @@
   gap: 10px;
   padding: 7px 12px;
   font-family: var(--mono);
-  font-size: .68rem;
+  font-size: .67rem;
   font-weight: 700;
   letter-spacing: .2em;
   text-transform: uppercase;
@@ -281,7 +355,7 @@
 .pg-frame {
   flex: 1 1 auto;
   width: 100%;
-  min-height: 280px;
+  min-height: 0;
   border: none;
   background: var(--paper);
   transition: opacity .18s ease;
@@ -295,28 +369,31 @@
 .pg-console { display: flex; flex-direction: column; min-height: 0; }
 .pg-clear {
   font: inherit;
-  font-size: .66rem;
+  font-size: .65rem;
   letter-spacing: .12em;
   text-transform: uppercase;
   cursor: pointer;
-  margin-left: auto;
   padding: 2px 8px;
   color: var(--grey);
   background: transparent;
   border: 1px solid var(--grey);
 }
+.pg-clear:first-of-type { margin-left: auto; }
 .pg-clear:hover { color: var(--paper); border-color: var(--paper); }
 
 .pg-log {
   font-family: var(--mono);
   font-size: .79rem;
   line-height: 1.5;
-  height: 120px;
+  height: 23vh;
+  min-height: 90px;
+  max-height: 260px;
   overflow: auto;
   padding: 8px 12px;
   color: var(--paper);
   background: var(--ink-soft);
 }
+.pg.console-closed .pg-log { display: none; }
 .pg-log.has-error { box-shadow: inset 4px 0 0 var(--red); }
 
 .pg-line { display: flex; gap: .7em; padding: 2px 0; }
@@ -333,7 +410,49 @@
 .pg-error .pg-text { color: #FF7D9E; }
 .pg-meta  .pg-text { color: var(--grey); }
 
-/* 7. The caption under a playground ------------------------ */
+/* 7. Narrower screens --------------------------------------
+   Two columns, then one. The result pane drops under the editor
+   rather than shrinking to a letterbox. */
+@media (max-width: 1180px) {
+  .pg-key { display: none; }
+}
+@media (max-width: 1020px) {
+  .pg-body {
+    grid-template-columns: 230px minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .pg.side-closed .pg-body { grid-template-columns: 0 minmax(0, 1fr); }
+  .pg-side { grid-row: 1 / -1; }
+  .pg-right {
+    grid-column: 2;
+    border-left: none;
+    border-top: 1px solid rgba(154, 144, 149, .3);
+  }
+  .pg.side-closed .pg-right { grid-column: 1 / -1; }
+}
+
+/* The sidebar becomes an overlay: on a phone it cannot have a
+   column of its own without leaving the editor unusable. */
+@media (max-width: 680px) {
+  .pg-body { grid-template-columns: minmax(0, 1fr); }
+  .pg.side-closed .pg-body { grid-template-columns: minmax(0, 1fr); }
+  .pg-side {
+    position: absolute;
+    top: 46px;
+    bottom: 0;
+    left: 0;
+    width: min(84vw, 300px);
+    z-index: 20;
+    box-shadow: 8px 0 28px rgba(0, 0, 0, .5);
+  }
+  .pg-editor { grid-row: 1; grid-column: 1; }
+  .pg-right  { grid-row: 2; grid-column: 1; }
+  .pg-brand, .pg-back { display: none; }
+  .pg-btn { padding: 6px 10px; font-size: .74rem; }
+  .pg-log { height: 20vh; }
+}
+
+/* 8. The caption under an embedded playground -------------- */
 .pg-note {
   margin: 18px 0 0;
   font-size: .93rem;
