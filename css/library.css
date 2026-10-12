@@ -26,7 +26,22 @@
 }
 .lib-h2 + .lib-lede { margin-top: 8px; }
 
-/* 2. Filter chips — one per track, built from the catalog --- */
+/* 2a. Search — the fastest way into a growing shelf --------- */
+.lib-find { margin-top: 18px; }
+.lib-search {
+  font: inherit;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 520px;
+  padding: 12px 14px;
+  color: var(--ink);
+  background: #fff;
+  border: 2px solid var(--ink);
+}
+.lib-search::placeholder { color: var(--grey); }
+.lib-search:focus { outline: 3px solid var(--red); outline-offset: 2px; }
+
+/* 2b. Filter chips — one per track, built from the catalog --- */
 .lib-filters {
   display: flex;
   flex-wrap: wrap;

@@ -77,7 +77,9 @@ const WORKSHOPS = [
   const shelf   = document.getElementById("shelf");
   const filters = document.getElementById("filters");
   const count   = document.getElementById("count");
+  const search  = document.getElementById("search");
   let   track   = "All";                       // which chip is pressed
+  let   query   = "";                          // what is in the search box
 
   /* Never drop user-ish text straight into innerHTML. Build the
      node and set .textContent — the browser escapes it for free. */
@@ -169,23 +171,52 @@ const WORKSHOPS = [
     return c;
   }
 
+  /* Everything a card shows, lowercased, in one string — so the
+     search matches what the reader can actually see, including the
+     tags and the hook, not just the title. */
+  function haystack(w) {
+    return [w.n, w.title, w.track, w.origin, w.hook, w.slug]
+             .concat(w.teaches || [])
+             .join(" ")
+             .toLowerCase();
+  }
+
   function paint() {
     const shown = WORKSHOPS.filter(function (w) {
-      return track === "All" || w.track === track;
+      if (track !== "All" && w.track !== track) return false;
+      return !query || haystack(w).indexOf(query) > -1;
     });
 
     shelf.textContent = "";                  // clear, then rebuild
     shown.forEach(function (w) { shelf.appendChild(card(w)); });
 
     if (!shown.length) {
-      shelf.appendChild(el("div", "shelf-empty",
-        "No workshops on the " + track + " track yet. Yours could be the first."));
+      shelf.appendChild(el("div", "shelf-empty", query
+        ? "Nothing matches “" + query + "”" +
+          (track === "All" ? "." : " on the " + track + " track.")
+        : "No workshops on the " + track + " track yet. Yours could be the first."));
     }
-    if (track === "All") shelf.appendChild(ghost());
+    /* The template is not a search result, so it only sits at the
+       end of the unfiltered shelf. */
+    if (track === "All" && !query) shelf.appendChild(ghost());
 
+    if (query || track !== "All") {
+      count.textContent = shown.length + " of " + WORKSHOPS.length + " workshops";
+      return;
+    }
     const ready = WORKSHOPS.filter(function (w) { return w.status === "ready"; }).length;
     count.textContent = WORKSHOPS.length + " workshop" + (WORKSHOPS.length === 1 ? "" : "s")
                       + " · " + ready + " classroom-tested";
+  }
+
+  if (search) {
+    search.addEventListener("input", function () {
+      query = search.value.trim().toLowerCase();
+      paint();
+    });
+    search.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { search.value = ""; query = ""; paint(); }
+    });
   }
 
   /* One chip per track, discovered from the catalog — so a new

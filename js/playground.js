@@ -182,6 +182,21 @@
     const side = el("nav", "pg-side");
     side.setAttribute("aria-label", "Workshop files");
     side.appendChild(el("div", "pg-side-head", "Workshop files"));
+
+    /* Search the workshop. Matches a path OR what is inside the
+       file, because "where did we write fetch?" is the question
+       people actually have, and the filename never answers it. */
+    const searchWrap = el("div", "pg-search");
+    const search = document.createElement("input");
+    search.type = "search";
+    search.className = "pg-search-input";
+    search.placeholder = "Search this workshop…";
+    search.setAttribute("aria-label", "Search file names and file contents");
+    searchWrap.appendChild(search);
+    const searchCount = el("div", "pg-search-count", "");
+    searchWrap.appendChild(searchCount);
+    side.appendChild(searchWrap);
+
     const sideList = el("div", "pg-side-list");
     side.appendChild(sideList);
     const foot = el("div", "pg-side-foot");
@@ -416,7 +431,9 @@
         if (b.name === "index.html") return 1;
         return a.name.localeCompare(b.name);
       }).forEach(function (f) {
-        const b = btn("pg-file", f.name, f.path);
+        const b = btn("pg-file", "", f.path);
+        b.appendChild(el("span", "pg-name", f.name));
+        b.appendChild(el("span", "pg-hits", ""));   // filled in by the search
         b.dataset.path = f.path;
         b.addEventListener("click", function () { openFile(f.path, true); });
         into.appendChild(b);
@@ -446,6 +463,68 @@
       d.appendChild(kids);
 
       sideList.appendChild(d);
+    });
+
+    /* ---------- searching the workshop -------------------- */
+    /* Matches a path OR the text inside the file. "Where did we
+       write fetch?" is the question people actually have, and a
+       filename never answers it. Twelve small files, so this runs
+       straight through on every keystroke — no debounce needed. */
+    function countHits(haystack, needle) {
+      let hits = 0, at = haystack.indexOf(needle);
+      while (at > -1) { hits++; at = haystack.indexOf(needle, at + needle.length); }
+      return hits;
+    }
+
+    function applySearch() {
+      const term = search.value.trim().toLowerCase();
+      root.classList.toggle("is-searching", term.length > 0);
+
+      if (!term) {
+        sideList.querySelectorAll("[hidden]").forEach(function (n) { n.hidden = false; });
+        sideList.querySelectorAll(".pg-hits").forEach(function (n) { n.textContent = ""; });
+        return;
+      }
+
+      let shownTotal = 0;
+
+      sideList.querySelectorAll(".pg-folder").forEach(function (folder) {
+        const project = folder.dataset.project;
+        /* A folder whose own name or label matches keeps all of its
+           files, so searching "mystery" shows you that project
+           rather than an empty folder. */
+        const nameMatch = project.toLowerCase().indexOf(term) > -1
+                       || (labels[project] || "").toLowerCase().indexOf(term) > -1;
+        let shown = 0;
+
+        folder.querySelectorAll(".pg-file").forEach(function (b) {
+          const path = b.dataset.path;
+          const hits = countHits((files[path] || "").toLowerCase(), term);
+          const show = nameMatch || path.toLowerCase().indexOf(term) > -1 || hits > 0;
+
+          b.hidden = !show;
+          b.querySelector(".pg-hits").textContent = hits ? "×" + hits : "";
+          if (show) shown++;
+        });
+
+        /* A subfolder with nothing left in it goes too. */
+        folder.querySelectorAll(".pg-subfolder").forEach(function (sub) {
+          sub.hidden = !sub.querySelector(".pg-file:not([hidden])");
+        });
+
+        folder.hidden = shown === 0;
+        if (shown) folder.open = true;        // show what matched
+        shownTotal += shown;
+      });
+
+      searchCount.textContent = shownTotal
+        ? shownTotal + (shownTotal === 1 ? " file matches" : " files match")
+        : "nothing matches that";
+    }
+
+    search.addEventListener("input", applySearch);
+    search.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { search.value = ""; applySearch(); search.blur(); }
     });
 
     /* ---------- buttons ----------------------------------- */

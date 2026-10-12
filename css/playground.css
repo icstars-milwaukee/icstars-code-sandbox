@@ -159,8 +159,20 @@ body:not(.pg-page) .pg {
   min-height: 0;
   position: relative;          /* the phone sidebar overlays this */
 }
-.pg.side-closed .pg-body { grid-template-columns: 0 minmax(0, 1.05fr) minmax(0, 1fr); }
-.pg.side-closed .pg-side { display: none; }
+/* Every pane is placed explicitly. Auto-placement is what made
+   collapsing the sidebar eat the editor: the sidebar's column was
+   set to 0 instead of removed, and the auto-placed editor dropped
+   into that zero-width track. */
+.pg-side   { grid-area: 1 / 1; }
+.pg-editor { grid-area: 1 / 2; }
+.pg-right  { grid-area: 1 / 3; }
+
+/* Collapsing REMOVES the sidebar's column, and the space it frees
+   goes to the editor. */
+.pg.side-closed .pg-body   { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+.pg.side-closed .pg-side   { display: none; }
+.pg.side-closed .pg-editor { grid-area: 1 / 1; }
+.pg.side-closed .pg-right  { grid-area: 1 / 2; }
 
 /* 3. The sidebar -------------------------------------------- */
 .pg-side {
@@ -181,6 +193,47 @@ body:not(.pg-page) .pg {
   color: var(--grey);
   border-bottom: 1px solid rgba(154, 144, 149, .2);
 }
+/* Search the workshop — file names and what is inside them. */
+.pg-search {
+  flex: 0 0 auto;
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(154, 144, 149, .2);
+}
+.pg-search-input {
+  width: 100%;
+  font: inherit;
+  font-family: var(--mono);
+  font-size: .78rem;
+  padding: 7px 9px;
+  color: var(--paper);
+  background: var(--ink-soft);
+  border: 1px solid var(--grey);
+}
+.pg-search-input::placeholder { color: var(--grey); }
+.pg-search-input:focus { outline: none; border-color: var(--red); }
+.pg-search-count {
+  display: none;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .06em;
+  color: var(--grey);
+}
+.pg.is-searching .pg-search-count { display: block; }
+
+/* The file name, which may need truncating, and how many times the
+   search term appears inside that file. */
+.pg-name { overflow: hidden; text-overflow: ellipsis; }
+.pg-hits {
+  margin-left: .5em;
+  font-size: .9em;
+  font-weight: 700;
+  color: var(--red);
+}
+
+/* Filtered out by the search. details needs this spelled out. */
+.pg-file[hidden], .pg-folder[hidden], .pg-subfolder[hidden] { display: none; }
+
 /* The list is the only thing that scrolls, so the hint at the
    bottom stays put. */
 .pg-side-list { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 6px 0 10px; }
@@ -421,32 +474,39 @@ body:not(.pg-page) .pg {
     grid-template-columns: 230px minmax(0, 1fr);
     grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
   }
-  .pg.side-closed .pg-body { grid-template-columns: 0 minmax(0, 1fr); }
-  .pg-side { grid-row: 1 / -1; }
-  .pg-right {
-    grid-column: 2;
+  .pg-side   { grid-area: 1 / 1 / 3 / 2; }
+  .pg-editor { grid-area: 1 / 2; }
+  .pg-right  {
+    grid-area: 2 / 2;
     border-left: none;
     border-top: 1px solid rgba(154, 144, 149, .3);
   }
-  .pg.side-closed .pg-right { grid-column: 1 / -1; }
+
+  .pg.side-closed .pg-body   { grid-template-columns: minmax(0, 1fr); }
+  .pg.side-closed .pg-editor { grid-area: 1 / 1; }
+  .pg.side-closed .pg-right  { grid-area: 2 / 1; }
 }
 
 /* The sidebar becomes an overlay: on a phone it cannot have a
    column of its own without leaving the editor unusable. */
 @media (max-width: 680px) {
-  .pg-body { grid-template-columns: minmax(0, 1fr); }
-  .pg.side-closed .pg-body { grid-template-columns: minmax(0, 1fr); }
+  .pg-body,
+  .pg.side-closed .pg-body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  /* Out of flow, so the editor keeps its full width underneath. */
   .pg-side {
     position: absolute;
-    top: 46px;
+    top: 0;
     bottom: 0;
     left: 0;
     width: min(84vw, 300px);
     z-index: 20;
     box-shadow: 8px 0 28px rgba(0, 0, 0, .5);
   }
-  .pg-editor { grid-row: 1; grid-column: 1; }
-  .pg-right  { grid-row: 2; grid-column: 1; }
+  .pg-editor, .pg.side-closed .pg-editor { grid-area: 1 / 1; }
+  .pg-right,  .pg.side-closed .pg-right  { grid-area: 2 / 1; }
   .pg-brand, .pg-back { display: none; }
   .pg-btn { padding: 6px 10px; font-size: .74rem; }
   .pg-log { height: 20vh; }
