@@ -42,15 +42,25 @@
     <p class="ics-sub" style="color:var(--grey-dark);margin-top:12px">
       The gateway is <strong>read-only</strong>: your SQL has to start with
       <code>SELECT</code> or <code>WITH</code>, and it will tell you off if it doesn't.
-      The query below asks the database what tables it has &mdash; start there, then
-      replace it with a real one.
+      It speaks <strong>PostgreSQL</strong>. The query below is the one to run first &mdash;
+      it asks the database what tables exist, because you cannot query data you cannot name.
+      Then swap in a real table.
     </p>
 
     <div class="ics-row">
-      <textarea class="ics-input" id="sql" rows="3" spellcheck="false"
+      <textarea class="ics-input" id="sql" rows="4" spellcheck="false"
         style="max-width:100%;font-family:var(--mono);font-size:.9rem"
-      >SELECT name FROM sqlite_master WHERE type = 'table'</textarea>
+      >SELECT table_schema, table_name
+FROM information_schema.tables
+WHERE table_schema NOT IN ('pg_catalog', 'information_schema')
+ORDER BY table_schema, table_name</textarea>
     </div>
+
+    <p class="ics-sub" style="color:var(--grey-dark);margin-top:12px">
+      Once that gives you a name, look at the thing itself:
+      <code>SELECT * FROM &lt;schema&gt;.&lt;table&gt; LIMIT 20</code>. Then start asking it
+      questions &mdash; <code>COUNT(*)</code>, <code>GROUP BY</code>, <code>ORDER BY</code>.
+    </p>
 
     <div class="ics-row">
       <button class="ics-btn" id="runBtn">Run the query</button>

@@ -30,6 +30,10 @@
    ============================================================ */
 
 // ---- 1. WHERE THE DATA COMES FROM --------------------------
+// The gateway speaks PostgreSQL. That matters: SQL is a family of
+// dialects, not one language, and the table list lives somewhere
+// different in each of them. Postgres keeps it in
+// information_schema.tables.
 const API_URL = "https://c21-data-gateway.icstars-milwaukee.workers.dev/api/query";
 
 // ---- 2. THE PAGE -------------------------------------------
@@ -223,6 +227,17 @@ runBtn.addEventListener("click", async function () {
    in the SQL                     error itself. An error from a
                                   server is information, written
                                   for you.
+
+   information_schema.tables      "relation "sqlite_master" does
+     -> sqlite_master             not exist". That is Postgres
+                                  telling you it has never heard of
+                                  it — because sqlite_master is
+                                  SQLite's table list, not its own.
+                                  SQL is a family of dialects, and
+                                  the error names exactly the thing
+                                  it could not find. This workshop
+                                  shipped with that bug in it on the
+                                  first run.
 
    delete  if (!data.ok)          a wrong password now looks like a
                                   successful query with no rows.
