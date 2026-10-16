@@ -98,6 +98,14 @@ On arrival, that folder's own `.codesandbox/tasks.json` runs `npm install`
 and `npm run dev`, and the preview opens on port 5173. You should land on a
 running app, not a terminal.
 
+**If a cloud preview ever shows "Blocked request. This host is not allowed":**
+that is Vite 5.4.12+ refusing an unfamiliar `Host` header, and the fix is
+`server.allowedHosts` in `vite.config.js`. Workshop 04 already sets it, and the
+comment there explains why the check exists and when you should name hosts
+instead of allowing all of them. Worth reading before you copy that config into
+anything real — it is the kind of setting that is fine in a throwaway sandbox
+and wrong on a server.
+
 Or skip CodeSandbox entirely: `npm install && npm run dev` inside
 `workshops/04-the-build-step`.
 
