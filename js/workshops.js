@@ -103,13 +103,14 @@ const WORKSHOPS = [
     deck: "REF-deck.html",
     live: false,
     needs: "needs npm",
-    /* The documented import form is the whole repo (codesandbox.io/p/github/
-       org/repo) - that is the one that creates a Devbox, which is what a Vite
-       project needs. ?file= lands you on App.jsx instead of the repo root, and
-       /.codesandbox/tasks.json installs and starts THIS workshop on arrival.
-       So one click = a running app with the right file open. */
-    sandbox: "https://codesandbox.io/p/github/icstars-milwaukee/icstars-code-sandbox/main"
-           + "?file=/workshops/04-the-build-step/src/App.jsx"
+    /* Opens THIS FOLDER on its own as a Devbox - not the whole repo.
+       CodeSandbox documents the form as
+         codesandbox.io/p/devbox/github/<owner>/<repo>/tree/<branch>/<folder>
+       and the shortcut for it is swapping github.com for githubbox.com on any
+       GitHub folder URL. A Devbox (rather than a Browser Sandbox) is what a
+       Vite project needs, and this folder's own .codesandbox/tasks.json
+       installs and starts it on arrival. */
+    sandbox: "https://codesandbox.io/p/devbox/github/icstars-milwaukee/icstars-code-sandbox/tree/main/workshops/04-the-build-step"
   }
 
   /* ---- Copy this block to add the next one -------------------
