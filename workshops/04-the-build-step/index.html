@@ -15,195 +15,240 @@
       <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span> Milwaukee</div>
       <h1 class="ics-title">The Build Step</h1>
       <p class="ics-sub">
-        <strong>JSX is not JavaScript.</strong> No browser has ever understood it &mdash;
-        something has to translate it first, and that something is why a React project
-        needs <code>npm install</code>, a <code>package.json</code> and Vite.
-        You will build a profile card, watch the translation happen, take the card apart
-        into components, and then install a project of your own.
+        Three stages, and each one is the stage before it plus one new idea:
+        <strong>Hello World &rarr; Profile &rarr; Data.</strong>
+        By the end you will have written React, seen what the computer turns it into,
+        and drawn a graph from real API numbers.
       </p>
     </div>
   </header>
 
   <main class="ics-wrap">
 
-    <!-- ========== 1 · the app: type JSX, see it compile AND run ========== -->
-    <span class="ics-step">1 &middot; Watch the translation</span>
+    <!-- ================= THE EDITOR ================= -->
+    <span class="ics-step">The editor</span>
 
     <p class="ics-sub bs-note">
-      A profile card, in three components. <strong>Left is what you write. Middle is what
-      actually runs. Right is the card itself.</strong> Edit the left and the other two keep
-      up. This is the entire job of the build step &mdash; there is no magic under it.
+      Pick a stage. <strong>You write the left. The computer turns it into the middle.
+      The middle is what draws the right.</strong> Change the left and watch both follow.
     </p>
+
+    <div class="bs-stages">
+      <button class="bs-stagebtn" data-stage="hello" aria-pressed="true">1 &middot; Hello World</button>
+      <button class="bs-stagebtn" data-stage="profile" aria-pressed="false">2 &middot; Profile</button>
+      <button class="bs-stagebtn" data-stage="data" aria-pressed="false">3 &middot; Data</button>
+    </div>
 
     <div class="bs-three">
       <div class="bs-pane">
-        <label class="bs-label" for="jsx">You write this &mdash; JSX</label>
-        <textarea id="jsx" class="ics-input" spellcheck="false" rows="22"></textarea>
+        <label class="bs-label" for="jsx">1 &middot; You write this</label>
+        <textarea id="jsx" class="ics-input" spellcheck="false" rows="20"></textarea>
       </div>
-
       <div class="bs-pane">
-        <label class="bs-label" for="out">The browser runs this &mdash; JavaScript</label>
+        <label class="bs-label" for="out">2 &middot; The computer makes this</label>
         <pre id="out" class="bs-out" aria-live="polite"></pre>
       </div>
-
       <div class="bs-pane">
-        <label class="bs-label">And this is on the page</label>
+        <label class="bs-label">3 &middot; And you see this</label>
         <div id="stage" class="bs-stage"></div>
         <p id="stageMsg" class="bs-stagemsg" aria-live="polite"></p>
       </div>
     </div>
 
     <div class="ics-row bs-row">
-      <button class="ics-btn" id="reset" type="button">Reset the card</button>
       <label class="bs-check">
         <input type="checkbox" id="modern">
-        <span>Use the modern runtime (what Vite actually does)</span>
+        <span>Show the modern version (what Vite really does)</span>
       </label>
     </div>
 
-    <p class="ics-sub bs-note" id="explain"></p>
+    <!-- ================= ACT 1 ================= -->
+    <span class="ics-step">Stage 1 &middot; Hello World</span>
 
     <p class="ics-sub bs-note">
-      <strong>The <code>person</code> object is handed in for you</strong> &mdash; name, role,
-      team, stats. You are writing the shape, not the data. That split is the first real
-      habit of this job: a component says <em>how it looks</em>, and whoever uses it says
-      <em>what goes in it</em>.
+      Click <strong>1 &middot; Hello World</strong> above. Two lines. Look at all three columns.
     </p>
 
-    <!-- ========== 2 · components and the folder that holds them ========== -->
-    <span class="ics-step">2 &middot; One page, four components</span>
+    <ol class="bs-beats">
+      <li><strong>You wrote a tag.</strong> <code>&lt;h1&gt;Hello, world&lt;/h1&gt;</code> looks like
+        HTML, but it is sitting inside JavaScript. Mixing the two like this is called
+        <strong>JSX</strong>.</li>
+
+      <li><strong>No browser understands JSX.</strong> Not one, not ever. So something has to
+        rewrite it first.</li>
+
+      <li><strong>Look at the middle column.</strong> Your tag became
+        <code>React.createElement("h1", null, "Hello, world")</code> &mdash; an ordinary function
+        call. That is all a tag ever was.</li>
+
+      <li><strong>That rewrite is the build step.</strong> It is the whole reason a React project
+        needs installing. <strong>Vite</strong> is the tool that does it for you, every time you
+        save.</li>
+    </ol>
 
     <p class="ics-sub bs-note">
-      Here is the same card, finished. <strong>Hover a row on the left to find it on the
-      card.</strong> Every one of those boxes is a component, and every component is one
-      file.
+      Try it: delete the <code>&lt;/h1&gt;</code>. The middle column turns into an error message
+      with a line number, and nothing draws. That is the build step telling you it cannot finish.
+    </p>
+
+    <!-- ================= ACT 2 ================= -->
+    <span class="ics-step">Stage 2 &middot; Profile</span>
+
+    <p class="ics-sub bs-note">
+      Click <strong>2 &middot; Profile</strong>. Same idea, bigger: a profile card.
+    </p>
+
+    <ol class="bs-beats">
+      <li><strong>A component is a box you named.</strong> That is all. You drew a box round
+        part of the page, gave it a name, and now you can use it again.</li>
+
+      <li><strong>Boxes go inside boxes.</strong> The card holds an <code>Avatar</code> and three
+        <code>Stat</code>s. <code>Stat</code> exists because the card needed three of them &mdash;
+        that is the only good reason to make one.</li>
+
+      <li><strong>Props are what you put in the box.</strong>
+        <code>&lt;Stat label="commits" value={48} /&gt;</code> &mdash; same box, different contents.
+        The box decides how it looks; whoever uses it decides what goes in.</li>
+
+      <li><strong>A capital letter means your box.</strong> <code>&lt;Avatar /&gt;</code> is yours.
+        <code>&lt;div /&gt;</code> is an HTML tag. That is the entire rule.</li>
+    </ol>
+
+    <p class="ics-sub bs-note">
+      Here is the finished card. <strong>Hover a row to find that box on the card.</strong>
     </p>
 
     <div class="bs-break">
+      <div><ul class="bs-tree" id="tree"></ul></div>
+      <div class="bs-demowrap"><div id="demo" class="bs-stage bs-stage-tall"></div></div>
+    </div>
+
+    <!-- ================= ACT 3 ================= -->
+    <span class="ics-step">Stage 3 &middot; Data</span>
+
+    <p class="ics-sub bs-note">
+      The profile card had its numbers typed into it. Real numbers do not work like that &mdash;
+      they live somewhere else, and you have to go and ask.
+    </p>
+
+    <ol class="bs-beats">
+      <li><strong>An API is a window you ask questions through.</strong> You pass a question in.
+        It passes an answer back. You never go inside.</li>
+
+      <li><strong>Our API is one window</strong> at
+        <code>c21-data-gateway</code>. You send it a question written in SQL and it sends back
+        the rows. That is the whole arrangement.</li>
+
+      <li><strong>The answer comes back as JSON</strong> &mdash; a way of writing down data so a
+        program can read it. Two parts matter: <code>columns</code> (what each slot means) and
+        <code>rows</code> (the slots).</li>
+
+      <li><strong>A graph is just those rows, drawn.</strong> No new data appears when you make a
+        chart. Every bar is one row.</li>
+    </ol>
+
+    <p class="ics-sub bs-note">You send this:</p>
+
+<pre class="bs-code-block">POST https://c21-data-gateway.icstars-milwaukee.workers.dev/api/query
+
+{
+  "team": "your-team",
+  "sql":  "SELECT \"assignment group\" AS team, COUNT(*) AS open_tickets
+           FROM servicenow.incident
+           WHERE state NOT IN ('Resolved', 'Closed')
+           GROUP BY \"assignment group\"
+           ORDER BY open_tickets DESC
+           LIMIT 6"
+}</pre>
+
+    <p class="ics-sub bs-note">
+      And you get this back. <strong>Hover a row on the left to find its bar on the right</strong>
+      &mdash; they are the same six numbers, written down twice.
+    </p>
+
+    <div class="bs-data">
       <div>
-        <ul class="bs-tree" id="tree"></ul>
+        <label class="bs-label">The answer &mdash; JSON</label>
+        <pre id="reply" class="bs-out bs-out-short"></pre>
+        <label class="bs-label" style="margin-top:12px">Its six rows</label>
+        <ul class="g-chips" id="rowlist"></ul>
       </div>
-      <div class="bs-demowrap">
-        <div id="demo" class="bs-stage bs-stage-tall"></div>
+      <div>
+        <label class="bs-label">The same rows, drawn</label>
+        <div class="g-card" id="graph"></div>
+        <p class="ics-sub bs-note" style="margin-top:10px">
+          One colour for every bar, because the <em>length</em> already tells you which is
+          biggest. Colour is saved for a different job.
+        </p>
       </div>
     </div>
 
     <p class="ics-sub bs-note">
-      A component is not a technique. <strong>It is a box you drew round part of a page and
-      gave a name</strong> &mdash; so you can move it, use it twice, and find it again in
-      six weeks. <code>Stat</code> exists because the card needed three of them; that is the
-      only reason any component should exist.
+      Now click <strong>3 &middot; Data</strong> in the editor. That is this graph, built in
+      React, in about fifteen lines. The reply is handed to it as <code>api</code>.
     </p>
 
-    <!-- ========== 3 · folder structure ========== -->
-    <span class="ics-step">3 &middot; Where the files go</span>
+    <!-- ================= WHERE FILES GO ================= -->
+    <span class="ics-step">Where the files go</span>
 
     <p class="ics-sub bs-note">
-      This is a Vite React project with those components in it. Nothing here is
-      convention-for-its-own-sake &mdash; each folder answers one question.
+      A real Vite React project, with those boxes in it. Each folder answers one question.
     </p>
 
-<pre class="bs-tree-code">my-app/
-├── index.html              the ONE page the browser loads. React fills the div in it.
+<pre class="bs-code-block">my-app/
+├── index.html              the ONE page the browser loads
 ├── package.json            the shopping list: what to install, what to run
-├── vite.config.js          tells Vite to expect React
 │
-├── src/                    everything you write lives here
-│   ├── main.jsx            the plug: finds that div, renders &lt;App /&gt; into it
-│   ├── App.jsx             the top of YOUR app. Decides what pages exist.
+├── src/                    everything YOU write lives here
+│   ├── main.jsx            the plug: puts &lt;App /&gt; on the page
+│   ├── App.jsx             the top of your app
 │   │
-│   ├── components/         the boxes. One component, one file, named for itself.
-│   │   ├── Profile.jsx
+│   ├── components/         your boxes. One box, one file, named the same.
 │   │   ├── Avatar.jsx
 │   │   ├── Stat.jsx
-│   │   └── Badge.jsx
+│   │   └── Bar.jsx
 │   │
-│   ├── lib/                code that is NOT a screen: fetching, maths, dates
-│   │   └── api.js
-│   │
-│   └── styles.css          colours and spacing
+│   └── lib/                code that is NOT a box: asking the API, maths
+│       └── api.js
 │
-└── node_modules/           the groceries. Never opened, never committed.</pre>
-
-    <p class="ics-sub bs-note">
-      <strong>The two rules that matter</strong> and the one that does not:
-    </p>
+└── node_modules/           the downloaded code. Never opened, never committed.</pre>
 
     <ul class="bs-rules">
-      <li><strong>One component, one file, named the same as the component.</strong>
-        <code>Avatar.jsx</code> exports <code>Avatar</code>. When a number on screen is
-        wrong, you know which file to open without searching.</li>
-      <li><strong><code>components/</code> draws screens. <code>lib/</code> does not.</strong>
-        Fetching, formatting and maths go in <code>lib/</code>. Keeping them apart is what
-        lets you fix a query without touching a single component.</li>
-      <li class="bs-rules-no"><strong>Folder names are not law.</strong> Some teams use
-        <code>ui/</code>, some nest by feature. Any arrangement where "where do I change
-        this?" has one obvious answer is a good one. Pick it on day one and keep it.</li>
+      <li><strong>One box, one file, same name.</strong> <code>Avatar.jsx</code> holds
+        <code>Avatar</code>. When something looks wrong you know which file to open.</li>
+      <li><strong><code>components/</code> draws. <code>lib/</code> fetches.</strong> Asking the
+        API goes in <code>lib/</code>. That split is what lets you fix a question without
+        touching a single box.</li>
+      <li class="bs-rules-no"><strong>Folder names are not law.</strong> Any layout where
+        "where do I change this?" has one obvious answer is a good one. Pick it and keep it.</li>
     </ul>
 
-    <!-- ========== 4 · what the project files are for ========== -->
-    <span class="ics-step">4 &middot; What <code>npm install</code> is for</span>
-
-    <table class="ics-table bs-anatomy">
-      <thead>
-        <tr><th>The thing</th><th>Its one job</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>package.json</code></td>
-          <td><strong>The shopping list.</strong> Names every package your project needs, and
-          the commands you can run. Checked into Git; small; you read it.</td>
-        </tr>
-        <tr>
-          <td><code>package-lock.json</code></td>
-          <td><strong>The receipt.</strong> The exact version of every package, including the
-          packages your packages wanted. Checked in so your laptop and CodeSandbox install
-          the identical thing. Never edited by hand.</td>
-        </tr>
-        <tr>
-          <td><code>node_modules/</code></td>
-          <td><strong>The groceries.</strong> The actual downloaded code &mdash; thousands of
-          files, tens of megabytes. <strong>Never</strong> committed, because
-          <code>npm install</code> recreates it from the two files above.</td>
-        </tr>
-        <tr>
-          <td><code>vite.config.js</code></td>
-          <td><strong>The kitchen.</strong> Tells Vite to expect React, so it runs that JSX
-          translation on every file as you save it.</td>
-        </tr>
-        <tr>
-          <td><code>dependencies</code><br><code>devDependencies</code></td>
-          <td><strong>Ships vs. builds.</strong> <code>react</code> is a dependency &mdash; it
-          runs in the user's browser. <code>vite</code> is a devDependency &mdash; it builds
-          the thing and is never sent to anyone. Backwards ships a toolchain to your users.</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- ========== 5 · install one ========== -->
-    <span class="ics-step">5 &middot; Install one yourself</span>
+    <!-- ================= INSTALL ================= -->
+    <span class="ics-step">Install one yourself</span>
 
     <p class="ics-sub bs-note">
-      Six commands. Tick them as you go &mdash; this page remembers. Every one has a
-      <strong>done when</strong>, so you never have to wonder whether it worked.
+      Six commands. Tick them as you go &mdash; this page remembers. Each one has a
+      <strong>done when</strong>, so you never have to guess whether it worked.
     </p>
 
     <ol class="bs-steps" id="steps"></ol>
 
     <p class="ics-footer">
-      Translation by <a href="https://babeljs.io/docs/babel-standalone">@babel/standalone</a>,
-      from a CDN &mdash; the same translation Vite runs, just in your browser instead of on
-      save. The whole app is <code>js/main.js</code>, which ends with a
-      <strong>BREAK IT ON PURPOSE</strong> list of nine things, every one of them tried first.
-      <br>Next: <a href="../03-honest-dashboard/index.html">03 &mdash; The Honest Dashboard</a>
-      is a bigger React app, built the same way, that you can take apart.
+      The translating is done by
+      <a href="https://babeljs.io/docs/babel-standalone">@babel/standalone</a> from a CDN &mdash;
+      the same translation Vite runs, just in your browser instead of on save.
+      The whole app is <code>js/main.js</code>, which ends with a
+      <strong>BREAK IT ON PURPOSE</strong> list, every entry tried first.
+      <br>The numbers in stage 3 are the real API's exact shape with made-up teams and counts.
+      To query it for real, with your team password:
+      <a href="../02-molson-data/index.html">02 &mdash; Molson Data</a>.
+      <br>Then: <a href="../03-honest-dashboard/index.html">03 &mdash; The Honest Dashboard</a>.
       <br>Open this one in the <a href="playground.html">live editor</a>.
     </p>
   </main>
 
-  <!-- React, ReactDOM and Babel as plain scripts, not modules: a browser on a
-       file:// path refuses to load a LOCAL module, so `import` is not available
-       to us here. These three give us the globals the app uses. -->
+  <!-- Plain scripts, not modules: a browser opening a file off disk refuses to
+       load a LOCAL module, so `import` is not available to us here. -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js" crossorigin></script>

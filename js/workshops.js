@@ -86,12 +86,12 @@ const WORKSHOPS = [
     title: "The Build Step",
     track: "Front-end",
     status: "draft",
-    minutes: 50,
+    minutes: 60,
     origin: "RFP Week 8",
-    hook: "Build a profile card and watch JSX stop being JSX - type on the left, see " +
-          "React.createElement in the middle, see the card render on the right. Then take the " +
-          "card apart into components, see the folder that holds them, and install Vite yourself.",
-    teaches: ["JSX", "components", "props", "folder structure", "npm install"],
+    hook: "Hello World, then a profile card, then a graph built from real API numbers. Three " +
+          "stages, each one the last plus one new idea - and in every one you see what you " +
+          "wrote, what the computer turned it into, and what it drew. Then you install Vite.",
+    teaches: ["JSX", "components", "props", "APIs & JSON", "npm install"],
     deck: null,
     live: true
   }
