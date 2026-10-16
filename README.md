@@ -27,7 +27,7 @@ the workshop says why:
 | 01 | [Who's That Pokemon?](workshops/01-hello-api/) — a guessing game built out of `fetch` | Front-end | 30 min | ready · live editor |
 | 02 | [Molson Data](workshops/02-molson-data/) — one `SELECT` to the Cycle 21 gateway, rows on the page | Data | 30 min | draft · live editor |
 | 03 | [The Honest Dashboard](workshops/03-honest-dashboard/) — rows in, a readable screen out, and an answer box that refuses | Front-end | 45 min | draft · live editor |
-| 04 | [The Build Step](workshops/04-the-build-step/) — watch JSX stop being JSX, then install Vite yourself | Front-end | 40 min | draft · live editor |
+| 04 | [The Build Step](workshops/04-the-build-step/) — build a profile card, watch JSX stop being JSX, take it apart into components | Front-end | 50 min | draft · live editor |
 
 The front page builds this list from [`js/workshops.js`](js/workshops.js), which
 is the single file you edit to add a workshop.
@@ -116,7 +116,7 @@ workshops/_template/            copy this to start a new one (it runs as-is)
 workshops/01-hello-api/         fetch, JSON, async/await, DOM
 workshops/02-molson-data/       SELECT, query params, API tokens
 workshops/03-honest-dashboard/  React from a CDN, chart decisions, refusals
-workshops/04-the-build-step/    JSX vs JavaScript, npm install, Vite
+workshops/04-the-build-step/    JSX vs JavaScript, components, folders, npm install
 ```
 
 ## Adding a workshop
