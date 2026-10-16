@@ -15,6 +15,8 @@ step, no accounts.
 | # | Workshop | Track | Time | Status |
 |---|---|---|---|---|
 | 01 | [Who's That Pokemon?](workshops/01-hello-api/) — a guessing game built out of `fetch` | Front-end | 30 min | ready · live editor |
+| 02 | [Molson Data](workshops/02-molson-data/) — one `SELECT` to the Cycle 21 gateway, rows on the page | Data | 30 min | draft · live editor |
+| 03 | [The Honest Dashboard](workshops/03-honest-dashboard/) — rows in, a readable screen out, and an answer box that refuses | Front-end | 45 min | draft · live editor |
 
 The front page builds this list from [`js/workshops.js`](js/workshops.js), which
 is the single file you edit to add a workshop.

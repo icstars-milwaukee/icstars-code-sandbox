@@ -1,0 +1,70 @@
+/* The chart's own marks. Everything else on the page comes from
+   ../../css/theme.css, which is shared and never forked.
+
+   Colours are named roles declared once here. Nothing below writes a raw hex -
+   it asks for var(--hd-series). One place to change, light and dark both. */
+
+:root {
+  --hd-surface:  #FAF6F2;
+  --hd-ink:      #161217;
+  --hd-ink-soft: #5C5458;
+  --hd-muted:    #9A9095;
+  --hd-grid:     #E3DCD6;
+  --hd-baseline: #C8BFB8;
+  --hd-series:   #2a78d6;   /* the one series colour */
+  --hd-deemph:   #C8BFB8;   /* bars that are not the selected one */
+  --hd-warning:  #D6003C;
+}
+
+/* --- tiles: a single number is a tile, not a one-bar chart --- */
+.hd-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 18px 0 22px; }
+.hd-tile { border: 1px solid var(--hd-grid); border-radius: 8px; padding: 12px 14px; }
+.hd-tile-value { font-size: 23px; font-weight: 700; letter-spacing: -0.01em; }
+.hd-tile-label { color: var(--hd-ink-soft); font-size: 12.5px; }
+
+/* --- the filter: its own row, above everything it scopes --- */
+.hd-filterrow { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
+.hd-filterrow input { flex: 1 1 240px; max-width: 420px; }
+
+/* --- the chart --- */
+svg.hd-chart { display: block; width: 100%; height: auto; }
+.hd-tick text { fill: var(--hd-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.hd-tick line { stroke: var(--hd-grid); stroke-width: 1; }          /* hairline, solid, never dashed */
+.hd-axis line { stroke: var(--hd-baseline); stroke-width: 1; }
+.hd-cat { fill: var(--hd-ink-soft); font-size: 12px; }
+.hd-val { fill: var(--hd-ink); font-size: 12px; font-weight: 600; }
+.hd-bar { fill: var(--hd-series); }
+.hd-hit { fill: transparent; cursor: pointer; }
+.hd-row:hover .hd-bar { opacity: 0.82; }
+
+/* Decision 3: with a team picked, the rest step back. This is the job colour
+   was being kept free for. */
+.hd-chart.hd-picked .hd-bar { fill: var(--hd-deemph); }
+.hd-chart.hd-picked .hd-row.hd-on .hd-bar { fill: var(--hd-series); }
+.hd-chart.hd-picked .hd-row.hd-on .hd-cat { fill: var(--hd-ink); font-weight: 600; }
+
+.hd-empty { color: var(--hd-ink-soft); font-size: 14px; padding: 18px 2px; }
+
+/* --- the table twin and the drill-down --- */
+.hd-table { margin: 14px 0; }
+.hd-table summary { cursor: pointer; font-size: 13px; color: var(--hd-ink-soft); padding: 6px 0; }
+.hd-n { text-align: right; font-variant-numeric: tabular-nums; }
+.hd-id { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hd-drill { margin-top: 16px; border-top: 1px solid var(--hd-grid); padding-top: 12px; }
+.hd-drill-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
+.hd-drill-head h3 { margin: 0; font-size: 15px; }
+.hd-drill-head span { color: var(--hd-ink-soft); font-size: 13px; }
+.hd-link { font: inherit; background: none; border: none; color: var(--hd-warning); cursor: pointer; padding: 0; text-decoration: underline; }
+
+/* --- the ask panel --- */
+.hd-ask { margin-top: 26px; }
+.hd-ask form { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.hd-ask input { flex: 1 1 280px; max-width: 460px; }
+.hd-answer { margin-top: 14px; font-size: 15px; }
+.hd-answer .hd-src { display: block; margin-top: 5px; color: var(--hd-muted); font-size: 12px; }
+.hd-refused { border-left: 3px solid var(--hd-warning); padding-left: 12px; }
+.hd-examples { margin-top: 14px; color: var(--hd-ink-soft); font-size: 13px; }
+.hd-chip { font: inherit; font-size: 12.5px; cursor: pointer; margin: 6px 6px 0 0;
+           background: none; border: 1px solid var(--hd-grid); color: var(--hd-ink-soft);
+           border-radius: 999px; padding: 4px 11px; }
+.hd-chip:hover { color: var(--hd-ink); border-color: var(--hd-baseline); }

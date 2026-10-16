@@ -62,6 +62,22 @@ const WORKSHOPS = [
     teaches: ["SELECT", "query params", "API tokens", "rows as arrays"],
     deck: null,
     live: true
+  },
+
+  {
+    n: "03",
+    slug: "03-honest-dashboard",
+    title: "The Honest Dashboard",
+    track: "Front-end",
+    status: "draft",
+    minutes: 45,
+    origin: "RFP Week 8",
+    hook: "You walk out with a dashboard that says where it stops. Four decisions turn " +
+          "a wall of numbers into something a manager reads in ten seconds - and the " +
+          "last one is refusing to answer what your data cannot.",
+    teaches: ["React without a build", "chart form", "one colour", "selection", "refusals"],
+    deck: null,
+    live: true
   }
 
   /* ---- Copy this block to add the next one -------------------

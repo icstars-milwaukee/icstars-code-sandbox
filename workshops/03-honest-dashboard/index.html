@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Honest Dashboard — i.c.stars Code Sandbox</title>
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="css/chart.css">
+</head>
+<body>
+
+  <header class="ics-header">
+    <div class="ics-wrap">
+      <a class="ics-back" href="../../index.html">&larr; Code Sandbox</a>
+      <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span> Milwaukee</div>
+      <h1 class="ics-title">The Honest Dashboard</h1>
+      <p class="ics-sub">
+        Rows go in, a screen comes out. Four decisions turn a wall of numbers into
+        something a manager reads in ten seconds &mdash; and the last one is the
+        hard one: <strong>saying where your data stops.</strong>
+      </p>
+    </div>
+  </header>
+
+  <main class="ics-wrap">
+
+    <span class="ics-step">The dashboard</span>
+
+    <p class="ics-sub" style="color:var(--grey-dark);margin-top:12px">
+      Made-up teams, made-up tickets &mdash; the numbers are baked into
+      <code>js/main.js</code>, so there is nothing to sign into and nothing to install.
+      Type in the filter. Click a bar. Then ask the panel something it cannot answer.
+    </p>
+
+    <!-- React builds everything below this line. -->
+    <div id="root"></div>
+
+    <p class="ics-footer">
+      Built with React straight from a CDN &mdash; no npm, no build step.
+      The whole app is <code>js/main.js</code>, and it ends with a
+      <strong>BREAK IT ON PURPOSE</strong> list.
+      <br>Wire it to real data next: <a href="../02-molson-data/index.html">02 &mdash; Molson Data</a>
+      sends a <code>SELECT</code> to the Cycle 21 gateway and gets these same rows back.
+      <br>Open it in the <a href="playground.html">live editor</a>.
+    </p>
+  </main>
+
+  <!-- React as plain scripts, not modules: a browser on a file:// path refuses
+       to load a local module, so a workshop that must run off disk cannot use
+       import. These three give us React, ReactDOM and htm as globals. -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js" crossorigin></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
