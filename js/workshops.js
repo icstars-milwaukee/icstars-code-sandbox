@@ -103,7 +103,13 @@ const WORKSHOPS = [
     deck: "REF-deck.html",
     live: false,
     needs: "needs npm",
+    /* The documented import form is the whole repo (codesandbox.io/p/github/
+       org/repo) - that is the one that creates a Devbox, which is what a Vite
+       project needs. ?file= lands you on App.jsx instead of the repo root, and
+       /.codesandbox/tasks.json installs and starts THIS workshop on arrival.
+       So one click = a running app with the right file open. */
     sandbox: "https://codesandbox.io/p/github/icstars-milwaukee/icstars-code-sandbox/main"
+           + "?file=/workshops/04-the-build-step/src/App.jsx"
   }
 
   /* ---- Copy this block to add the next one -------------------

@@ -74,8 +74,30 @@ Vite project has to be bundled first. Its card carries `live: false` and a
 04-the-build-step      skipped (npm project - opens in CodeSandbox)
 ```
 
-Open it with one click in CodeSandbox, or `npm install && npm run dev` in the
-folder.
+### Opening it in CodeSandbox
+
+The card does this for you, but the URL is worth knowing:
+
+```
+https://codesandbox.io/p/github/icstars-milwaukee/icstars-code-sandbox/main
+  ?file=/workshops/04-the-build-step/src/App.jsx
+```
+
+That is the **documented** import form — the whole repo, as a Devbox, which is
+what a Vite project needs. Three things then happen on their own:
+`/.codesandbox/tasks.json` installs workshop 04, starts its dev server on
+5173, and `?file=` opens `App.jsx` so you land on the right file.
+
+You get the whole library in the file tree, not just the one folder. That is a
+fair trade for a link that is guaranteed to work.
+
+> If you ever want workshop 04 to open **on its own**, with nothing else in the
+> tree, it needs to be its own repository — CodeSandbox imports a repo, not a
+> subdirectory of one. Worth doing if the extra folders ever confuse a room;
+> not worth doing before then.
+
+Or skip CodeSandbox entirely: `npm install && npm run dev` inside
+`workshops/04-the-build-step`.
 
 ## The live editor
 
