@@ -136,13 +136,18 @@ puts the slash back.
   must be able to open the file and see it work, and to be handed a zip offline.
   Workshop 01 holds this line completely and it is still the target.
 
-  **If a workshop has to break it**, three things are required: the workshop
-  folder itself still opens and runs (load the library from a CDN as a plain
-  script - a browser on a `file://` path refuses to load a *local* module, so
-  `import` is not available to you); the README's needs-table says what it
-  needs; and anything requiring `npm` happens in the student's own project,
-  never in the workshop folder. 03 loads React this way; 04 loads Babel this way
-  and is *about* npm without containing any.
+  **If a workshop has to break it**, say so on the card and in the README's
+  needs-table, and pick one of two shapes.
+
+  *Still runs off disk:* load the library from a CDN as a plain `<script>` - a
+  browser on a `file://` path refuses to load a *local* module, so `import` is
+  not available to you. Workshop 03 is this shape, and it keeps its live editor.
+
+  *A real npm project:* only when the toolchain IS the subject. Workshop 04 is a
+  real Vite app, because you cannot teach what `npm install` is for inside a
+  folder that never needs it. Such a folder has a `package.json`, which means
+  `build-playground.py` skips it, so the card needs `live: false` and a
+  `deck`. Do not reach for this shape to avoid writing plain JavaScript.
 - **No signup walls, by default.** Free, no-key sample APIs. A login screen on
   night one costs you half the room. [PokeAPI](https://pokeapi.co/) and
   [JSONPlaceholder](https://jsonplaceholder.typicode.com/) are known-good.

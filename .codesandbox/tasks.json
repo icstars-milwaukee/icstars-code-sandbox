@@ -1,0 +1,24 @@
+{
+  "$schema": "https://codesandbox.io/schemas/tasks.json",
+  "//": "This repo is a static site plus ONE npm project - workshop 04, which is a real Vite app because its subject is the toolchain. These tasks install and start that one, so the card's CodeSandbox link lands on a running app instead of a terminal.",
+  "setupTasks": [
+    {
+      "name": "Install workshop 04",
+      "command": "cd workshops/04-the-build-step && npm install"
+    }
+  ],
+  "tasks": {
+    "dev": {
+      "name": "Run workshop 04",
+      "command": "cd workshops/04-the-build-step && npm run dev",
+      "runAtStart": true,
+      "preview": {
+        "port": 5173
+      }
+    },
+    "build": {
+      "name": "Build workshop 04",
+      "command": "cd workshops/04-the-build-step && npm run build"
+    }
+  }
+}

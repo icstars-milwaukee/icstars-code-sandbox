@@ -1,0 +1,94 @@
+/* src/styles.css
+
+   Colours and spacing. Nothing here is the lesson - skip it on day one and
+   come back when you want to change how something looks.
+
+   Every colour is a named role declared once, so a change happens in one
+   place instead of forty. */
+
+:root {
+  --ink: #161217;
+  --ink-soft: #231c24;
+  --paper: #faf6f2;
+  --red: #d6003c;
+  --grey: #9a9095;
+  --grey-dark: #5c5458;
+  --line: #e3dcd6;
+  --series: #2a78d6;      /* the one bar colour */
+  --mono: Consolas, "Courier New", monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #f7f3ef;
+  color: var(--ink);
+  font: 16px/1.6 "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+.app { max-width: 54rem; margin: 0 auto; padding: 5vh 6vw 12vh; }
+
+.app-head { margin-bottom: 4vh; }
+.app-kicker {
+  margin: 0; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--grey);
+}
+.app-head h1 {
+  margin: .3em 0 .2em; font-size: clamp(30px, 5vw, 48px); font-weight: 900;
+  text-transform: uppercase; letter-spacing: -.02em; line-height: 1.02;
+}
+.app-sub { margin: 0; color: var(--grey-dark); max-width: 60ch; }
+.app-sub code, .showcase-label code {
+  font-family: var(--mono); font-size: .9em;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 4px; padding: .1em .4em;
+}
+
+/* one showcased screen: what it is on the left, the outcome on the right */
+.showcase {
+  display: grid; grid-template-columns: 17rem 1fr; gap: 24px;
+  padding: 3vh 0; border-top: 1px solid var(--line); align-items: start;
+}
+@media (max-width: 760px) { .showcase { grid-template-columns: 1fr; } }
+.showcase-label code { font-size: .8rem; color: var(--red); }
+.showcase-label p { margin: .6em 0 0; font-size: 14px; color: var(--grey-dark); }
+.showcase-out {
+  background: var(--paper); border: 1px solid var(--line); border-radius: 10px;
+  padding: 20px; display: grid; place-items: center; min-height: 9rem;
+}
+
+.app-foot { margin-top: 5vh; padding-top: 3vh; border-top: 1px solid var(--line); }
+.app-foot p { margin: 0; font-size: 14px; color: var(--grey-dark); max-width: 70ch; }
+
+/* HelloPage */
+.hello { margin: 0; font-size: clamp(22px, 3vw, 32px); font-weight: 800; }
+
+/* ProfilePage */
+.card {
+  width: 100%; max-width: 19rem; background: #fff;
+  border: 1px solid var(--line); border-radius: 10px; padding: 16px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.card-head { display: flex; gap: 12px; align-items: center; }
+.avatar {
+  flex: none; width: 46px; height: 46px; border-radius: 50%;
+  background: var(--red); color: #fff; display: grid; place-items: center;
+  font-weight: 800; font-size: 16px;
+}
+.card-name { margin: 0; font-size: 16px; font-weight: 700; }
+.card-role { margin: 2px 0 0; font-size: 13px; color: var(--grey-dark); }
+.card-stats { display: flex; gap: 8px; }
+.stat { flex: 1; border: 1px solid var(--line); border-radius: 8px; padding: 8px 6px; text-align: center; }
+.stat b { display: block; font-size: 17px; }
+.stat span { font-size: 11.5px; color: var(--grey-dark); }
+
+/* DataPage */
+.graph {
+  width: 100%; background: #fff; border: 1px solid var(--line); border-radius: 10px;
+  padding: 14px 16px; display: flex; flex-direction: column; gap: 8px;
+}
+.bar-row { display: grid; grid-template-columns: 7.5rem 1fr 2.2rem; gap: 10px; align-items: center; }
+.bar-name { font-size: 13px; color: var(--grey-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track { background: #f1eae4; border-radius: 4px; height: 16px; overflow: hidden; }
+.bar-fill { display: block; height: 100%; background: var(--series); border-radius: 0 4px 4px 0; }
+.bar-value { font-size: 13px; text-align: right; font-variant-numeric: tabular-nums; }
+.graph-foot { margin: 6px 0 0; font-size: 11.5px; color: var(--grey-dark); }

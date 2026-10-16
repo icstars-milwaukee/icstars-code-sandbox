@@ -16,7 +16,7 @@ the workshop says why:
 | 01 Hello, API | nothing. Double-click it. |
 | 02 Molson Data | a team password (it queries the real Cycle 21 gateway) |
 | 03 The Honest Dashboard | the network, for React from a CDN. No account, no data. |
-| 04 The Build Step | the network, for Babel from a CDN. The npm part happens in *your* project, not in this folder. |
+| 04 The Build Step | **npm.** It is a real Vite project — one click in CodeSandbox, or `npm install && npm run dev`. |
 
 ---
 
@@ -27,7 +27,7 @@ the workshop says why:
 | 01 | [Who's That Pokemon?](workshops/01-hello-api/) — a guessing game built out of `fetch` | Front-end | 30 min | ready · live editor |
 | 02 | [Molson Data](workshops/02-molson-data/) — one `SELECT` to the Cycle 21 gateway, rows on the page | Data | 30 min | draft · live editor |
 | 03 | [The Honest Dashboard](workshops/03-honest-dashboard/) — rows in, a readable screen out, and an answer box that refuses | Front-end | 45 min | draft · live editor |
-| 04 | [The Build Step](workshops/04-the-build-step/) — Hello World → Profile → Data: JSX, components, then a graph from the API | Front-end | 60 min | draft · live editor |
+| 04 | [The Build Step](workshops/04-the-build-step/) — a real Vite app: Hello World → Profile → Data | Front-end | 60 min | draft · deck · **CodeSandbox** |
 
 The front page builds this list from [`js/workshops.js`](js/workshops.js), which
 is the single file you edit to add a workshop.
@@ -57,6 +57,25 @@ something a student reads past to find the point.
 and what each one teaches when it goes wrong. Delete an `await` and you get
 `[object Promise]` — you printed the waiting instead of the thing. Better than a
 paragraph about promises, and it costs one keystroke.
+
+## One workshop is a real npm project
+
+**04 The Build Step** is the exception, and deliberately so: you cannot teach what
+`npm install` is for inside a folder that never needs it. It is a real Vite React
+app — `index.html`, `package.json`, `vite.config.js`, and `src/` with
+`pages/`, `components/` and `api/` in it.
+
+That means **no live editor for that one** — a playground inlines files, and a
+Vite project has to be bundled first. Its card carries `live: false` and a
+`deck`, and `tools/build-playground.py` skips any folder containing a
+`package.json` and says so:
+
+```
+04-the-build-step      skipped (npm project - opens in CodeSandbox)
+```
+
+Open it with one click in CodeSandbox, or `npm install && npm run dev` in the
+folder.
 
 ## The live editor
 
@@ -116,7 +135,7 @@ workshops/_template/            copy this to start a new one (it runs as-is)
 workshops/01-hello-api/         fetch, JSON, async/await, DOM
 workshops/02-molson-data/       SELECT, query params, API tokens
 workshops/03-honest-dashboard/  React from a CDN, chart decisions, refusals
-workshops/04-the-build-step/    JSX, components, APIs and JSON, npm install
+workshops/04-the-build-step/    a real Vite app — JSX, components, pages, APIs
 ```
 
 ## Adding a workshop

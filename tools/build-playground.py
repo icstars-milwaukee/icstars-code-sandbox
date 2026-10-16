@@ -24,6 +24,12 @@ WHY THIS EXISTS AT ALL
 WHAT GOES IN
   Every text file in the workshop folder except the deck, the README
   and playground.html itself. In practice: index.html and js/main.js.
+
+WHAT IS SKIPPED
+  A folder containing package.json. That is a real npm project - no
+  file-inlining preview can do anything with it, because it has to be
+  bundled first. Those open in CodeSandbox and carry live: false on
+  their card.
 """
 
 import io
@@ -118,6 +124,13 @@ def collect(folder):
 
 def build(slug):
     folder = os.path.join(WORKSHOPS, slug)
+
+    # A workshop with a package.json is a real npm project, not an app that
+    # runs off disk - so there is nothing a playground could preview. It has
+    # to be bundled first. Those open in CodeSandbox and carry live: false.
+    if os.path.exists(os.path.join(folder, "package.json")):
+        return None
+
     files = collect(folder)
 
     if "index.html" not in files:
@@ -146,7 +159,10 @@ def main(argv):
     for slug in slugs:
         page = build(slug)
         if page is None:
-            print("  %-22s skipped" % slug)
+            why = ("npm project - opens in CodeSandbox"
+                   if os.path.exists(os.path.join(WORKSHOPS, slug, "package.json"))
+                   else "no index.html")
+            print("  %-22s skipped (%s)" % (slug, why))
             continue
 
         out = os.path.join(WORKSHOPS, slug, "playground.html")

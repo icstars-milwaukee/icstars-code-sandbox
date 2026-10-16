@@ -26,6 +26,14 @@
               in a live editor, so a student can run and break it
               without installing anything.
               Built by tools/build-playground.py
+     needs    omit for the normal case (nothing). Set it when the
+              workshop needs something — "npm", "a team password" —
+              and it shows as a chip on the card, so nobody plans a
+              session around a surprise
+     sandbox  only for a real npm project, whose index.html is a build
+              entry rather than a page. Set it to the CodeSandbox URL
+              and the card links there instead of offering to open a
+              file that would render blank
 
    There is deliberately no field for "extra pages". A workshop is
    one app and one deck. Anything else is not on the shelf.
@@ -88,12 +96,14 @@ const WORKSHOPS = [
     status: "draft",
     minutes: 60,
     origin: "RFP Week 8",
-    hook: "Hello World, then a profile card, then a graph built from real API numbers. Three " +
-          "stages, each one the last plus one new idea - and in every one you see what you " +
-          "wrote, what the computer turned it into, and what it drew. Then you install Vite.",
-    teaches: ["JSX", "components", "props", "APIs & JSON", "npm install"],
-    deck: null,
-    live: true
+    hook: "A real Vite React app - the thing npm create vite gives you, with three finished " +
+          "screens in it: Hello World, a profile, and a graph of what the API said. Open it in " +
+          "CodeSandbox, read the folders, then build one from an empty directory.",
+    teaches: ["JSX", "components", "props", "APIs & JSON", "Vite"],
+    deck: "REF-deck.html",
+    live: false,
+    needs: "needs npm",
+    sandbox: "https://codesandbox.io/p/github/icstars-milwaukee/icstars-code-sandbox/main"
   }
 
   /* ---- Copy this block to add the next one -------------------
@@ -163,6 +173,13 @@ const WORKSHOPS = [
       chip.title = "Open the app's files in an editor, already running";
       chips.appendChild(chip);
     }
+    /* The other thing worth knowing before you click: does this one
+       want anything installed? Most do not. Say so when one does. */
+    if (w.needs) {
+      const chip = el("span", "chip needs", w.needs);
+      chip.title = "What this workshop needs before it will run";
+      chips.appendChild(chip);
+    }
     top.appendChild(chips);
     c.appendChild(top);
 
@@ -185,6 +202,13 @@ const WORKSHOPS = [
     const links = el("div", "wlinks");
     if (w.status === "soon") {
       links.appendChild(el("span", "wmeta", "Nothing to open yet."));
+    } else if (w.sandbox) {
+      /* An npm project: its index.html is a build entry, not a page.
+         Opening it here would render a blank screen, so the card sends
+         you where it actually runs. */
+      links.appendChild(link("Open in CodeSandbox", w.sandbox, true));
+      if (w.deck) links.appendChild(link("Deck", base + w.deck));
+      links.appendChild(link("Read the files", base));
     } else {
       /* index.html at a workshop root IS the app — the card runs
          the thing rather than landing on a page about it. */
