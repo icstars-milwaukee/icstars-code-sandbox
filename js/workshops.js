@@ -78,6 +78,22 @@ const WORKSHOPS = [
     teaches: ["React without a build", "chart form", "one colour", "selection", "refusals"],
     deck: null,
     live: true
+  },
+
+  {
+    n: "04",
+    slug: "04-the-build-step",
+    title: "The Build Step",
+    track: "Front-end",
+    status: "draft",
+    minutes: 40,
+    origin: "RFP Week 8",
+    hook: "JSX is not JavaScript and no browser has ever understood it. Type JSX on the left, " +
+          "watch it become React.createElement on the right, and the build step stops being a " +
+          "rumour. Then install Vite yourself, six commands with a done-when on each.",
+    teaches: ["JSX", "npm install", "Vite", "package.json", "dev server"],
+    deck: null,
+    live: true
   }
 
   /* ---- Copy this block to add the next one -------------------
