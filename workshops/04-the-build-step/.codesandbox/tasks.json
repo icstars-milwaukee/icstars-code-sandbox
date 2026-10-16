@@ -1,0 +1,22 @@
+{
+  "$schema": "https://codesandbox.io/schemas/tasks.json",
+
+  "//": "This folder is imported into CodeSandbox on its own, as a Devbox, so it needs its own tasks file - the one at the repo root does not apply when only this folder is imported. These two tasks are why one click gives you a running app instead of a terminal.",
+
+  "setupTasks": [
+    { "name": "Install", "command": "npm install" }
+  ],
+
+  "tasks": {
+    "dev": {
+      "name": "Run the app",
+      "command": "npm run dev",
+      "runAtStart": true,
+      "preview": { "port": 5173 }
+    },
+    "build": {
+      "name": "Build for production",
+      "command": "npm run build"
+    }
+  }
+}

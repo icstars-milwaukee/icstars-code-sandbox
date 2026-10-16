@@ -76,25 +76,27 @@ Vite project has to be bundled first. Its card carries `live: false` and a
 
 ### Opening it in CodeSandbox
 
-The card does this for you, but the URL is worth knowing:
+The card does this for you. The URL opens **that folder on its own** — not the
+whole repo:
 
 ```
-https://codesandbox.io/p/github/icstars-milwaukee/icstars-code-sandbox/main
-  ?file=/workshops/04-the-build-step/src/App.jsx
+https://codesandbox.io/p/devbox/github/icstars-milwaukee/icstars-code-sandbox/tree/main/workshops/04-the-build-step
 ```
 
-That is the **documented** import form — the whole repo, as a Devbox, which is
-what a Vite project needs. Three things then happen on their own:
-`/.codesandbox/tasks.json` installs workshop 04, starts its dev server on
-5173, and `?file=` opens `App.jsx` so you land on the right file.
+Two things in that URL matter, and both are documented:
 
-You get the whole library in the file tree, not just the one folder. That is a
-fair trade for a link that is guaranteed to work.
+- **`/p/devbox/`**, not `/p/sandbox/`. A Devbox is a real VM; a Browser
+  Sandbox is not, and a Vite project needs the VM.
+- **`/tree/<branch>/<folder>`** — the same shape as the GitHub URL for that
+  folder. This is how you import one directory instead of a repository.
 
-> If you ever want workshop 04 to open **on its own**, with nothing else in the
-> tree, it needs to be its own repository — CodeSandbox imports a repo, not a
-> subdirectory of one. Worth doing if the extra folders ever confuse a room;
-> not worth doing before then.
+**The shortcut worth remembering:** open any folder on GitHub, change
+`github.com` to `githubbox.com` in the address bar, press Enter. It builds
+the URL above for you. Works for any repo, not just ours.
+
+On arrival, that folder's own `.codesandbox/tasks.json` runs `npm install`
+and `npm run dev`, and the preview opens on port 5173. You should land on a
+running app, not a terminal.
 
 Or skip CodeSandbox entirely: `npm install && npm run dev` inside
 `workshops/04-the-build-step`.

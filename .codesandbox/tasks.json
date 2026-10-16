@@ -1,6 +1,6 @@
 {
   "$schema": "https://codesandbox.io/schemas/tasks.json",
-  "//": "This repo is a static workshop library plus ONE npm project: workshops/04-the-build-step, which is a real Vite app because its subject IS the toolchain. These tasks install and start that one on arrival, so the card link lands on a running app rather than a terminal. The other workshops need nothing - open their index.html.",
+  "//": "A FALLBACK. Workshop 04 is normally opened as its own folder (codesandbox.io/p/devbox/github/.../tree/main/workshops/04-the-build-step), and that folder has its own .codesandbox/tasks.json. This file only matters if somebody imports the WHOLE repo instead - then these tasks still find workshop 04 and start it, rather than leaving them at a terminal. The other workshops need nothing: open their index.html.",
   "setupTasks": [
     {
       "name": "Install workshop 04 (the only npm project here)",
