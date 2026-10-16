@@ -183,14 +183,18 @@
 /* "You can do this one right now, in this browser, on a borrowed
    laptop." That is worth a red chip — and it is a link to the
    playground, so it gets hover and focus states to say so. */
+.chip.needs{background:none;border:1px solid var(--grey-dark);color:var(--grey-dark)}
 .chip.live {
   background: var(--red);
   color: var(--paper);
   text-decoration: none;
   cursor: pointer;
 }
+.chip.needs{background:none;border:1px solid var(--grey-dark);color:var(--grey-dark)}
 .chip.live:hover { background: var(--red-deep); }
+.chip.needs{background:none;border:1px solid var(--grey-dark);color:var(--grey-dark)}
 .chip.live:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.chip.needs{background:none;border:1px solid var(--grey-dark);color:var(--grey-dark)}
 .chip.live::after { content: " ▸"; }
 
 /* 6. The ghost card — "the next one goes here" -------------- */

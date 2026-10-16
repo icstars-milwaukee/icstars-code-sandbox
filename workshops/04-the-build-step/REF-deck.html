@@ -1,0 +1,345 @@
+<title>The Build Step — i.c.stars Code Sandbox</title>
+<style>
+  :root{
+    --ink:#161217; --ink-soft:#231C24; --paper:#FAF6F2; --paper-dim:#EFE8E2;
+    --red:#D6003C; --red-deep:#A00030; --grey:#9A9095; --grey-dark:#5C5458;
+    --disp:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+    --mono:Consolas,"Courier New",monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{font-family:var(--disp);background:var(--ink);color:var(--paper)}
+  .deck{position:relative;height:100%;width:100%}
+  .slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+    padding:6vh 8vw;opacity:0;visibility:hidden;transform:translateX(4%);
+    transition:opacity .45s ease,transform .45s ease,visibility .45s;overflow-y:auto}
+  .slide.active{opacity:1;visibility:visible;transform:none}
+  @media (prefers-reduced-motion: reduce){.slide{transition:none;transform:none}}
+  .ink{background:var(--ink);color:var(--paper)}
+  .paper{background:var(--paper);color:var(--ink)}
+  .redbg{background:var(--red);color:var(--paper)}
+
+  .eyebrow{font-size:clamp(12px,1.4vw,16px);font-weight:700;letter-spacing:.28em;
+    text-transform:uppercase;color:var(--red);margin-bottom:2.2vh}
+  .redbg .eyebrow{color:var(--paper)}
+  h1{font-weight:900;font-size:clamp(40px,7.2vw,104px);line-height:.98;letter-spacing:-.02em;
+    text-wrap:balance;text-transform:uppercase}
+  h2{font-weight:900;font-size:clamp(28px,4.6vw,66px);line-height:1.02;letter-spacing:-.015em;
+    text-wrap:balance;text-transform:uppercase;margin-bottom:3vh}
+  .sub{font-size:clamp(16px,1.8vw,23px);line-height:1.5;max-width:64ch;color:var(--grey)}
+  .paper .sub{color:var(--grey-dark)}
+  .redbg .sub{color:#FFD9E2}
+  .star{color:var(--red);font-style:normal}
+
+  .brand{position:fixed;top:3.2vh;left:8vw;z-index:40;font-weight:900;
+    font-size:clamp(15px,1.6vw,21px);letter-spacing:-.01em;pointer-events:none}
+  .brand .pipe{font-weight:400;opacity:.55;margin:0 .12em}
+  .brand .mke{font-weight:400;letter-spacing:.22em;text-transform:uppercase;
+    font-size:.62em;vertical-align:.12em;margin-left:.9em;opacity:.75}
+  .tag{position:fixed;bottom:3.2vh;left:8vw;z-index:40;font-size:clamp(11px,1.15vw,14px);
+    letter-spacing:.22em;text-transform:uppercase;color:var(--grey);pointer-events:none}
+  .counter{position:fixed;bottom:3.2vh;right:8vw;z-index:40;font-family:var(--mono);
+    font-size:clamp(12px,1.2vw,15px);color:var(--grey);pointer-events:none;font-variant-numeric:tabular-nums}
+  .bar{position:fixed;top:0;left:0;height:5px;background:var(--red);z-index:50;
+    width:0;transition:width .45s ease}
+  @media (prefers-reduced-motion: reduce){.bar{transition:none}}
+
+  ul.big{list-style:none;font-size:clamp(16px,1.9vw,25px);line-height:1.45}
+  ul.big li{padding:1.3vh 0;border-bottom:1px solid rgba(154,144,149,.28);display:flex;gap:.7em}
+  ul.big li:last-child{border-bottom:none}
+  ul.big .b{color:var(--red);font-weight:900;flex-shrink:0}
+  .paper ul.big li{border-color:rgba(92,84,88,.22)}
+
+  .defs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2vh 2.5vw}
+  .def{border-top:4px solid var(--red);padding-top:1.3vh}
+  .def dt{font-weight:900;font-size:clamp(17px,2vw,26px);text-transform:uppercase;letter-spacing:.01em}
+  .def dd{font-size:clamp(14px,1.55vw,19px);line-height:1.45;color:var(--grey);margin-top:.5vh}
+  .paper .def dd{color:var(--grey-dark)}
+
+  .file{font-family:var(--mono);font-size:.92em;background:rgba(214,0,60,.12);
+    color:var(--red);padding:.1em .45em;border-radius:3px;white-space:nowrap}
+  .paper .file{background:rgba(214,0,60,.09)}
+
+  .huge{font-weight:900;font-size:clamp(60px,11vw,170px);line-height:.95;letter-spacing:-.03em;text-transform:uppercase}
+  .stamp{display:inline-block;font-family:var(--mono);font-weight:700;border:3px solid currentColor;
+    padding:.35em .7em;font-size:clamp(15px,1.8vw,23px);letter-spacing:.12em;margin-top:3vh}
+
+  table{border-collapse:collapse;width:100%;font-size:clamp(13px,1.55vw,19px)}
+  th{text-align:left;font-size:.72em;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--red);padding:0 1.2em .7em 0;font-weight:700}
+  td{padding:.65em 1.2em .65em 0;border-top:1px solid rgba(154,144,149,.28);line-height:1.4;vertical-align:top}
+  .paper td{border-color:rgba(92,84,88,.22)}
+  .tnum{font-family:var(--mono);color:var(--red);font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+  .rfpcard{background:var(--paper);color:var(--ink);border-left:8px solid var(--red);
+    padding:3.5vh 3vw;font-size:clamp(15px,1.8vw,23px);line-height:1.65;max-width:74ch;
+    box-shadow:0 12px 40px rgba(0,0,0,.35)}
+  .rfpcard .from{font-family:var(--mono);font-size:.65em;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--red);display:block;margin-bottom:1.5vh}
+  .rfpcard .forge{display:block;margin-top:1.5vh;padding-top:1.5vh;border-top:2px dashed rgba(214,0,60,.4);
+    font-weight:700}
+
+  .hint{position:fixed;bottom:3.2vh;left:50%;transform:translateX(-50%);z-index:40;
+    font-size:clamp(11px,1.1vw,13px);letter-spacing:.18em;text-transform:uppercase;
+    color:var(--grey);opacity:.8;pointer-events:none;transition:opacity .6s}
+  .hint.gone{opacity:0}
+  .navzone{position:fixed;top:0;bottom:0;width:14vw;z-index:30;cursor:pointer;background:none;border:none}
+  .navzone:focus-visible{outline:3px solid var(--red);outline-offset:-3px}
+  .navzone.prev{left:0}.navzone.next{right:0}
+
+  /* Print = export: Ctrl+P -> Save as PDF gives one slide per page */
+  @page{size:13.33in 7.5in;margin:0}
+  @media print{
+    html,body{height:auto;overflow:visible}
+    .bar,.brand,.tag,.counter,.hint,.navzone{display:none!important}
+    .deck{height:auto}
+    .slide{position:relative;inset:auto;opacity:1!important;visibility:visible!important;transform:none!important;
+      height:7.5in;width:13.33in;page-break-after:always;overflow:hidden;transition:none}
+  }
+  .code{font-family:var(--mono);font-size:clamp(12px,1.45vw,18px);line-height:1.55;background:var(--ink-soft);color:var(--paper);padding:2.2vh 1.8vw;border-left:6px solid var(--red);white-space:pre;overflow-x:auto;max-width:100%}  .paper .code{background:#241D25}  .code .cm{color:var(--grey)}</style>
+
+<!-- ============================================================
+     ADDITIVE styles only. The house block above is untouched —
+     copied byte-for-byte from the deck template. Do not edit it,
+     do not add colors to it. If your workshop needs a live demo
+     or a custom component, add it HERE, using the same tokens.
+     ============================================================ -->
+<style>
+  /* e.g. .demo{margin-top:1.5vh} ... delete this block if unused */
+</style>
+
+<div class="bar" id="bar"></div>
+<div class="brand" id="brand">i.c.stars<span class="pipe">|</span><span class="star">*</span><span class="mke">Milwaukee</span></div>
+<div class="tag">RFP Tech Learning · Week 8</div>
+<div class="counter" id="counter">1 / 14</div>
+<div class="hint" id="hint">→ arrow keys or tap sides</div>
+<button class="navzone prev" id="zPrev" aria-label="Previous slide"></button>
+<button class="navzone next" id="zNext" aria-label="Next slide"></button>
+
+<div class="deck" id="deck">
+
+<section class="slide ink active">
+  <div class="eyebrow">Workshop 04 · 60 minutes</div>
+  <h1>THE BUILD<br>STEP<span class="star">*</span></h1>
+  <p class="sub" style="margin-top:3vh">You will walk out with a React app running on your own
+  machine, three screens in it, and a straight answer to the question nobody ever answers:
+  <strong style="color:var(--paper)">why does this need installing at all?</strong></p>
+</section>
+
+<section class="slide paper">
+  <div class="eyebrow">Tonight</div>
+  <h2>Three stages</h2>
+  <ul class="big">
+    <li><span class="b">1</span><span><strong>Hello World.</strong> One tag. We watch what the computer turns it into.</span></li>
+    <li><span class="b">2</span><span><strong>Profile.</strong> The same idea, bigger. Boxes inside boxes.</span></li>
+    <li><span class="b">3</span><span><strong>Data.</strong> The numbers come from an API, and we draw them.</span></li>
+  </ul>
+  <p class="sub" style="margin-top:2.5vh">Then you install one yourself, from an empty folder.</p>
+</section>
+
+<section class="slide redbg">
+  <h2>JSX is not<br>JavaScript</h2>
+  <p class="sub" style="margin-top:3vh">No browser has ever understood it. Not one, not ever.</p>
+  <p class="sub" style="margin-top:2vh"><strong style="color:var(--paper)">So something has to rewrite
+  it first.</strong> That something is the build step, and it is the whole reason a React project
+  has a package.json.</p>
+</section>
+
+<section class="slide ink">
+  <div class="eyebrow">Four words</div>
+  <h2>Four words</h2>
+  <table>
+    <tr><th>Word</th><th>What it means</th></tr>
+    <tr><td><strong>JSX</strong></td><td>HTML-looking code written inside JavaScript. What you type.</td></tr>
+    <tr><td><strong>Component</strong></td><td>A box you drew round part of a page and gave a name.</td></tr>
+    <tr><td><strong>Props</strong></td><td>What you put in the box. Same box, different contents.</td></tr>
+    <tr><td><strong>Vite</strong></td><td>The tool that does the rewriting, every time you save.</td></tr>
+  </table>
+</section>
+
+<section class="slide ink">
+  <div class="eyebrow">Stage 1 · I do</div>
+  <h2>One tag in.<br>One function call out.</h2>
+  <div class="code"><span class="cm">src/pages/HelloPage.jsx — what I write:</span>
+export default function HelloPage() {
+  return &lt;h1&gt;Hello, world&lt;/h1&gt;;
+}
+
+<span class="cm">What the browser actually runs:</span>
+function HelloPage() {
+  return React.createElement("h1", null, "Hello, world");
+}</div>
+  <p class="sub" style="margin-top:2vh"><strong style="color:var(--paper)">I say:</strong> "That is the
+  entire job. A tag was always a function call wearing a costume. Vite takes the costume off on the
+  way to the browser - and that is the only thing it has done so far."</p>
+</section>
+
+<section class="slide paper">
+  <div class="eyebrow">Stage 1 · the same thing, Vite's way</div>
+  <h2>And with the<br>modern setting</h2>
+  <div class="code"><span class="cm">The same file, compiled the way Vite does it by default:</span>
+import { jsx as _jsx } from "react/jsx-runtime";
+function HelloPage() {
+  return _jsx("h1", { children: "Hello, world" });
+}</div>
+  <p class="sub" style="margin-top:2.5vh">Notice the <strong>import that you did not type.</strong>
+  That line is what people mean when they say the build step "adds things" - and it is why a modern
+  React file no longer starts with <span class="file">import React from "react"</span>.</p>
+</section>
+
+<section class="slide redbg">
+  <h2>I DO → WE DO<br>→ YOU DO</h2>
+  <p class="sub" style="margin-top:3vh">Watch stage 1. Then we open it together and change one
+  thing. Then you build stages 2 and 3 in your own folder.</p>
+</section>
+
+<section class="slide ink">
+  <div class="eyebrow">Stage 2 · components</div>
+  <h2>A component is<br>a box you named</h2>
+  <div class="code"><span class="cm">src/components/Stat.jsx — the whole file:</span>
+export default function Stat({ label, value }) {
+  return (
+    &lt;div className="stat"&gt;
+      &lt;b&gt;{value}&lt;/b&gt;
+      &lt;span&gt;{label}&lt;/span&gt;
+    &lt;/div&gt;
+  );
+}</div>
+  <p class="sub" style="margin-top:2vh"><strong style="color:var(--paper)">I say:</strong> "Nine lines.
+  It exists because the profile needed three of them -
+  <strong style="color:var(--paper)">repetition, not tidiness</strong>, is what earns a component its
+  own file."</p>
+</section>
+
+<section class="slide paper">
+  <div class="eyebrow">Stage 2 · props</div>
+  <h2>Props are what<br>you put in the box</h2>
+  <div class="code"><span class="cm">src/pages/ProfilePage.jsx — the page uses Stat three times:</span>
+&lt;Stat label="commits" value={48} /&gt;
+&lt;Stat label="PRs"     value={7}  /&gt;
+&lt;Stat label="weeks"   value={8}  /&gt;</div>
+  <p class="sub" style="margin-top:2.5vh">Same box, different contents. <strong>The component decides
+  how it looks. Whoever uses it decides what goes in it.</strong> That split is the first real habit
+  of this job.</p>
+  <p class="sub" style="margin-top:1.5vh">And a capital letter means <em>your</em> box.
+  <span class="file">&lt;Stat /&gt;</span> is yours; <span class="file">&lt;div /&gt;</span> is an HTML
+  tag. That is the whole rule.</p>
+</section>
+
+<section class="slide redbg">
+  <h2>An API is a window<br>you ask questions through</h2>
+  <p class="sub" style="margin-top:3vh">You pass a question in. It passes an answer back.
+  <strong style="color:var(--paper)">You never go inside.</strong></p>
+  <p class="sub" style="margin-top:2vh">Ours is one window at <span class="file">c21-data-gateway</span>.
+  You send it SQL; it sends back rows.</p>
+</section>
+
+<section class="slide ink">
+  <div class="eyebrow">Stage 3 · the question and the answer</div>
+  <h2>Ask, and look at<br>what comes back</h2>
+  <div class="code"><span class="cm">You send:</span>
+POST /api/query   { "team": "...", "sql": "SELECT ... GROUP BY ..." }
+
+<span class="cm">It sends back:</span>
+{
+  "columns": ["team", "open_tickets"],
+  "rows": [ ["Service Desk", 57], ["Network", 44], ["Cloud Platform", 41] ],
+  "rowCount": 6
+}</div>
+  <p class="sub" style="margin-top:2vh">Two parts matter. <strong style="color:var(--paper)">columns</strong>
+  says what each slot means. <strong style="color:var(--paper)">rows</strong> is the slots. That is
+  the whole format.</p>
+</section>
+
+<section class="slide paper">
+  <div class="eyebrow">Stage 3 · the graph</div>
+  <h2>A graph is just<br>those rows, drawn</h2>
+  <div class="code"><span class="cm">src/pages/DataPage.jsx — one Bar per row:</span>
+{reply.rows.map((row) =&gt; (
+  &lt;Bar key={row[0]} name={row[0]} value={row[1]} most={most} /&gt;
+))}</div>
+  <p class="sub" style="margin-top:2.5vh"><strong>No new information appears when you make a chart.</strong>
+  Six rows in, six bars out. If a number looks wrong on a graph, the graph is almost never where it
+  went wrong.</p>
+  <p class="sub" style="margin-top:1.5vh">One colour for every bar, on purpose: the <em>length</em>
+  already tells you which is biggest, so colour stays free for a different job.</p>
+</section>
+
+<section class="slide ink">
+  <div class="eyebrow">You do · the folders</div>
+  <h2>Where things live</h2>
+  <div class="code">src/
+  main.jsx            the plug. Puts &lt;App /&gt; on the page.
+  App.jsx             which screen you are looking at
+  pages/              a whole screen you could navigate to
+  components/         a part you use on more than one screen
+  api/                data and fetching. NOT a screen.
+  styles.css</div>
+  <p class="sub" style="margin-top:2vh"><strong style="color:var(--paper)">Two rules that matter:</strong>
+  one component, one file, named the same. And <span class="file">components/</span> draws while
+  <span class="file">api/</span> fetches - so you can fix a query without opening a single screen.</p>
+  <p class="sub" style="margin-top:1.5vh">Folder <em>names</em> are not law. Any layout where "where do
+  I change this?" has one obvious answer is a good one.</p>
+</section>
+
+<section class="slide redbg">
+  <div class="eyebrow">You do · until the end</div>
+  <h2>Install one,<br>from nothing</h2>
+  <div class="code">node -v                                      <span class="cm">v18 or newer, or nothing works</span>
+npm create vite@latest my-app -- --template react
+cd my-app &amp;&amp; npm install                     <span class="cm">node_modules appears. It is huge.</span>
+npm run dev                                  <span class="cm">localhost:5173, and it stays running</span></div>
+  <p class="sub" style="margin-top:2.5vh">Then change a word in <span class="file">src/App.jsx</span>
+  and save. <strong style="color:var(--paper)">You did not reload anything.</strong> That is the dev
+  server doing the rewrite again, in the time it took you to lift your finger.</p>
+  <p class="sub" style="margin-top:1.5vh">Stuck more than 15 minutes? Say so out loud. That is the
+  rule, not a last resort.</p>
+</section>
+
+</div>
+
+<script>
+/* ---------- deck navigation (house template — do not edit) ---------- */
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var bar=document.getElementById('bar'),counter=document.getElementById('counter'),
+      hint=document.getElementById('hint'),brand=document.getElementById('brand'),
+      tag=document.querySelector('.tag');
+  var i=0,n=slides.length,moved=false;
+  function paint(){
+    slides.forEach(function(s,k){s.classList.toggle('active',k===i)});
+    bar.style.width=((i+1)/n*100)+'%';
+    counter.textContent=(i+1)+' / '+n;
+    var dark=!slides[i].classList.contains('paper');
+    var fg=dark?'#FAF6F2':'#161217';
+    brand.style.color=fg; tag.style.color=dark?'#9A9095':'#5C5458';
+    counter.style.color=dark?'#9A9095':'#5C5458';
+    if(!moved&&i>0){moved=true;hint.classList.add('gone')}
+  }
+  function go(d){i=Math.min(n-1,Math.max(0,i+d));paint()}
+  document.addEventListener('keydown',function(e){
+    // Live demos have real buttons and number keys. Don't steal those.
+    // Scoped to .demo so the invisible navzone buttons still advance on space.
+    if(e.target.closest&&e.target.closest('.demo')&&(e.key===' '||e.key==='Enter'))return;
+    if(/^[1-4]$/.test(e.key)&&document.querySelector('.slide.active .demo-choices'))return;
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown')go(1);
+    if(e.key==='ArrowLeft'||e.key==='PageUp')go(-1);
+    if(e.key==='Home'){i=0;paint()} if(e.key==='End'){i=n-1;paint()}
+  });
+  document.getElementById('zNext').addEventListener('click',function(){go(1)});
+  document.getElementById('zPrev').addEventListener('click',function(){go(-1)});
+  var x0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>60)go(dx<0?1:-1);
+    x0=null;
+  },{passive:true});
+  paint();
+})();
+
+/* ---------- your live demos, if any, go below ----------
+   Real code, running in the deck, identical to what the students write.
+   Keep each demo's ids prefixed (d1*, d2*) so slides can't collide. */
+</script>
