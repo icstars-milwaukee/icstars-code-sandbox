@@ -149,17 +149,7 @@
 
     <p class="ics-sub bs-note">You send this:</p>
 
-<pre class="bs-code-block">POST https://c21-data-gateway.icstars-milwaukee.workers.dev/api/query
-
-{
-  "team": "your-team",
-  "sql":  "SELECT \"assignment group\" AS team, COUNT(*) AS open_tickets
-           FROM servicenow.incident
-           WHERE state NOT IN ('Resolved', 'Closed')
-           GROUP BY \"assignment group\"
-           ORDER BY open_tickets DESC
-           LIMIT 6"
-}</pre>
+<pre id="request" class="bs-code-block"></pre>
 
     <p class="ics-sub bs-note">
       And you get this back. <strong>Hover a row on the left to find its bar on the right</strong>
@@ -213,6 +203,15 @@
 │
 └── node_modules/           the downloaded code. Never opened, never committed.</pre>
 
+    <p class="ics-sub bs-note">
+      <strong>This workshop is built that way too.</strong> Not as an example in a
+      box &mdash; the page you are reading is ten files in those folders.
+      <a href="playground.html">Open the live editor</a> and the sidebar shows you
+      <code>js/api/</code>, <code>js/components/</code> and <code>js/lib/</code>,
+      one thing in each file. Open <code>js/components/Stat.js</code> and that is
+      the whole of <code>Stat</code>, fourteen lines including the comment.
+    </p>
+
     <ul class="bs-rules">
       <li><strong>One box, one file, same name.</strong> <code>Avatar.jsx</code> holds
         <code>Avatar</code>. When something looks wrong you know which file to open.</li>
@@ -249,9 +248,34 @@
 
   <!-- Plain scripts, not modules: a browser opening a file off disk refuses to
        load a LOCAL module, so `import` is not available to us here. -->
+  <!-- React, ReactDOM and Babel from a CDN. -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js" crossorigin></script>
+
+  <!-- This workshop is organised the way it tells you to organise: one thing
+       per file, components in components/, the API in api/, the rest in lib/.
+       Open the live editor and you will see these in the sidebar.
+
+       They are <script> tags rather than imports because this page has to run
+       when you double-click it, and a browser opening a file off your disk
+       refuses to load a local module. So the order below matters: each file
+       hangs its one thing on a shared ICS object, and a file can only use what
+       loaded before it.
+
+       In a real Vite project you would write
+           import Stat from "./components/Stat.jsx";
+       and never think about order again. That is one of the things the build
+       step buys you. -->
+  <script src="js/api/reply.js"></script>
+  <script src="js/lib/translate.js"></script>
+  <script src="js/lib/remember.js"></script>
+  <script src="js/components/Avatar.js"></script>
+  <script src="js/components/Stat.js"></script>
+  <script src="js/components/ProfileCard.js"></script>
+  <script src="js/components/Bar.js"></script>
+  <script src="js/components/Graph.js"></script>
+  <script src="js/stages.js"></script>
   <script src="js/main.js"></script>
 
 </body>
