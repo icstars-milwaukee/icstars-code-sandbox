@@ -38,195 +38,240 @@
             <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span> Milwaukee</div>
             <h1 class="ics-title">The Build Step</h1>
             <p class="ics-sub">
-              <strong>JSX is not JavaScript.</strong> No browser has ever understood it &mdash;
-              something has to translate it first, and that something is why a React project
-              needs <code>npm install</code>, a <code>package.json</code> and Vite.
-              You will build a profile card, watch the translation happen, take the card apart
-              into components, and then install a project of your own.
+              Three stages, and each one is the stage before it plus one new idea:
+              <strong>Hello World &rarr; Profile &rarr; Data.</strong>
+              By the end you will have written React, seen what the computer turns it into,
+              and drawn a graph from real API numbers.
             </p>
           </div>
         </header>
 
         <main class="ics-wrap">
 
-          <!-- ========== 1 · the app: type JSX, see it compile AND run ========== -->
-          <span class="ics-step">1 &middot; Watch the translation</span>
+          <!-- ================= THE EDITOR ================= -->
+          <span class="ics-step">The editor</span>
 
           <p class="ics-sub bs-note">
-            A profile card, in three components. <strong>Left is what you write. Middle is what
-            actually runs. Right is the card itself.</strong> Edit the left and the other two keep
-            up. This is the entire job of the build step &mdash; there is no magic under it.
+            Pick a stage. <strong>You write the left. The computer turns it into the middle.
+            The middle is what draws the right.</strong> Change the left and watch both follow.
           </p>
+
+          <div class="bs-stages">
+            <button class="bs-stagebtn" data-stage="hello" aria-pressed="true">1 &middot; Hello World</button>
+            <button class="bs-stagebtn" data-stage="profile" aria-pressed="false">2 &middot; Profile</button>
+            <button class="bs-stagebtn" data-stage="data" aria-pressed="false">3 &middot; Data</button>
+          </div>
 
           <div class="bs-three">
             <div class="bs-pane">
-              <label class="bs-label" for="jsx">You write this &mdash; JSX</label>
-              <textarea id="jsx" class="ics-input" spellcheck="false" rows="22"></textarea>
+              <label class="bs-label" for="jsx">1 &middot; You write this</label>
+              <textarea id="jsx" class="ics-input" spellcheck="false" rows="20"></textarea>
             </div>
-
             <div class="bs-pane">
-              <label class="bs-label" for="out">The browser runs this &mdash; JavaScript</label>
+              <label class="bs-label" for="out">2 &middot; The computer makes this</label>
               <pre id="out" class="bs-out" aria-live="polite"></pre>
             </div>
-
             <div class="bs-pane">
-              <label class="bs-label">And this is on the page</label>
+              <label class="bs-label">3 &middot; And you see this</label>
               <div id="stage" class="bs-stage"></div>
               <p id="stageMsg" class="bs-stagemsg" aria-live="polite"></p>
             </div>
           </div>
 
           <div class="ics-row bs-row">
-            <button class="ics-btn" id="reset" type="button">Reset the card</button>
             <label class="bs-check">
               <input type="checkbox" id="modern">
-              <span>Use the modern runtime (what Vite actually does)</span>
+              <span>Show the modern version (what Vite really does)</span>
             </label>
           </div>
 
-          <p class="ics-sub bs-note" id="explain"></p>
+          <!-- ================= ACT 1 ================= -->
+          <span class="ics-step">Stage 1 &middot; Hello World</span>
 
           <p class="ics-sub bs-note">
-            <strong>The <code>person</code> object is handed in for you</strong> &mdash; name, role,
-            team, stats. You are writing the shape, not the data. That split is the first real
-            habit of this job: a component says <em>how it looks</em>, and whoever uses it says
-            <em>what goes in it</em>.
+            Click <strong>1 &middot; Hello World</strong> above. Two lines. Look at all three columns.
           </p>
 
-          <!-- ========== 2 · components and the folder that holds them ========== -->
-          <span class="ics-step">2 &middot; One page, four components</span>
+          <ol class="bs-beats">
+            <li><strong>You wrote a tag.</strong> <code>&lt;h1&gt;Hello, world&lt;/h1&gt;</code> looks like
+              HTML, but it is sitting inside JavaScript. Mixing the two like this is called
+              <strong>JSX</strong>.</li>
+
+            <li><strong>No browser understands JSX.</strong> Not one, not ever. So something has to
+              rewrite it first.</li>
+
+            <li><strong>Look at the middle column.</strong> Your tag became
+              <code>React.createElement("h1", null, "Hello, world")</code> &mdash; an ordinary function
+              call. That is all a tag ever was.</li>
+
+            <li><strong>That rewrite is the build step.</strong> It is the whole reason a React project
+              needs installing. <strong>Vite</strong> is the tool that does it for you, every time you
+              save.</li>
+          </ol>
 
           <p class="ics-sub bs-note">
-            Here is the same card, finished. <strong>Hover a row on the left to find it on the
-            card.</strong> Every one of those boxes is a component, and every component is one
-            file.
+            Try it: delete the <code>&lt;/h1&gt;</code>. The middle column turns into an error message
+            with a line number, and nothing draws. That is the build step telling you it cannot finish.
+          </p>
+
+          <!-- ================= ACT 2 ================= -->
+          <span class="ics-step">Stage 2 &middot; Profile</span>
+
+          <p class="ics-sub bs-note">
+            Click <strong>2 &middot; Profile</strong>. Same idea, bigger: a profile card.
+          </p>
+
+          <ol class="bs-beats">
+            <li><strong>A component is a box you named.</strong> That is all. You drew a box round
+              part of the page, gave it a name, and now you can use it again.</li>
+
+            <li><strong>Boxes go inside boxes.</strong> The card holds an <code>Avatar</code> and three
+              <code>Stat</code>s. <code>Stat</code> exists because the card needed three of them &mdash;
+              that is the only good reason to make one.</li>
+
+            <li><strong>Props are what you put in the box.</strong>
+              <code>&lt;Stat label="commits" value={48} /&gt;</code> &mdash; same box, different contents.
+              The box decides how it looks; whoever uses it decides what goes in.</li>
+
+            <li><strong>A capital letter means your box.</strong> <code>&lt;Avatar /&gt;</code> is yours.
+              <code>&lt;div /&gt;</code> is an HTML tag. That is the entire rule.</li>
+          </ol>
+
+          <p class="ics-sub bs-note">
+            Here is the finished card. <strong>Hover a row to find that box on the card.</strong>
           </p>
 
           <div class="bs-break">
+            <div><ul class="bs-tree" id="tree"></ul></div>
+            <div class="bs-demowrap"><div id="demo" class="bs-stage bs-stage-tall"></div></div>
+          </div>
+
+          <!-- ================= ACT 3 ================= -->
+          <span class="ics-step">Stage 3 &middot; Data</span>
+
+          <p class="ics-sub bs-note">
+            The profile card had its numbers typed into it. Real numbers do not work like that &mdash;
+            they live somewhere else, and you have to go and ask.
+          </p>
+
+          <ol class="bs-beats">
+            <li><strong>An API is a window you ask questions through.</strong> You pass a question in.
+              It passes an answer back. You never go inside.</li>
+
+            <li><strong>Our API is one window</strong> at
+              <code>c21-data-gateway</code>. You send it a question written in SQL and it sends back
+              the rows. That is the whole arrangement.</li>
+
+            <li><strong>The answer comes back as JSON</strong> &mdash; a way of writing down data so a
+              program can read it. Two parts matter: <code>columns</code> (what each slot means) and
+              <code>rows</code> (the slots).</li>
+
+            <li><strong>A graph is just those rows, drawn.</strong> No new data appears when you make a
+              chart. Every bar is one row.</li>
+          </ol>
+
+          <p class="ics-sub bs-note">You send this:</p>
+
+      <pre class="bs-code-block">POST https://c21-data-gateway.icstars-milwaukee.workers.dev/api/query
+
+      {
+        "team": "your-team",
+        "sql":  "SELECT \"assignment group\" AS team, COUNT(*) AS open_tickets
+                 FROM servicenow.incident
+                 WHERE state NOT IN ('Resolved', 'Closed')
+                 GROUP BY \"assignment group\"
+                 ORDER BY open_tickets DESC
+                 LIMIT 6"
+      }</pre>
+
+          <p class="ics-sub bs-note">
+            And you get this back. <strong>Hover a row on the left to find its bar on the right</strong>
+            &mdash; they are the same six numbers, written down twice.
+          </p>
+
+          <div class="bs-data">
             <div>
-              <ul class="bs-tree" id="tree"></ul>
+              <label class="bs-label">The answer &mdash; JSON</label>
+              <pre id="reply" class="bs-out bs-out-short"></pre>
+              <label class="bs-label" style="margin-top:12px">Its six rows</label>
+              <ul class="g-chips" id="rowlist"></ul>
             </div>
-            <div class="bs-demowrap">
-              <div id="demo" class="bs-stage bs-stage-tall"></div>
+            <div>
+              <label class="bs-label">The same rows, drawn</label>
+              <div class="g-card" id="graph"></div>
+              <p class="ics-sub bs-note" style="margin-top:10px">
+                One colour for every bar, because the <em>length</em> already tells you which is
+                biggest. Colour is saved for a different job.
+              </p>
             </div>
           </div>
 
           <p class="ics-sub bs-note">
-            A component is not a technique. <strong>It is a box you drew round part of a page and
-            gave a name</strong> &mdash; so you can move it, use it twice, and find it again in
-            six weeks. <code>Stat</code> exists because the card needed three of them; that is the
-            only reason any component should exist.
+            Now click <strong>3 &middot; Data</strong> in the editor. That is this graph, built in
+            React, in about fifteen lines. The reply is handed to it as <code>api</code>.
           </p>
 
-          <!-- ========== 3 · folder structure ========== -->
-          <span class="ics-step">3 &middot; Where the files go</span>
+          <!-- ================= WHERE FILES GO ================= -->
+          <span class="ics-step">Where the files go</span>
 
           <p class="ics-sub bs-note">
-            This is a Vite React project with those components in it. Nothing here is
-            convention-for-its-own-sake &mdash; each folder answers one question.
+            A real Vite React project, with those boxes in it. Each folder answers one question.
           </p>
 
-      <pre class="bs-tree-code">my-app/
-      ├── index.html              the ONE page the browser loads. React fills the div in it.
+      <pre class="bs-code-block">my-app/
+      ├── index.html              the ONE page the browser loads
       ├── package.json            the shopping list: what to install, what to run
-      ├── vite.config.js          tells Vite to expect React
       │
-      ├── src/                    everything you write lives here
-      │   ├── main.jsx            the plug: finds that div, renders &lt;App /&gt; into it
-      │   ├── App.jsx             the top of YOUR app. Decides what pages exist.
+      ├── src/                    everything YOU write lives here
+      │   ├── main.jsx            the plug: puts &lt;App /&gt; on the page
+      │   ├── App.jsx             the top of your app
       │   │
-      │   ├── components/         the boxes. One component, one file, named for itself.
-      │   │   ├── Profile.jsx
+      │   ├── components/         your boxes. One box, one file, named the same.
       │   │   ├── Avatar.jsx
       │   │   ├── Stat.jsx
-      │   │   └── Badge.jsx
+      │   │   └── Bar.jsx
       │   │
-      │   ├── lib/                code that is NOT a screen: fetching, maths, dates
-      │   │   └── api.js
-      │   │
-      │   └── styles.css          colours and spacing
+      │   └── lib/                code that is NOT a box: asking the API, maths
+      │       └── api.js
       │
-      └── node_modules/           the groceries. Never opened, never committed.</pre>
-
-          <p class="ics-sub bs-note">
-            <strong>The two rules that matter</strong> and the one that does not:
-          </p>
+      └── node_modules/           the downloaded code. Never opened, never committed.</pre>
 
           <ul class="bs-rules">
-            <li><strong>One component, one file, named the same as the component.</strong>
-              <code>Avatar.jsx</code> exports <code>Avatar</code>. When a number on screen is
-              wrong, you know which file to open without searching.</li>
-            <li><strong><code>components/</code> draws screens. <code>lib/</code> does not.</strong>
-              Fetching, formatting and maths go in <code>lib/</code>. Keeping them apart is what
-              lets you fix a query without touching a single component.</li>
-            <li class="bs-rules-no"><strong>Folder names are not law.</strong> Some teams use
-              <code>ui/</code>, some nest by feature. Any arrangement where "where do I change
-              this?" has one obvious answer is a good one. Pick it on day one and keep it.</li>
+            <li><strong>One box, one file, same name.</strong> <code>Avatar.jsx</code> holds
+              <code>Avatar</code>. When something looks wrong you know which file to open.</li>
+            <li><strong><code>components/</code> draws. <code>lib/</code> fetches.</strong> Asking the
+              API goes in <code>lib/</code>. That split is what lets you fix a question without
+              touching a single box.</li>
+            <li class="bs-rules-no"><strong>Folder names are not law.</strong> Any layout where
+              "where do I change this?" has one obvious answer is a good one. Pick it and keep it.</li>
           </ul>
 
-          <!-- ========== 4 · what the project files are for ========== -->
-          <span class="ics-step">4 &middot; What <code>npm install</code> is for</span>
-
-          <table class="ics-table bs-anatomy">
-            <thead>
-              <tr><th>The thing</th><th>Its one job</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><code>package.json</code></td>
-                <td><strong>The shopping list.</strong> Names every package your project needs, and
-                the commands you can run. Checked into Git; small; you read it.</td>
-              </tr>
-              <tr>
-                <td><code>package-lock.json</code></td>
-                <td><strong>The receipt.</strong> The exact version of every package, including the
-                packages your packages wanted. Checked in so your laptop and CodeSandbox install
-                the identical thing. Never edited by hand.</td>
-              </tr>
-              <tr>
-                <td><code>node_modules/</code></td>
-                <td><strong>The groceries.</strong> The actual downloaded code &mdash; thousands of
-                files, tens of megabytes. <strong>Never</strong> committed, because
-                <code>npm install</code> recreates it from the two files above.</td>
-              </tr>
-              <tr>
-                <td><code>vite.config.js</code></td>
-                <td><strong>The kitchen.</strong> Tells Vite to expect React, so it runs that JSX
-                translation on every file as you save it.</td>
-              </tr>
-              <tr>
-                <td><code>dependencies</code><br><code>devDependencies</code></td>
-                <td><strong>Ships vs. builds.</strong> <code>react</code> is a dependency &mdash; it
-                runs in the user's browser. <code>vite</code> is a devDependency &mdash; it builds
-                the thing and is never sent to anyone. Backwards ships a toolchain to your users.</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <!-- ========== 5 · install one ========== -->
-          <span class="ics-step">5 &middot; Install one yourself</span>
+          <!-- ================= INSTALL ================= -->
+          <span class="ics-step">Install one yourself</span>
 
           <p class="ics-sub bs-note">
-            Six commands. Tick them as you go &mdash; this page remembers. Every one has a
-            <strong>done when</strong>, so you never have to wonder whether it worked.
+            Six commands. Tick them as you go &mdash; this page remembers. Each one has a
+            <strong>done when</strong>, so you never have to guess whether it worked.
           </p>
 
           <ol class="bs-steps" id="steps"></ol>
 
           <p class="ics-footer">
-            Translation by <a href="https://babeljs.io/docs/babel-standalone">@babel/standalone</a>,
-            from a CDN &mdash; the same translation Vite runs, just in your browser instead of on
-            save. The whole app is <code>js/main.js</code>, which ends with a
-            <strong>BREAK IT ON PURPOSE</strong> list of nine things, every one of them tried first.
-            <br>Next: <a href="../03-honest-dashboard/index.html">03 &mdash; The Honest Dashboard</a>
-            is a bigger React app, built the same way, that you can take apart.
+            The translating is done by
+            <a href="https://babeljs.io/docs/babel-standalone">@babel/standalone</a> from a CDN &mdash;
+            the same translation Vite runs, just in your browser instead of on save.
+            The whole app is <code>js/main.js</code>, which ends with a
+            <strong>BREAK IT ON PURPOSE</strong> list, every entry tried first.
+            <br>The numbers in stage 3 are the real API's exact shape with made-up teams and counts.
+            To query it for real, with your team password:
+            <a href="../02-molson-data/index.html">02 &mdash; Molson Data</a>.
+            <br>Then: <a href="../03-honest-dashboard/index.html">03 &mdash; The Honest Dashboard</a>.
             <br>Open this one in the <a href="playground.html">live editor</a>.
           </p>
         </main>
 
-        <!-- React, ReactDOM and Babel as plain scripts, not modules: a browser on a
-             file:// path refuses to load a LOCAL module, so `import` is not available
-             to us here. These three give us the globals the app uses. -->
+        <!-- Plain scripts, not modules: a browser opening a file off disk refuses to
+             load a LOCAL module, so `import` is not available to us here. -->
         <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin><\/script>
         <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin><\/script>
         <script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js" crossorigin><\/script>
@@ -241,10 +286,24 @@
 
       .bs-note { color: var(--grey-dark); margin-top: 10px; max-width: 80ch; }
 
-      /* ---- 1 · the three panes: write it, run it, see it ---- */
+      /* ---- the three stage buttons ---- */
+      .bs-stages { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
+      .bs-stagebtn {
+        font: inherit; font-size: 14.5px; font-weight: 700;
+        padding: .5em 1.1em; cursor: pointer;
+        background: none; color: var(--grey-dark);
+        border: 1px solid #D8CFC8; border-radius: 999px;
+      }
+      .bs-stagebtn:hover { color: var(--ink); border-color: var(--grey-dark); }
+      .bs-stagebtn[aria-pressed="true"] {
+        background: var(--red); border-color: var(--red); color: #fff;
+      }
+      .bs-stagebtn:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+      /* ---- the three columns: write it, see it translated, see it drawn ---- */
       .bs-three {
         display: grid; gap: 14px; margin-top: 14px;
-        grid-template-columns: 1.1fr 1fr .85fr;
+        grid-template-columns: 1.05fr 1fr .9fr;
       }
       @media (max-width: 1100px) { .bs-three { grid-template-columns: 1fr 1fr; } }
       @media (max-width: 760px)  { .bs-three { grid-template-columns: 1fr; } }
@@ -255,116 +314,124 @@
         color: var(--red); font-weight: 700; margin-bottom: 6px;
       }
 
-      #jsx {
-        font-family: var(--mono); font-size: .84rem; line-height: 1.5;
-        resize: vertical; min-height: 24rem;
-      }
+      #jsx { font-family: var(--mono); font-size: .84rem; line-height: 1.5; resize: vertical; min-height: 22rem; }
 
       .bs-out {
-        margin: 0; padding: .9em 1em; min-height: 24rem; overflow: auto;
-        font-family: var(--mono); font-size: .8rem; line-height: 1.5;
+        margin: 0; padding: .9em 1em; min-height: 22rem; overflow: auto;
+        font-family: var(--mono); font-size: .79rem; line-height: 1.5;
         background: var(--ink); color: var(--paper);
         border-radius: 6px; white-space: pre-wrap; word-break: break-word;
       }
+      .bs-out-short { min-height: 14rem; font-size: .76rem; }
       .bs-out.bs-error { color: #FF9CB4; }
 
-      /* the live render target */
       .bs-stage {
-        border: 1px dashed #CFC6BE; border-radius: 8px;
-        padding: 16px; min-height: 12rem; display: grid; place-items: start center;
-        background: #FFFDFB;
+        border: 1px dashed #CFC6BE; border-radius: 8px; padding: 16px;
+        min-height: 11rem; display: grid; place-items: start center; background: #FFFDFB;
       }
-      .bs-stage-tall { min-height: 20rem; place-items: center; }
+      .bs-stage-tall { min-height: 18rem; place-items: center; }
       .bs-stagemsg { font-size: 12.5px; margin-top: 8px; color: var(--grey-dark); }
       .bs-stagemsg.bs-good { color: #1C6B3A; }
       .bs-stagemsg.bs-bad  { color: var(--red); }
 
-      .bs-row { margin-top: 12px; align-items: center; gap: 1.2em; }
-      .bs-check {
-        display: inline-flex; align-items: center; gap: .55em;
-        font-size: 14px; color: var(--grey-dark); cursor: pointer;
-      }
+      .bs-row { margin-top: 12px; align-items: center; }
+      .bs-check { display: inline-flex; align-items: center; gap: .55em; font-size: 14px; color: var(--grey-dark); cursor: pointer; }
       .bs-check input { width: 1.1em; height: 1.1em; cursor: pointer; }
 
-      /* ---- THE PROFILE CARD itself ----
-         Plain CSS, deliberately simple: the lesson is the components, not the look. */
+      /* ---- the numbered beats in each act ---- */
+      .bs-beats { margin: 12px 0 0; padding-left: 1.4em; max-width: 82ch; }
+      .bs-beats li { margin-bottom: .75em; font-size: 15px; color: var(--grey-dark); line-height: 1.6; }
+      .bs-beats li strong { color: var(--ink); }
+
+      /* ---- code blocks shown for reading, not editing ---- */
+      .bs-code-block {
+        margin: 14px 0 0; padding: 1.1em 1.2em; overflow-x: auto;
+        background: var(--ink); color: var(--paper); border-radius: 8px;
+        font-family: var(--mono); font-size: .79rem; line-height: 1.6;
+      }
+
+      /* ---- THE PROFILE CARD ---- */
       .pf-card {
-        width: 100%; max-width: 20rem;
-        background: var(--paper); border: 1px solid #E3DCD6; border-radius: 10px;
-        padding: 16px; display: flex; flex-direction: column; gap: 14px;
+        width: 100%; max-width: 19rem; background: var(--paper);
+        border: 1px solid #E3DCD6; border-radius: 10px; padding: 16px;
+        display: flex; flex-direction: column; gap: 14px;
       }
       .pf-head { display: flex; gap: 12px; align-items: center; }
       .pf-avatar {
         flex: none; width: 46px; height: 46px; border-radius: 50%;
-        background: var(--red); color: #fff;
-        display: grid; place-items: center;
-        font-weight: 800; font-size: 16px; letter-spacing: .02em;
+        background: var(--red); color: #fff; display: grid; place-items: center;
+        font-weight: 800; font-size: 16px;
       }
       .pf-name { margin: 0; font-size: 16px; font-weight: 700; }
       .pf-role { margin: 2px 0 0; font-size: 13px; color: var(--grey-dark); }
-
       .pf-stats { display: flex; gap: 8px; }
-      .pf-stat {
-        flex: 1; border: 1px solid #EDE6E0; border-radius: 8px;
-        padding: 8px 6px; text-align: center;
-      }
+      .pf-stat { flex: 1; border: 1px solid #EDE6E0; border-radius: 8px; padding: 8px 6px; text-align: center; }
       .pf-stat b { display: block; font-size: 17px; font-weight: 700; }
       .pf-stat span { font-size: 11.5px; color: var(--grey-dark); }
 
-      .pf-badges { display: flex; flex-wrap: wrap; gap: 6px; }
-      .pf-badge {
-        font-size: 11.5px; padding: 3px 9px; border-radius: 999px;
-        border: 1px solid #E3DCD6; color: var(--grey-dark);
-      }
-
-      /* hover a row in the tree and the matching box lights up */
       .pf-lit {
         outline: 2px solid var(--red); outline-offset: 2px;
         border-radius: 6px; background: rgba(214, 0, 60, .06);
       }
 
-      /* ---- 2 · the component breakdown ---- */
-      .bs-break {
-        display: grid; grid-template-columns: 1.25fr 1fr; gap: 20px;
-        margin-top: 14px; align-items: start;
-      }
+      /* ---- the component breakdown ---- */
+      .bs-break { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; margin-top: 14px; align-items: start; }
       @media (max-width: 860px) { .bs-break { grid-template-columns: 1fr; } }
       .bs-demowrap { position: sticky; top: 16px; }
 
       .bs-tree { list-style: none; margin: 0; padding: 0; }
       .bs-part {
         border: 1px solid #E3DCD6; border-left: 3px solid #E3DCD6; border-radius: 8px;
-        padding: .75em .9em; margin-bottom: 8px; cursor: default;
+        padding: .75em .9em; margin-bottom: 8px;
         display: flex; flex-direction: column; gap: .3em;
       }
       .bs-part:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
       .bs-part code { font-family: var(--mono); font-size: .9rem; font-weight: 700; }
       .bs-file { font-family: var(--mono); font-size: .76rem; color: var(--red); }
-      .bs-job  { font-size: 13.5px; color: var(--grey-dark); }
+      .bs-job { font-size: 13.5px; color: var(--grey-dark); }
       .bs-part-on { border-left-color: var(--red); background: #FFF7F9; }
 
-      /* ---- 3 · the folder tree ---- */
-      .bs-tree-code {
-        margin: 14px 0 0; padding: 1.1em 1.2em; overflow-x: auto;
-        background: var(--ink); color: var(--paper); border-radius: 8px;
-        font-family: var(--mono); font-size: .8rem; line-height: 1.65;
-      }
+      /* ---- stage 3: the reply beside the graph ---- */
+      .bs-data { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 14px; align-items: start; }
+      @media (max-width: 860px) { .bs-data { grid-template-columns: 1fr; } }
 
-      .bs-rules { margin: 10px 0 0; padding-left: 1.3em; max-width: 80ch; }
+      .g-card {
+        background: var(--paper); border: 1px solid #E3DCD6; border-radius: 10px;
+        padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; width: 100%;
+      }
+      .g-row { display: grid; grid-template-columns: 7.5rem 1fr 2.2rem; gap: 10px; align-items: center; }
+      .g-name { font-size: 13px; color: var(--grey-dark); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .g-track { background: #F1EAE4; border-radius: 4px; height: 16px; overflow: hidden; }
+      /* One colour for every bar: the LENGTH says which is biggest, so colour is
+         free for a different job. 4px rounded at the data end, square at the start. */
+      .g-bar { display: block; height: 100%; background: #2a78d6; border-radius: 0 4px 4px 0; }
+      .g-value { font-size: 13px; text-align: right; font-variant-numeric: tabular-nums; }
+      .g-foot { margin: 6px 0 0; font-size: 11.5px; color: var(--grey-dark); }
+
+      .g-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+      .g-chip {
+        border: 1px solid #E3DCD6; border-left: 3px solid #E3DCD6; border-radius: 6px;
+        padding: .35em .7em; font-size: .78rem;
+      }
+      .g-chip code { font-family: var(--mono); font-size: inherit; }
+      .g-chip:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+      /* hovering either side lights up both */
+      .g-lit { background: #FFF7F9; }
+      .g-chip.g-lit { border-left-color: var(--red); }
+      .g-row.g-lit .g-track { background: #F7DCE4; }
+      .g-row.g-lit .g-name, .g-row.g-lit .g-value { color: var(--ink); font-weight: 600; }
+
+      /* ---- the folder rules ---- */
+      .bs-rules { margin: 12px 0 0; padding-left: 1.3em; max-width: 82ch; }
       .bs-rules li { margin-bottom: .6em; font-size: 14.5px; color: var(--grey-dark); }
       .bs-rules li strong { color: var(--ink); }
       .bs-rules-no { opacity: .85; }
 
-      /* ---- 4 · the anatomy table ---- */
-      .bs-anatomy { margin-top: 14px; }
-      .bs-anatomy td:first-child { white-space: nowrap; vertical-align: top; }
-
-      /* ---- 5 · the install checklist ---- */
+      /* ---- the install checklist ---- */
       .bs-steps { list-style: none; margin: 16px 0 0; padding: 0; }
       .bs-step { border: 1px solid #E3DCD6; border-radius: 8px; margin-bottom: 10px; }
-      .bs-step label {
-        display: flex; gap: .9em; padding: .9em 1em; cursor: pointer; align-items: flex-start;
-      }
+      .bs-step label { display: flex; gap: .9em; padding: .9em 1em; cursor: pointer; align-items: flex-start; }
       .bs-step input { flex: none; width: 1.25em; height: 1.25em; margin-top: .2em; cursor: pointer; }
       .bs-step label > span { display: flex; flex-direction: column; gap: .35em; min-width: 0; }
       .bs-cmd { font-family: var(--mono); font-size: .88rem; word-break: break-all; }
@@ -375,43 +442,58 @@
     </script>
     <script type="text/plain" data-pg-file="js/main.js">
       /* ============================================================
-         THE BUILD STEP
+         THE BUILD STEP   —   Hello World  ->  Profile  ->  Data
 
-         Four jobs in this file:
-           1. translate JSX to JavaScript as you type, and RUN the result, so the
-              build step stops being a rumour and becomes a thing you watched happen
-           2. show the same page broken into components, with the folder that holds
-              them, and let you hover one to find it on screen
-           3. (in index.html) what each project file is for
-           4. remember which install steps you have ticked
+         One editor, three stages. Each stage is the one before it, plus one new
+         idea. Nothing in this file is clever.
 
-         React, ReactDOM and Babel are plain globals from CDN script tags. Babel is
-         the same translator Vite runs - Vite just runs it on save, inside a dev
-         server, instead of in your browser.
+         React, ReactDOM and Babel are plain globals from CDN <script> tags. Babel is
+         the translator. Vite runs the same translator for you on every save - that is
+         the whole thing this workshop is about.
          ============================================================ */
 
-      /* ============================================================
-         PART 1 - THE PROFILE CARD
+      /* ---- the data the stages are handed ---------------------------------------
 
-         The example is a profile page on purpose. It is the smallest real thing that
-         needs more than one component, and you already know what it should look
-         like, so when it renders wrong you can see that it is wrong.
-         ============================================================ */
+         PERSON is for the profile card.
+
+         API is a real reply from the Cycle 21 data API, with the team names and
+         numbers swapped for made-up ones. The SHAPE is exactly what you get back:
+         a list of column names, and a list of rows. Nothing else.                  */
 
       const PERSON = {
         initials: "JR",
         name: "Jordan Rivera",
         role: "Tech Apprentice",
-        team: "ibis",
         stats: [
           { label: "commits", value: 48 },
-          { label: "PRs merged", value: 7 },
-          { label: "weeks in", value: 8 },
+          { label: "PRs", value: 7 },
+          { label: "weeks", value: 8 },
         ],
-        badges: ["SQL", "React", "Git"],
       };
 
-      const EXAMPLE = `function Avatar({ initials }) {
+      const API = {
+        ok: true,
+        columns: ["team", "open_tickets"],
+        rows: [
+          ["Service Desk", 57],
+          ["Network", 44],
+          ["Cloud Platform", 41],
+          ["Field Support", 23],
+          ["Apps", 18],
+          ["Security", 9],
+        ],
+        rowCount: 6,
+        durationMs: 2651,
+      };
+
+      /* ---- the three stages ----------------------------------------------------- */
+
+      const STAGES = {
+        hello: `function App() {
+        return <h1>Hello, world</h1>;
+      }`,
+
+        profile: `function Avatar({ initials }) {
         return <div className="pf-avatar">{initials}</div>;
       }
 
@@ -424,14 +506,14 @@
         );
       }
 
-      function Profile({ person }) {
+      function App() {
         return (
           <article className="pf-card">
             <header className="pf-head">
               <Avatar initials={person.initials} />
               <div>
                 <h3 className="pf-name">{person.name}</h3>
-                <p className="pf-role">{person.role} · team {person.team}</p>
+                <p className="pf-role">{person.role}</p>
               </div>
             </header>
 
@@ -442,306 +524,320 @@
             </div>
           </article>
         );
-      }`;
+      }`,
 
-      const jsxBox  = document.getElementById("jsx");
-      const outBox  = document.getElementById("out");
-      const modern  = document.getElementById("modern");
-      const explain = document.getElementById("explain");
-      const stage   = document.getElementById("stage");
+        data: `function Bar({ name, value, most }) {
+        return (
+          <div className="g-row">
+            <span className="g-name">{name}</span>
+            <span className="g-track">
+              <span className="g-bar" style={{ width: (value / most) * 100 + "%" }} />
+            </span>
+            <b className="g-value">{value}</b>
+          </div>
+        );
+      }
+
+      function App() {
+        const most = Math.max(...api.rows.map((r) => r[1]));
+
+        return (
+          <div className="g-card">
+            <h3 className="pf-name">Open tickets by team</h3>
+
+            {api.rows.map((row) => (
+              <Bar key={row[0]} name={row[0]} value={row[1]} most={most} />
+            ))}
+
+            <p className="g-foot">{api.rowCount} teams · from the API</p>
+          </div>
+        );
+      }`,
+      };
+
+      /* ---- the editor ----------------------------------------------------------- */
+
+      const jsxBox   = document.getElementById("jsx");
+      const outBox   = document.getElementById("out");
+      const stage    = document.getElementById("stage");
       const stageMsg = document.getElementById("stageMsg");
+      const modern   = document.getElementById("modern");
 
-      /* ---- translate, then run ---------------------------------------------------
+      let root = null;
 
-         Two steps, and they are worth keeping separate in your head:
-
-           compile   JSX text        -> JavaScript text      (Babel. This is Vite's job.)
-           run       JavaScript text -> something on screen  (the browser. Always was.)
-
-         A build step only ever does the first one. */
-
-      let stageRoot = null;
-
+      // Step one: JSX text in, JavaScript text out. This is Babel. This is Vite's job.
       function compile(source, runtime) {
         return Babel.transform(source, {
-          presets: [["react", { runtime }]],
-          // Keep it readable. A real build minifies this to one line, which is right
-          // for shipping and useless for learning.
+          presets: [["react", { runtime: runtime || "classic" }]],
           compact: false,
-          retainLines: false,
         }).code;
       }
 
-      function render(code) {
-        // The compiled code defines components but does not render anything, so we
-        // hand it React and ask for `Profile` back. `person` is handed in too, so
-        // the example does not need to carry data.
-        const factory = new Function("React", "person", code + "\n return typeof Profile !== 'undefined' ? Profile : null;");
-        const Profile = factory(React, PERSON);
-        if (!Profile) throw new Error("No component called Profile - did you rename it?");
-
-        if (!stageRoot) stageRoot = ReactDOM.createRoot(stage);
-        stageRoot.render(React.createElement(Profile, { person: PERSON }));
+      // Step two: run that JavaScript. This is the browser, and always was.
+      function run(code) {
+        const make = new Function("React", "person", "api",
+          code + "\n return typeof App !== 'undefined' ? App : null;");
+        const App = make(React, PERSON, API);
+        if (!App) throw new Error("No component called App - did you rename it?");
+        if (!root) root = ReactDOM.createRoot(stage);
+        root.render(React.createElement(App));
       }
 
       function update() {
         const runtime = modern.checked ? "automatic" : "classic";
-        let code;
 
-        // Compile. A JSX mistake stops here, and the message is the useful part.
+        let code;
         try {
           code = compile(jsxBox.value, runtime);
           outBox.textContent = code;
           outBox.classList.remove("bs-error");
         } catch (err) {
+          // A JSX mistake stops here. The message is the useful part - it has the
+          // line and the column in it.
           outBox.textContent = String(err.message);
           outBox.classList.add("bs-error");
-          stageMsg.textContent = "Not rendering - the JSX did not compile. Read the message above: Babel gives you the line and the column.";
+          stageMsg.textContent = "Nothing drawn - the JSX did not translate. Read the message in the middle.";
           stageMsg.className = "bs-stagemsg bs-bad";
           return;
         }
 
-        // Run. The automatic runtime emits an `import`, which a `new Function` cannot
-        // execute - so the preview uses the classic output while you read either one.
         try {
-          render(runtime === "automatic" ? compile(jsxBox.value, "classic") : code);
-          stageMsg.textContent = runtime === "automatic"
-            ? "Rendered. (The preview runs the classic output - the import in the modern version needs a bundler, which is exactly what Vite is for.)"
-            : "Rendered. That card is the JavaScript on the right, running.";
+          // The modern runtime writes an `import`, and a browser cannot run an import
+          // on its own - that is what a bundler is for. So the picture uses the
+          // classic output while you read either one.
+          run(runtime === "automatic" ? compile(jsxBox.value, "classic") : code);
+          stageMsg.textContent = "Drawn. That picture is the middle column, running.";
           stageMsg.className = "bs-stagemsg bs-good";
         } catch (err) {
-          stageMsg.textContent = "Compiled, but would not run: " + err.message;
+          stageMsg.textContent = "Translated, but would not run: " + err.message;
           stageMsg.className = "bs-stagemsg bs-bad";
         }
-
-        explain.innerHTML = modern.checked
-          ? "<strong>Automatic runtime.</strong> Every tag became <code>_jsx(...)</code> and Babel added "
-            + "the import for it at the top. This is what Vite does by default, and it is why you no "
-            + "longer write <code>import React from \"react\"</code> in every file."
-          : "<strong>Classic runtime.</strong> Every tag became <code>React.createElement(...)</code> - a "
-            + "plain function call with three arguments: the tag, its props as an object, and its children. "
-            + "<code>className</code> rather than <code>class</code>, because that second argument is a "
-            + "JavaScript object and <code>class</code> is a reserved word.";
       }
 
+      function load(which) {
+        jsxBox.value = STAGES[which];
+        update();
+        document.querySelectorAll("[data-stage]").forEach((b) => {
+          b.setAttribute("aria-pressed", String(b.dataset.stage === which));
+        });
+      }
+
+      document.querySelectorAll("[data-stage]").forEach((b) => {
+        b.addEventListener("click", () => load(b.dataset.stage));
+      });
       jsxBox.addEventListener("input", update);
       modern.addEventListener("change", update);
-      document.getElementById("reset").addEventListener("click", () => {
-        jsxBox.value = EXAMPLE;
-        update();
-        jsxBox.focus();
-      });
 
-      jsxBox.value = EXAMPLE;
-      update();
+      load("hello");
 
-      /* ============================================================
-         PART 2 - ONE PAGE, FOUR COMPONENTS
+      /* ---- Act 2: the card, and the boxes it is made of -------------------------
 
-         The same card again, fixed this time so it keeps working while you break the
-         one above. Hover a row in the tree and that component lights up on the card.
+         A second copy, built by hand, so breaking the editor above cannot break it.
+         Hover a row and the matching box lights up.                               */
 
-         The point of this section: a component is not a technique. It is a box you
-         drew round part of a page and gave a name, so you can move it, reuse it, and
-         find it again. The folder is just where the box lives.
-         ============================================================ */
-
-      const PARTS = [
-        {
-          file: "components/Profile.jsx",
-          name: "Profile",
-          sel: ".pf-card",
-          job: "The whole card. Takes one prop - person - and decides the layout. Owns nothing else.",
-        },
-        {
-          file: "components/Avatar.jsx",
-          name: "Avatar",
-          sel: ".pf-avatar",
-          job: "Initials in a circle. Knows nothing about profiles - give it any initials and it works.",
-        },
-        {
-          file: "components/Stat.jsx",
-          name: "Stat",
-          sel: ".pf-stat",
-          job: "One number with a label. Rendered three times from one array, which is why it exists at all.",
-        },
-        {
-          file: "components/Badge.jsx",
-          name: "Badge",
-          sel: ".pf-badge",
-          job: "A single skill chip. The smallest component here, and the one most likely to get reused on another page.",
-        },
-      ];
-
-      // A second, independent render so breaking part 1 cannot break part 2.
-      function FixedProfile() {
+      function FixedCard() {
         const h = React.createElement;
         return h("article", { className: "pf-card" },
           h("header", { className: "pf-head" },
             h("div", { className: "pf-avatar" }, PERSON.initials),
             h("div", null,
               h("h3", { className: "pf-name" }, PERSON.name),
-              h("p", { className: "pf-role" }, PERSON.role + " · team " + PERSON.team))),
+              h("p", { className: "pf-role" }, PERSON.role))),
           h("div", { className: "pf-stats" },
             PERSON.stats.map((s) => h("div", { className: "pf-stat", key: s.label },
-              h("b", null, String(s.value)), h("span", null, s.label)))),
-          h("div", { className: "pf-badges" },
-            PERSON.badges.map((b) => h("span", { className: "pf-badge", key: b }, b)))
+              h("b", null, String(s.value)), h("span", null, s.label))))
         );
       }
 
       const demo = document.getElementById("demo");
-      ReactDOM.createRoot(demo).render(React.createElement(FixedProfile));
+      if (demo) ReactDOM.createRoot(demo).render(React.createElement(FixedCard));
+
+      const PARTS = [
+        { name: "App",    file: "App.jsx",               sel: ".pf-card",   job: "The whole card. Decides what goes where." },
+        { name: "Avatar", file: "components/Avatar.jsx", sel: ".pf-avatar", job: "Initials in a circle. Knows nothing about profiles." },
+        { name: "Stat",   file: "components/Stat.jsx",   sel: ".pf-stat",   job: "One number with a label. Used three times - which is why it exists." },
+      ];
 
       const tree = document.getElementById("tree");
-      tree.innerHTML = PARTS.map((p) => (
-        '<li class="bs-part" data-sel="' + p.sel + '">' +
-          '<code>&lt;' + p.name + ' /&gt;</code>' +
-          '<span class="bs-file">' + p.file + '</span>' +
-          '<span class="bs-job">' + p.job + '</span>' +
-        '</li>'
-      )).join("");
+      if (tree) {
+        tree.innerHTML = PARTS.map((p) =>
+          '<li class="bs-part" data-sel="' + p.sel + '" tabindex="0">' +
+            '<code>&lt;' + p.name + ' /&gt;</code>' +
+            '<span class="bs-file">' + p.file + '</span>' +
+            '<span class="bs-job">' + p.job + '</span>' +
+          '</li>').join("");
 
-      // Hover a row, outline the thing. Touch and keyboard get the same via focus.
-      tree.querySelectorAll(".bs-part").forEach((row) => {
-        const on = () => {
-          demo.querySelectorAll(row.dataset.sel).forEach((el) => el.classList.add("pf-lit"));
-          row.classList.add("bs-part-on");
-        };
-        const off = () => {
-          demo.querySelectorAll(".pf-lit").forEach((el) => el.classList.remove("pf-lit"));
-          row.classList.remove("bs-part-on");
-        };
-        row.addEventListener("pointerenter", on);
-        row.addEventListener("pointerleave", off);
-        row.tabIndex = 0;
-        row.addEventListener("focus", on);
-        row.addEventListener("blur", off);
-      });
+        tree.querySelectorAll(".bs-part").forEach((row) => {
+          const on = () => {
+            demo.querySelectorAll(row.dataset.sel).forEach((el) => el.classList.add("pf-lit"));
+            row.classList.add("bs-part-on");
+          };
+          const off = () => {
+            demo.querySelectorAll(".pf-lit").forEach((el) => el.classList.remove("pf-lit"));
+            row.classList.remove("bs-part-on");
+          };
+          row.addEventListener("pointerenter", on);
+          row.addEventListener("pointerleave", off);
+          row.addEventListener("focus", on);
+          row.addEventListener("blur", off);
+        });
+      }
 
-      /* ============================================================
-         PART 4 - the install checklist
+      /* ---- Act 3: the answer, and the same answer as a picture ------------------
 
-         Every step has a done-when you can check without asking anyone. That is the
-         difference between a tutorial and a checklist.
-         ============================================================ */
+         Left: the reply, exactly as the API sends it. Right: that reply, drawn.
+         Hover a row in the reply and its bar lights up. They are the same numbers.  */
+
+      const reply = document.getElementById("reply");
+      if (reply) {
+        reply.textContent = JSON.stringify(API, null, 2);
+      }
+
+      const graph = document.getElementById("graph");
+      if (graph) {
+        const most = Math.max(...API.rows.map((r) => r[1]));
+        graph.innerHTML = API.rows.map((row, i) =>
+          '<div class="g-row" data-i="' + i + '">' +
+            '<span class="g-name">' + row[0] + '</span>' +
+            '<span class="g-track"><span class="g-bar" style="width:' + (row[1] / most) * 100 + '%"></span></span>' +
+            '<b class="g-value">' + row[1] + '</b>' +
+          '</div>').join("");
+
+        // the rows of the reply, as hoverable chips, tied to the bars
+        const rowList = document.getElementById("rowlist");
+        if (rowList) {
+          rowList.innerHTML = API.rows.map((row, i) =>
+            '<li class="g-chip" data-i="' + i + '" tabindex="0"><code>["' + row[0] + '", ' + row[1] + ']</code></li>'
+          ).join("");
+
+          const link = (i, on) => {
+            const bar = graph.querySelector('.g-row[data-i="' + i + '"]');
+            const chip = rowList.querySelector('.g-chip[data-i="' + i + '"]');
+            if (bar) bar.classList.toggle("g-lit", on);
+            if (chip) chip.classList.toggle("g-lit", on);
+          };
+          rowList.querySelectorAll(".g-chip").forEach((c) => {
+            c.addEventListener("pointerenter", () => link(c.dataset.i, true));
+            c.addEventListener("pointerleave", () => link(c.dataset.i, false));
+            c.addEventListener("focus", () => link(c.dataset.i, true));
+            c.addEventListener("blur", () => link(c.dataset.i, false));
+          });
+          graph.querySelectorAll(".g-row").forEach((r) => {
+            r.addEventListener("pointerenter", () => link(r.dataset.i, true));
+            r.addEventListener("pointerleave", () => link(r.dataset.i, false));
+          });
+        }
+      }
+
+      /* ---- the install checklist ------------------------------------------------ */
 
       const STEPS = [
-        {
-          cmd: "node -v",
-          why: "Vite needs Node 18 or newer. This is the one thing that fails silently and wastes an hour.",
-          done: "a version number starting with v18, v20, v22 or v24. If the command is not found, Node is not installed."
-        },
-        {
-          cmd: "npm create vite@latest my-app -- --template react",
-          why: "Makes the folder, the package.json and a working App.jsx. The bare -- passes the rest through to the template.",
-          done: "a my-app folder exists and contains package.json, index.html and src/App.jsx."
-        },
-        {
-          cmd: "cd my-app && npm install",
-          why: "Reads package.json, downloads everything into node_modules, writes package-lock.json.",
-          done: "node_modules exists and npm printed a package count. It is big. That is normal."
-        },
-        {
-          cmd: "npm run dev",
-          why: "Starts the dev server. 'run dev' works because package.json has a scripts.dev entry - go and look at it.",
-          done: "the terminal prints a http://localhost:5173 line and sits there. It is supposed to keep running."
-        },
-        {
-          cmd: "open http://localhost:5173",
-          why: "The app. Vite translated the JSX on the way to the browser - the same translation you watched in part 1.",
-          done: "the Vite + React starter page renders."
-        },
-        {
-          cmd: "make src/components/ and move something into it",
-          why: "Put one component in its own file and import it, exactly like part 3's folder. This is the habit, not the ceremony.",
-          done: "the page looks identical and the component lives in its own file."
-        }
+        { cmd: "node -v",
+          why: "Vite needs Node 18 or newer. This is the one thing that fails quietly and costs an hour.",
+          done: "a number starting with v18, v20, v22 or v24. 'Command not found' means Node is not installed yet." },
+        { cmd: "npm create vite@latest my-app -- --template react",
+          why: "Makes the folder and the files. The bare -- passes the rest through to the template.",
+          done: "a my-app folder exists, with package.json and src/App.jsx inside it." },
+        { cmd: "cd my-app && npm install",
+          why: "Downloads everything package.json asked for into node_modules.",
+          done: "node_modules exists. It is huge. That is normal." },
+        { cmd: "npm run dev",
+          why: "Starts Vite. It translates your JSX every time you save.",
+          done: "a http://localhost:5173 line appears and the terminal keeps running. It is meant to." },
+        { cmd: "open http://localhost:5173",
+          why: "Your app. Vite translated the JSX on the way to the browser.",
+          done: "the starter page renders." },
+        { cmd: "change a word in src/App.jsx and save",
+          why: "You did not reload anything.",
+          done: "the browser updated by itself." },
       ];
 
       const KEY = "ics-build-step-steps";
-      const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } };
-      const save = (v) => { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} };
+      const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } };
+      const write = (v) => { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} };
 
-      const ticked = load();
+      const ticked = read();
       const list = document.getElementById("steps");
-
-      STEPS.forEach((s, i) => {
-        const id = "bs" + i;
-        const li = document.createElement("li");
-        li.className = "bs-step";
-        li.innerHTML =
-          '<label><input type="checkbox" data-id="' + id + '"' + (ticked[id] ? " checked" : "") + '>' +
-          '<span><code class="bs-cmd">' + s.cmd + '</code>' +
-          '<span class="bs-why">' + s.why + '</span>' +
-          '<span class="bs-done"><b>Done when:</b> ' + s.done + '</span>' +
-          '</span></label>';
-        list.appendChild(li);
-      });
-
-      list.addEventListener("change", (e) => {
-        if (e.target.type !== "checkbox") return;
-        ticked[e.target.dataset.id] = e.target.checked;
-        save(ticked);
-      });
+      if (list) {
+        STEPS.forEach((s, i) => {
+          const id = "bs" + i;
+          const li = document.createElement("li");
+          li.className = "bs-step";
+          li.innerHTML =
+            '<label><input type="checkbox" data-id="' + id + '"' + (ticked[id] ? " checked" : "") + '>' +
+            '<span><code class="bs-cmd">' + s.cmd + '</code>' +
+            '<span class="bs-why">' + s.why + '</span>' +
+            '<span class="bs-done"><b>Done when:</b> ' + s.done + '</span></span></label>';
+          list.appendChild(li);
+        });
+        list.addEventListener("change", (e) => {
+          if (e.target.type !== "checkbox") return;
+          ticked[e.target.dataset.id] = e.target.checked;
+          write(ticked);
+        });
+      }
 
       /* ============================================================
          BREAK IT ON PURPOSE
 
-         One at a time, in the JSX box at the top. Every one of these was run before
-         it went in this list.
+         In the editor at the top. One at a time. Every one of these was run first.
 
-         delete an INNER closing     "Expected corresponding JSX closing tag for
-         tag - the </div> in         <div>. (23:6)" - Babel gives you the line AND the
-         <header>                    column. The parser hit </header> where it wanted
-                                     </div>, so it can tell you exactly what it
-                                     expected. This is the error you will see most
-                                     often all week; meet it now, not at 11pm.
+         START ON HELLO WORLD - it is two lines, so the error has nowhere to hide.
 
-         delete the OUTERMOST        "Unterminated JSX contents. (29:12)" - a different
-         closing tag, </article>     message for the same mistake, and worth telling
-                                     apart. Inner: it found the wrong closer and says
-                                     so. Outermost: it ran out of file still waiting.
-                                     Same fix, different sentence.
+         delete the </h1>           "Unterminated JSX contents." You said where to
+                                    start and never where to stop, and Babel ran out
+                                    of file still waiting.
 
-         className -> class          It renders anyway, and the card keeps its styles.
-                                     React 18 is forgiving here - but open your browser
-                                     console and it is shouting: "Invalid DOM property
-                                     `class`. Did you mean `className`?" Nothing on the
-                                     page tells you. THE CONSOLE IS PART OF THE PAGE,
-                                     and this is the habit that entry exists to build.
+         <h1>Hello</p>              "Expected corresponding JSX closing tag for <h1>."
+                                    A different sentence for a near-identical mistake:
+                                    this time it found a closer, just the wrong one.
 
-         remove the ( ) after        NO ERROR AT ALL, and that is the point. It
-         return in Profile           compiles to "return;" with the JSX below it as
-                                     dead code, so the card renders nothing. A blank
-                                     box and a clean console is a worse afternoon than
-                                     any error message. The parens are not style.
+         rename App to Page         "No component called App - did you rename it?"
+                                    The picture looks for App. Real projects hit this
+                                    too, they just call it an import error.
 
-         {person.name} ->            the words "person.name" appear on the card as
-         person.name                 literal text. Braces are how you leave text and
-                                     enter JavaScript. That is their whole job.
+         NOW SWITCH TO PROFILE and try these.
 
-         rename Profile to Card      "No component called Profile - did you rename
-                                     it?" The preview looks for that name. Real
-                                     projects have the same problem, they just call it
-                                     an import error.
+         className -> class         It still draws, and it keeps its styling. React is
+                                    forgiving here - but open your browser console and
+                                    it is telling you: "Invalid DOM property `class`.
+                                    Did you mean `className`?" Nothing on the page
+                                    says so. THE CONSOLE IS PART OF THE PAGE.
 
-         delete  key={s.label}       it renders fine and React complains in the
-                                     console again: "Each child in a list should have
-                                     a unique key prop." Keys are not decoration -
-                                     they are how React tells three Stats apart when
-                                     one of them changes.
+         remove the ( ) after       NO ERROR, and nothing draws. It becomes "return;"
+         return in App              with the card below it as dead code. A blank box
+                                    and a clean console is a worse afternoon than any
+                                    error message. The brackets are not decoration.
 
-         lowercase <avatar />        renders an empty, unknown HTML tag instead of
-         instead of <Avatar />       your component. Capital letter = my component,
-                                     lowercase = an HTML tag. That is the whole rule.
+         {person.name} ->           the words "person.name" appear on the card as
+         person.name                plain text. Curly brackets are how you stop
+                                    writing text and start writing JavaScript.
 
-         tick the modern runtime     React.createElement becomes _jsx, and an import
-                                     appears that you did not type. That import is
-                                     what people mean by "the build step adds stuff" -
-                                     and it is why the preview falls back to the
-                                     classic output, because a browser cannot run an
-                                     import without a bundler.
+         <avatar /> instead         an empty unknown tag appears and your component
+         of <Avatar />              never runs. Capital letter means my component,
+                                    lowercase means an HTML tag. That is the rule.
+
+         delete key={s.label}       draws fine, and the console says "Each child in a
+                                    list should have a unique key prop." Keys are how
+                                    React tells three Stats apart when one changes.
+
+         NOW SWITCH TO DATA.
+
+         api.rows -> api.row        "Cannot read properties of undefined (reading
+                                    'map')." The reply has no `row` in it. Look at the
+                                    reply on the left and spell it the way it is
+                                    written there - that is most API debugging.
+
+         remove / most from         every bar fills the whole width. The widths were a
+         the width                  share of the biggest one; without it you are
+                                    drawing 57% and 44% as the same thing.
+
+         tick the modern runtime    React.createElement becomes _jsx, and an import
+                                    appears that you never typed. That import is what
+                                    people mean by "the build step adds things" - and
+                                    it is why the picture falls back to the classic
+                                    output, because a browser cannot run an import by
+                                    itself.
          ============================================================ */
     </script>
   </div>

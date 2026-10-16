@@ -1,41 +1,56 @@
 /* ============================================================
-   THE BUILD STEP
+   THE BUILD STEP   —   Hello World  ->  Profile  ->  Data
 
-   Four jobs in this file:
-     1. translate JSX to JavaScript as you type, and RUN the result, so the
-        build step stops being a rumour and becomes a thing you watched happen
-     2. show the same page broken into components, with the folder that holds
-        them, and let you hover one to find it on screen
-     3. (in index.html) what each project file is for
-     4. remember which install steps you have ticked
+   One editor, three stages. Each stage is the one before it, plus one new
+   idea. Nothing in this file is clever.
 
-   React, ReactDOM and Babel are plain globals from CDN script tags. Babel is
-   the same translator Vite runs - Vite just runs it on save, inside a dev
-   server, instead of in your browser.
+   React, ReactDOM and Babel are plain globals from CDN <script> tags. Babel is
+   the translator. Vite runs the same translator for you on every save - that is
+   the whole thing this workshop is about.
    ============================================================ */
 
-/* ============================================================
-   PART 1 - THE PROFILE CARD
+/* ---- the data the stages are handed ---------------------------------------
 
-   The example is a profile page on purpose. It is the smallest real thing that
-   needs more than one component, and you already know what it should look
-   like, so when it renders wrong you can see that it is wrong.
-   ============================================================ */
+   PERSON is for the profile card.
+
+   API is a real reply from the Cycle 21 data API, with the team names and
+   numbers swapped for made-up ones. The SHAPE is exactly what you get back:
+   a list of column names, and a list of rows. Nothing else.                  */
 
 const PERSON = {
   initials: "JR",
   name: "Jordan Rivera",
   role: "Tech Apprentice",
-  team: "ibis",
   stats: [
     { label: "commits", value: 48 },
-    { label: "PRs merged", value: 7 },
-    { label: "weeks in", value: 8 },
+    { label: "PRs", value: 7 },
+    { label: "weeks", value: 8 },
   ],
-  badges: ["SQL", "React", "Git"],
 };
 
-const EXAMPLE = `function Avatar({ initials }) {
+const API = {
+  ok: true,
+  columns: ["team", "open_tickets"],
+  rows: [
+    ["Service Desk", 57],
+    ["Network", 44],
+    ["Cloud Platform", 41],
+    ["Field Support", 23],
+    ["Apps", 18],
+    ["Security", 9],
+  ],
+  rowCount: 6,
+  durationMs: 2651,
+};
+
+/* ---- the three stages ----------------------------------------------------- */
+
+const STAGES = {
+  hello: `function App() {
+  return <h1>Hello, world</h1>;
+}`,
+
+  profile: `function Avatar({ initials }) {
   return <div className="pf-avatar">{initials}</div>;
 }
 
@@ -48,14 +63,14 @@ function Stat({ label, value }) {
   );
 }
 
-function Profile({ person }) {
+function App() {
   return (
     <article className="pf-card">
       <header className="pf-head">
         <Avatar initials={person.initials} />
         <div>
           <h3 className="pf-name">{person.name}</h3>
-          <p className="pf-role">{person.role} · team {person.team}</p>
+          <p className="pf-role">{person.role}</p>
         </div>
       </header>
 
@@ -66,304 +81,318 @@ function Profile({ person }) {
       </div>
     </article>
   );
-}`;
+}`,
 
-const jsxBox  = document.getElementById("jsx");
-const outBox  = document.getElementById("out");
-const modern  = document.getElementById("modern");
-const explain = document.getElementById("explain");
-const stage   = document.getElementById("stage");
+  data: `function Bar({ name, value, most }) {
+  return (
+    <div className="g-row">
+      <span className="g-name">{name}</span>
+      <span className="g-track">
+        <span className="g-bar" style={{ width: (value / most) * 100 + "%" }} />
+      </span>
+      <b className="g-value">{value}</b>
+    </div>
+  );
+}
+
+function App() {
+  const most = Math.max(...api.rows.map((r) => r[1]));
+
+  return (
+    <div className="g-card">
+      <h3 className="pf-name">Open tickets by team</h3>
+
+      {api.rows.map((row) => (
+        <Bar key={row[0]} name={row[0]} value={row[1]} most={most} />
+      ))}
+
+      <p className="g-foot">{api.rowCount} teams · from the API</p>
+    </div>
+  );
+}`,
+};
+
+/* ---- the editor ----------------------------------------------------------- */
+
+const jsxBox   = document.getElementById("jsx");
+const outBox   = document.getElementById("out");
+const stage    = document.getElementById("stage");
 const stageMsg = document.getElementById("stageMsg");
+const modern   = document.getElementById("modern");
 
-/* ---- translate, then run ---------------------------------------------------
+let root = null;
 
-   Two steps, and they are worth keeping separate in your head:
-
-     compile   JSX text        -> JavaScript text      (Babel. This is Vite's job.)
-     run       JavaScript text -> something on screen  (the browser. Always was.)
-
-   A build step only ever does the first one. */
-
-let stageRoot = null;
-
+// Step one: JSX text in, JavaScript text out. This is Babel. This is Vite's job.
 function compile(source, runtime) {
   return Babel.transform(source, {
-    presets: [["react", { runtime }]],
-    // Keep it readable. A real build minifies this to one line, which is right
-    // for shipping and useless for learning.
+    presets: [["react", { runtime: runtime || "classic" }]],
     compact: false,
-    retainLines: false,
   }).code;
 }
 
-function render(code) {
-  // The compiled code defines components but does not render anything, so we
-  // hand it React and ask for `Profile` back. `person` is handed in too, so
-  // the example does not need to carry data.
-  const factory = new Function("React", "person", code + "\n return typeof Profile !== 'undefined' ? Profile : null;");
-  const Profile = factory(React, PERSON);
-  if (!Profile) throw new Error("No component called Profile - did you rename it?");
-
-  if (!stageRoot) stageRoot = ReactDOM.createRoot(stage);
-  stageRoot.render(React.createElement(Profile, { person: PERSON }));
+// Step two: run that JavaScript. This is the browser, and always was.
+function run(code) {
+  const make = new Function("React", "person", "api",
+    code + "\n return typeof App !== 'undefined' ? App : null;");
+  const App = make(React, PERSON, API);
+  if (!App) throw new Error("No component called App - did you rename it?");
+  if (!root) root = ReactDOM.createRoot(stage);
+  root.render(React.createElement(App));
 }
 
 function update() {
   const runtime = modern.checked ? "automatic" : "classic";
-  let code;
 
-  // Compile. A JSX mistake stops here, and the message is the useful part.
+  let code;
   try {
     code = compile(jsxBox.value, runtime);
     outBox.textContent = code;
     outBox.classList.remove("bs-error");
   } catch (err) {
+    // A JSX mistake stops here. The message is the useful part - it has the
+    // line and the column in it.
     outBox.textContent = String(err.message);
     outBox.classList.add("bs-error");
-    stageMsg.textContent = "Not rendering - the JSX did not compile. Read the message above: Babel gives you the line and the column.";
+    stageMsg.textContent = "Nothing drawn - the JSX did not translate. Read the message in the middle.";
     stageMsg.className = "bs-stagemsg bs-bad";
     return;
   }
 
-  // Run. The automatic runtime emits an `import`, which a `new Function` cannot
-  // execute - so the preview uses the classic output while you read either one.
   try {
-    render(runtime === "automatic" ? compile(jsxBox.value, "classic") : code);
-    stageMsg.textContent = runtime === "automatic"
-      ? "Rendered. (The preview runs the classic output - the import in the modern version needs a bundler, which is exactly what Vite is for.)"
-      : "Rendered. That card is the JavaScript on the right, running.";
+    // The modern runtime writes an `import`, and a browser cannot run an import
+    // on its own - that is what a bundler is for. So the picture uses the
+    // classic output while you read either one.
+    run(runtime === "automatic" ? compile(jsxBox.value, "classic") : code);
+    stageMsg.textContent = "Drawn. That picture is the middle column, running.";
     stageMsg.className = "bs-stagemsg bs-good";
   } catch (err) {
-    stageMsg.textContent = "Compiled, but would not run: " + err.message;
+    stageMsg.textContent = "Translated, but would not run: " + err.message;
     stageMsg.className = "bs-stagemsg bs-bad";
   }
-
-  explain.innerHTML = modern.checked
-    ? "<strong>Automatic runtime.</strong> Every tag became <code>_jsx(...)</code> and Babel added "
-      + "the import for it at the top. This is what Vite does by default, and it is why you no "
-      + "longer write <code>import React from \"react\"</code> in every file."
-    : "<strong>Classic runtime.</strong> Every tag became <code>React.createElement(...)</code> - a "
-      + "plain function call with three arguments: the tag, its props as an object, and its children. "
-      + "<code>className</code> rather than <code>class</code>, because that second argument is a "
-      + "JavaScript object and <code>class</code> is a reserved word.";
 }
 
+function load(which) {
+  jsxBox.value = STAGES[which];
+  update();
+  document.querySelectorAll("[data-stage]").forEach((b) => {
+    b.setAttribute("aria-pressed", String(b.dataset.stage === which));
+  });
+}
+
+document.querySelectorAll("[data-stage]").forEach((b) => {
+  b.addEventListener("click", () => load(b.dataset.stage));
+});
 jsxBox.addEventListener("input", update);
 modern.addEventListener("change", update);
-document.getElementById("reset").addEventListener("click", () => {
-  jsxBox.value = EXAMPLE;
-  update();
-  jsxBox.focus();
-});
 
-jsxBox.value = EXAMPLE;
-update();
+load("hello");
 
-/* ============================================================
-   PART 2 - ONE PAGE, FOUR COMPONENTS
+/* ---- Act 2: the card, and the boxes it is made of -------------------------
 
-   The same card again, fixed this time so it keeps working while you break the
-   one above. Hover a row in the tree and that component lights up on the card.
+   A second copy, built by hand, so breaking the editor above cannot break it.
+   Hover a row and the matching box lights up.                               */
 
-   The point of this section: a component is not a technique. It is a box you
-   drew round part of a page and gave a name, so you can move it, reuse it, and
-   find it again. The folder is just where the box lives.
-   ============================================================ */
-
-const PARTS = [
-  {
-    file: "components/Profile.jsx",
-    name: "Profile",
-    sel: ".pf-card",
-    job: "The whole card. Takes one prop - person - and decides the layout. Owns nothing else.",
-  },
-  {
-    file: "components/Avatar.jsx",
-    name: "Avatar",
-    sel: ".pf-avatar",
-    job: "Initials in a circle. Knows nothing about profiles - give it any initials and it works.",
-  },
-  {
-    file: "components/Stat.jsx",
-    name: "Stat",
-    sel: ".pf-stat",
-    job: "One number with a label. Rendered three times from one array, which is why it exists at all.",
-  },
-  {
-    file: "components/Badge.jsx",
-    name: "Badge",
-    sel: ".pf-badge",
-    job: "A single skill chip. The smallest component here, and the one most likely to get reused on another page.",
-  },
-];
-
-// A second, independent render so breaking part 1 cannot break part 2.
-function FixedProfile() {
+function FixedCard() {
   const h = React.createElement;
   return h("article", { className: "pf-card" },
     h("header", { className: "pf-head" },
       h("div", { className: "pf-avatar" }, PERSON.initials),
       h("div", null,
         h("h3", { className: "pf-name" }, PERSON.name),
-        h("p", { className: "pf-role" }, PERSON.role + " · team " + PERSON.team))),
+        h("p", { className: "pf-role" }, PERSON.role))),
     h("div", { className: "pf-stats" },
       PERSON.stats.map((s) => h("div", { className: "pf-stat", key: s.label },
-        h("b", null, String(s.value)), h("span", null, s.label)))),
-    h("div", { className: "pf-badges" },
-      PERSON.badges.map((b) => h("span", { className: "pf-badge", key: b }, b)))
+        h("b", null, String(s.value)), h("span", null, s.label))))
   );
 }
 
 const demo = document.getElementById("demo");
-ReactDOM.createRoot(demo).render(React.createElement(FixedProfile));
+if (demo) ReactDOM.createRoot(demo).render(React.createElement(FixedCard));
+
+const PARTS = [
+  { name: "App",    file: "App.jsx",               sel: ".pf-card",   job: "The whole card. Decides what goes where." },
+  { name: "Avatar", file: "components/Avatar.jsx", sel: ".pf-avatar", job: "Initials in a circle. Knows nothing about profiles." },
+  { name: "Stat",   file: "components/Stat.jsx",   sel: ".pf-stat",   job: "One number with a label. Used three times - which is why it exists." },
+];
 
 const tree = document.getElementById("tree");
-tree.innerHTML = PARTS.map((p) => (
-  '<li class="bs-part" data-sel="' + p.sel + '">' +
-    '<code>&lt;' + p.name + ' /&gt;</code>' +
-    '<span class="bs-file">' + p.file + '</span>' +
-    '<span class="bs-job">' + p.job + '</span>' +
-  '</li>'
-)).join("");
+if (tree) {
+  tree.innerHTML = PARTS.map((p) =>
+    '<li class="bs-part" data-sel="' + p.sel + '" tabindex="0">' +
+      '<code>&lt;' + p.name + ' /&gt;</code>' +
+      '<span class="bs-file">' + p.file + '</span>' +
+      '<span class="bs-job">' + p.job + '</span>' +
+    '</li>').join("");
 
-// Hover a row, outline the thing. Touch and keyboard get the same via focus.
-tree.querySelectorAll(".bs-part").forEach((row) => {
-  const on = () => {
-    demo.querySelectorAll(row.dataset.sel).forEach((el) => el.classList.add("pf-lit"));
-    row.classList.add("bs-part-on");
-  };
-  const off = () => {
-    demo.querySelectorAll(".pf-lit").forEach((el) => el.classList.remove("pf-lit"));
-    row.classList.remove("bs-part-on");
-  };
-  row.addEventListener("pointerenter", on);
-  row.addEventListener("pointerleave", off);
-  row.tabIndex = 0;
-  row.addEventListener("focus", on);
-  row.addEventListener("blur", off);
-});
+  tree.querySelectorAll(".bs-part").forEach((row) => {
+    const on = () => {
+      demo.querySelectorAll(row.dataset.sel).forEach((el) => el.classList.add("pf-lit"));
+      row.classList.add("bs-part-on");
+    };
+    const off = () => {
+      demo.querySelectorAll(".pf-lit").forEach((el) => el.classList.remove("pf-lit"));
+      row.classList.remove("bs-part-on");
+    };
+    row.addEventListener("pointerenter", on);
+    row.addEventListener("pointerleave", off);
+    row.addEventListener("focus", on);
+    row.addEventListener("blur", off);
+  });
+}
 
-/* ============================================================
-   PART 4 - the install checklist
+/* ---- Act 3: the answer, and the same answer as a picture ------------------
 
-   Every step has a done-when you can check without asking anyone. That is the
-   difference between a tutorial and a checklist.
-   ============================================================ */
+   Left: the reply, exactly as the API sends it. Right: that reply, drawn.
+   Hover a row in the reply and its bar lights up. They are the same numbers.  */
+
+const reply = document.getElementById("reply");
+if (reply) {
+  reply.textContent = JSON.stringify(API, null, 2);
+}
+
+const graph = document.getElementById("graph");
+if (graph) {
+  const most = Math.max(...API.rows.map((r) => r[1]));
+  graph.innerHTML = API.rows.map((row, i) =>
+    '<div class="g-row" data-i="' + i + '">' +
+      '<span class="g-name">' + row[0] + '</span>' +
+      '<span class="g-track"><span class="g-bar" style="width:' + (row[1] / most) * 100 + '%"></span></span>' +
+      '<b class="g-value">' + row[1] + '</b>' +
+    '</div>').join("");
+
+  // the rows of the reply, as hoverable chips, tied to the bars
+  const rowList = document.getElementById("rowlist");
+  if (rowList) {
+    rowList.innerHTML = API.rows.map((row, i) =>
+      '<li class="g-chip" data-i="' + i + '" tabindex="0"><code>["' + row[0] + '", ' + row[1] + ']</code></li>'
+    ).join("");
+
+    const link = (i, on) => {
+      const bar = graph.querySelector('.g-row[data-i="' + i + '"]');
+      const chip = rowList.querySelector('.g-chip[data-i="' + i + '"]');
+      if (bar) bar.classList.toggle("g-lit", on);
+      if (chip) chip.classList.toggle("g-lit", on);
+    };
+    rowList.querySelectorAll(".g-chip").forEach((c) => {
+      c.addEventListener("pointerenter", () => link(c.dataset.i, true));
+      c.addEventListener("pointerleave", () => link(c.dataset.i, false));
+      c.addEventListener("focus", () => link(c.dataset.i, true));
+      c.addEventListener("blur", () => link(c.dataset.i, false));
+    });
+    graph.querySelectorAll(".g-row").forEach((r) => {
+      r.addEventListener("pointerenter", () => link(r.dataset.i, true));
+      r.addEventListener("pointerleave", () => link(r.dataset.i, false));
+    });
+  }
+}
+
+/* ---- the install checklist ------------------------------------------------ */
 
 const STEPS = [
-  {
-    cmd: "node -v",
-    why: "Vite needs Node 18 or newer. This is the one thing that fails silently and wastes an hour.",
-    done: "a version number starting with v18, v20, v22 or v24. If the command is not found, Node is not installed."
-  },
-  {
-    cmd: "npm create vite@latest my-app -- --template react",
-    why: "Makes the folder, the package.json and a working App.jsx. The bare -- passes the rest through to the template.",
-    done: "a my-app folder exists and contains package.json, index.html and src/App.jsx."
-  },
-  {
-    cmd: "cd my-app && npm install",
-    why: "Reads package.json, downloads everything into node_modules, writes package-lock.json.",
-    done: "node_modules exists and npm printed a package count. It is big. That is normal."
-  },
-  {
-    cmd: "npm run dev",
-    why: "Starts the dev server. 'run dev' works because package.json has a scripts.dev entry - go and look at it.",
-    done: "the terminal prints a http://localhost:5173 line and sits there. It is supposed to keep running."
-  },
-  {
-    cmd: "open http://localhost:5173",
-    why: "The app. Vite translated the JSX on the way to the browser - the same translation you watched in part 1.",
-    done: "the Vite + React starter page renders."
-  },
-  {
-    cmd: "make src/components/ and move something into it",
-    why: "Put one component in its own file and import it, exactly like part 3's folder. This is the habit, not the ceremony.",
-    done: "the page looks identical and the component lives in its own file."
-  }
+  { cmd: "node -v",
+    why: "Vite needs Node 18 or newer. This is the one thing that fails quietly and costs an hour.",
+    done: "a number starting with v18, v20, v22 or v24. 'Command not found' means Node is not installed yet." },
+  { cmd: "npm create vite@latest my-app -- --template react",
+    why: "Makes the folder and the files. The bare -- passes the rest through to the template.",
+    done: "a my-app folder exists, with package.json and src/App.jsx inside it." },
+  { cmd: "cd my-app && npm install",
+    why: "Downloads everything package.json asked for into node_modules.",
+    done: "node_modules exists. It is huge. That is normal." },
+  { cmd: "npm run dev",
+    why: "Starts Vite. It translates your JSX every time you save.",
+    done: "a http://localhost:5173 line appears and the terminal keeps running. It is meant to." },
+  { cmd: "open http://localhost:5173",
+    why: "Your app. Vite translated the JSX on the way to the browser.",
+    done: "the starter page renders." },
+  { cmd: "change a word in src/App.jsx and save",
+    why: "You did not reload anything.",
+    done: "the browser updated by itself." },
 ];
 
 const KEY = "ics-build-step-steps";
-const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } };
-const save = (v) => { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} };
+const read = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } };
+const write = (v) => { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} };
 
-const ticked = load();
+const ticked = read();
 const list = document.getElementById("steps");
-
-STEPS.forEach((s, i) => {
-  const id = "bs" + i;
-  const li = document.createElement("li");
-  li.className = "bs-step";
-  li.innerHTML =
-    '<label><input type="checkbox" data-id="' + id + '"' + (ticked[id] ? " checked" : "") + '>' +
-    '<span><code class="bs-cmd">' + s.cmd + '</code>' +
-    '<span class="bs-why">' + s.why + '</span>' +
-    '<span class="bs-done"><b>Done when:</b> ' + s.done + '</span>' +
-    '</span></label>';
-  list.appendChild(li);
-});
-
-list.addEventListener("change", (e) => {
-  if (e.target.type !== "checkbox") return;
-  ticked[e.target.dataset.id] = e.target.checked;
-  save(ticked);
-});
+if (list) {
+  STEPS.forEach((s, i) => {
+    const id = "bs" + i;
+    const li = document.createElement("li");
+    li.className = "bs-step";
+    li.innerHTML =
+      '<label><input type="checkbox" data-id="' + id + '"' + (ticked[id] ? " checked" : "") + '>' +
+      '<span><code class="bs-cmd">' + s.cmd + '</code>' +
+      '<span class="bs-why">' + s.why + '</span>' +
+      '<span class="bs-done"><b>Done when:</b> ' + s.done + '</span></span></label>';
+    list.appendChild(li);
+  });
+  list.addEventListener("change", (e) => {
+    if (e.target.type !== "checkbox") return;
+    ticked[e.target.dataset.id] = e.target.checked;
+    write(ticked);
+  });
+}
 
 /* ============================================================
    BREAK IT ON PURPOSE
 
-   One at a time, in the JSX box at the top. Every one of these was run before
-   it went in this list.
+   In the editor at the top. One at a time. Every one of these was run first.
 
-   delete an INNER closing     "Expected corresponding JSX closing tag for
-   tag - the </div> in         <div>. (23:6)" - Babel gives you the line AND the
-   <header>                    column. The parser hit </header> where it wanted
-                               </div>, so it can tell you exactly what it
-                               expected. This is the error you will see most
-                               often all week; meet it now, not at 11pm.
+   START ON HELLO WORLD - it is two lines, so the error has nowhere to hide.
 
-   delete the OUTERMOST        "Unterminated JSX contents. (29:12)" - a different
-   closing tag, </article>     message for the same mistake, and worth telling
-                               apart. Inner: it found the wrong closer and says
-                               so. Outermost: it ran out of file still waiting.
-                               Same fix, different sentence.
+   delete the </h1>           "Unterminated JSX contents." You said where to
+                              start and never where to stop, and Babel ran out
+                              of file still waiting.
 
-   className -> class          It renders anyway, and the card keeps its styles.
-                               React 18 is forgiving here - but open your browser
-                               console and it is shouting: "Invalid DOM property
-                               `class`. Did you mean `className`?" Nothing on the
-                               page tells you. THE CONSOLE IS PART OF THE PAGE,
-                               and this is the habit that entry exists to build.
+   <h1>Hello</p>              "Expected corresponding JSX closing tag for <h1>."
+                              A different sentence for a near-identical mistake:
+                              this time it found a closer, just the wrong one.
 
-   remove the ( ) after        NO ERROR AT ALL, and that is the point. It
-   return in Profile           compiles to "return;" with the JSX below it as
-                               dead code, so the card renders nothing. A blank
-                               box and a clean console is a worse afternoon than
-                               any error message. The parens are not style.
+   rename App to Page         "No component called App - did you rename it?"
+                              The picture looks for App. Real projects hit this
+                              too, they just call it an import error.
 
-   {person.name} ->            the words "person.name" appear on the card as
-   person.name                 literal text. Braces are how you leave text and
-                               enter JavaScript. That is their whole job.
+   NOW SWITCH TO PROFILE and try these.
 
-   rename Profile to Card      "No component called Profile - did you rename
-                               it?" The preview looks for that name. Real
-                               projects have the same problem, they just call it
-                               an import error.
+   className -> class         It still draws, and it keeps its styling. React is
+                              forgiving here - but open your browser console and
+                              it is telling you: "Invalid DOM property `class`.
+                              Did you mean `className`?" Nothing on the page
+                              says so. THE CONSOLE IS PART OF THE PAGE.
 
-   delete  key={s.label}       it renders fine and React complains in the
-                               console again: "Each child in a list should have
-                               a unique key prop." Keys are not decoration -
-                               they are how React tells three Stats apart when
-                               one of them changes.
+   remove the ( ) after       NO ERROR, and nothing draws. It becomes "return;"
+   return in App              with the card below it as dead code. A blank box
+                              and a clean console is a worse afternoon than any
+                              error message. The brackets are not decoration.
 
-   lowercase <avatar />        renders an empty, unknown HTML tag instead of
-   instead of <Avatar />       your component. Capital letter = my component,
-                               lowercase = an HTML tag. That is the whole rule.
+   {person.name} ->           the words "person.name" appear on the card as
+   person.name                plain text. Curly brackets are how you stop
+                              writing text and start writing JavaScript.
 
-   tick the modern runtime     React.createElement becomes _jsx, and an import
-                               appears that you did not type. That import is
-                               what people mean by "the build step adds stuff" -
-                               and it is why the preview falls back to the
-                               classic output, because a browser cannot run an
-                               import without a bundler.
+   <avatar /> instead         an empty unknown tag appears and your component
+   of <Avatar />              never runs. Capital letter means my component,
+                              lowercase means an HTML tag. That is the rule.
+
+   delete key={s.label}       draws fine, and the console says "Each child in a
+                              list should have a unique key prop." Keys are how
+                              React tells three Stats apart when one changes.
+
+   NOW SWITCH TO DATA.
+
+   api.rows -> api.row        "Cannot read properties of undefined (reading
+                              'map')." The reply has no `row` in it. Look at the
+                              reply on the left and spell it the way it is
+                              written there - that is most API debugging.
+
+   remove / most from         every bar fills the whole width. The widths were a
+   the width                  share of the biggest one; without it you are
+                              drawing 57% and 44% as the same thing.
+
+   tick the modern runtime    React.createElement becomes _jsx, and an import
+                              appears that you never typed. That import is what
+                              people mean by "the build step adds things" - and
+                              it is why the picture falls back to the classic
+                              output, because a browser cannot run an import by
+                              itself.
    ============================================================ */
