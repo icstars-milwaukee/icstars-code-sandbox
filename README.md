@@ -4,9 +4,19 @@ A growing library of guided tech learning workshops from **i.c.stars Milwaukee**
 
 **Live site:** https://icstars-milwaukee.github.io/icstars-code-sandbox/
 
-A workshop here is two things: a **deck you can present**, and **one app that
-already runs**. Small enough to read in a sitting. No server, no npm, no build
-step, no accounts.
+A workshop here is **one app that already runs**, sometimes with a deck beside
+it. Small enough to read in a sitting, and nothing to install to start.
+
+The house default is no server, no npm, no build step and no accounts — 01 holds
+that line completely. Where a workshop has to break it, the shelf says so and
+the workshop says why:
+
+| Workshop | Needs |
+|---|---|
+| 01 Hello, API | nothing. Double-click it. |
+| 02 Molson Data | a team password (it queries the real Cycle 21 gateway) |
+| 03 The Honest Dashboard | the network, for React from a CDN. No account, no data. |
+| 04 The Build Step | the network, for Babel from a CDN. The npm part happens in *your* project, not in this folder. |
 
 ---
 
@@ -15,6 +25,9 @@ step, no accounts.
 | # | Workshop | Track | Time | Status |
 |---|---|---|---|---|
 | 01 | [Who's That Pokemon?](workshops/01-hello-api/) — a guessing game built out of `fetch` | Front-end | 30 min | ready · live editor |
+| 02 | [Molson Data](workshops/02-molson-data/) — one `SELECT` to the Cycle 21 gateway, rows on the page | Data | 30 min | draft · live editor |
+| 03 | [The Honest Dashboard](workshops/03-honest-dashboard/) — rows in, a readable screen out, and an answer box that refuses | Front-end | 45 min | draft · live editor |
+| 04 | [The Build Step](workshops/04-the-build-step/) — watch JSX stop being JSX, then install Vite yourself | Front-end | 40 min | draft · live editor |
 
 The front page builds this list from [`js/workshops.js`](js/workshops.js), which
 is the single file you edit to add a workshop.
@@ -25,9 +38,13 @@ is the single file you edit to add a workshop.
 workshops/01-hello-api/
 ├── index.html        THE APP
 ├── js/main.js        THE APP'S CODE
-├── REF-deck.html     the deck — self-contained, arrow keys drive it
+├── css/*.css         only if the lesson needs its own styles
+├── REF-deck.html     the deck — optional, self-contained, arrow keys drive it
 └── playground.html   GENERATED — the app in a live editor
 ```
+
+Only 01 has a deck so far. A workshop without one is still a workshop; set
+`deck: null` on its card.
 
 **The workshop folder is the app.** Double-click `index.html` and it runs, off
 disk, no server. That is the source of truth and what students end up editing.
@@ -95,8 +112,11 @@ js/playground.js        the sidebar, editor and console
 
 tools/build-playground.py   regenerates each playground.html
 
-workshops/_template/    copy this to start a new one (it runs as-is)
-workshops/01-hello-api/ fetch, JSON, async/await, DOM
+workshops/_template/            copy this to start a new one (it runs as-is)
+workshops/01-hello-api/         fetch, JSON, async/await, DOM
+workshops/02-molson-data/       SELECT, query params, API tokens
+workshops/03-honest-dashboard/  React from a CDN, chart decisions, refusals
+workshops/04-the-build-step/    JSX vs JavaScript, npm install, Vite
 ```
 
 ## Adding a workshop
@@ -105,12 +125,17 @@ Copy `workshops/_template/` and work through the checklist in its `README.md`.
 The short version:
 
 1. Copy the template folder to `workshops/0N-your-slug/`
-2. Rewrite `REF-deck.html` — **don't touch its `<style>` block**
-3. Rewrite the app: `index.html` and `js/main.js`, lesson code only
-4. End `js/main.js` with a BREAK IT ON PURPOSE list
+2. Rewrite the app: `index.html` and `js/main.js`, lesson code only
+3. End `js/main.js` with a BREAK IT ON PURPOSE list — and **check every claim in
+   it actually happens.** A list that promises the wrong error message is worse
+   than no list
+4. Keep or delete `REF-deck.html`. If you keep it, **don't touch its `<style>`
+   block**; if you delete it, set `deck: null` on the card
 5. Run `python tools/build-playground.py 0N-your-slug`
 6. Add one object to `js/workshops.js`, with `live: true`
-7. Teach it to real people, then set `status: "ready"`
+7. Name the `DEL-` it unblocks in the RFP crosswalk — a workshop that can't name
+   its deliverable is a topic, and topics don't go on the shelf
+8. Teach it to real people, then set `status: "ready"`
 
 Full rules, including the parts of the house style that are not up for
 redesign, are in [CONTRIBUTING.md](CONTRIBUTING.md).
@@ -133,6 +158,16 @@ a 404.
 `tools/build-playground.py` is an *authoring* tool, not part of serving the
 site. Run it with `--check` in review so a stale `playground.html` cannot slip
 through.
+
+## Where these fit in the cycle
+
+Each workshop exists to unblock a specific RFP deliverable, not to cover a topic.
+The crosswalk — every `DEL-` against the workshop and live editor that serves it,
+plus the gaps still to build — lives with the RFP repos as
+`GUIDED-LEARNING-MAP.md`.
+
+Short version as of now: 01 and 02 serve week 6–7's data and API work, 03 and 04
+serve week 8's React prototype (`DEL-1023`). Weeks 9–12 have no workshop yet.
 
 ---
 

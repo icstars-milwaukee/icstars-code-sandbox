@@ -132,11 +132,27 @@ puts the slash back.
 
 ## Writing rules that are worth more than they look
 
-- **No build step.** No npm, no bundler, no framework. The student must be able
-  to open the file and see it work, and to be handed a zip offline
-- **No signup walls.** Free, no-key sample APIs. A login screen on night one
-  costs you half the room. [PokeAPI](https://pokeapi.co/) and
-  [JSONPlaceholder](https://jsonplaceholder.typicode.com/) are known-good
+- **No build step, by default.** No npm, no bundler, no framework. The student
+  must be able to open the file and see it work, and to be handed a zip offline.
+  Workshop 01 holds this line completely and it is still the target.
+
+  **If a workshop has to break it**, three things are required: the workshop
+  folder itself still opens and runs (load the library from a CDN as a plain
+  script - a browser on a `file://` path refuses to load a *local* module, so
+  `import` is not available to you); the README's needs-table says what it
+  needs; and anything requiring `npm` happens in the student's own project,
+  never in the workshop folder. 03 loads React this way; 04 loads Babel this way
+  and is *about* npm without containing any.
+- **No signup walls, by default.** Free, no-key sample APIs. A login screen on
+  night one costs you half the room. [PokeAPI](https://pokeapi.co/) and
+  [JSONPlaceholder](https://jsonplaceholder.typicode.com/) are known-good.
+  Workshop 02 is the exception - it queries the real Cycle 21 gateway, so it
+  needs a team password. Anything touching client data earns that exception;
+  nothing else does, and this repo is public.
+- **Check your BREAK IT list.** Every entry claims a specific thing happens.
+  Run each one and confirm it does. Two of workshop 04's entries were wrong on
+  the first draft - the error messages did not match - and a list that promises
+  the wrong error is worse than no list at all
 - **Four words of new vocabulary, maximum.** People quit this subject because
   somebody handed them forty words on night one
 - **One honest number early.** "Three lines." "Two files." Then say that

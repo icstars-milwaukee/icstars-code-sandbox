@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Build Step — i.c.stars Code Sandbox</title>
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="css/build.css">
+</head>
+<body>
+
+  <header class="ics-header">
+    <div class="ics-wrap">
+      <a class="ics-back" href="../../index.html">&larr; Code Sandbox</a>
+      <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span> Milwaukee</div>
+      <h1 class="ics-title">The Build Step</h1>
+      <p class="ics-sub">
+        <strong>JSX is not JavaScript.</strong> No browser has ever understood it. Something
+        has to translate it first &mdash; and that something is why a React project needs
+        <code>npm install</code>, a <code>package.json</code> and Vite. Watch the translation
+        happen, then install one yourself.
+      </p>
+    </div>
+  </header>
+
+  <main class="ics-wrap">
+
+    <!-- ===== PANEL 1: the app. Type JSX, watch it stop being JSX. ===== -->
+    <span class="ics-step">1 &middot; Watch the translation</span>
+
+    <p class="ics-sub bs-note">
+      Left is what you write. Right is what actually runs. Edit the left and the right
+      keeps up. This is the entire job of the build step &mdash; there is no magic under it.
+    </p>
+
+    <div class="bs-split">
+      <div class="bs-pane">
+        <label class="bs-label" for="jsx">You write this &mdash; JSX</label>
+        <textarea id="jsx" class="ics-input" spellcheck="false" rows="14"></textarea>
+      </div>
+      <div class="bs-pane">
+        <label class="bs-label" for="out">The browser runs this &mdash; JavaScript</label>
+        <pre id="out" class="bs-out" aria-live="polite"></pre>
+      </div>
+    </div>
+
+    <div class="ics-row bs-row">
+      <button class="ics-btn" id="reset" type="button">Reset the example</button>
+      <label class="bs-check">
+        <input type="checkbox" id="modern">
+        <span>Use the modern runtime (what Vite actually does)</span>
+      </label>
+    </div>
+
+    <p class="ics-sub bs-note" id="explain"></p>
+
+    <!-- ===== PANEL 2: what the files are for ===== -->
+    <span class="ics-step">2 &middot; What <code>npm install</code> is for</span>
+
+    <p class="ics-sub bs-note">
+      A React project is four files doing four jobs, plus a folder you never open.
+      Nothing here is ceremony.
+    </p>
+
+    <table class="ics-table bs-anatomy">
+      <thead>
+        <tr><th>The thing</th><th>Its one job</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>package.json</code></td>
+          <td><strong>The shopping list.</strong> Names every package your project needs, and the
+          commands you can run. It is checked into Git; it is small; you read it.</td>
+        </tr>
+        <tr>
+          <td><code>package-lock.json</code></td>
+          <td><strong>The receipt.</strong> The exact version of every package, including the
+          packages your packages wanted. Checked in so your laptop and CodeSandbox install
+          the identical thing. You never edit it by hand.</td>
+        </tr>
+        <tr>
+          <td><code>node_modules/</code></td>
+          <td><strong>The groceries.</strong> The actual downloaded code &mdash; thousands of
+          files, tens of megabytes. <strong>Never</strong> checked into Git, because
+          <code>npm install</code> recreates it from the two files above.</td>
+        </tr>
+        <tr>
+          <td><code>vite.config.js</code></td>
+          <td><strong>The kitchen.</strong> Tells Vite to expect React, so it knows to run
+          that JSX translation on every file as you save it.</td>
+        </tr>
+        <tr>
+          <td><code>dependencies</code><br><code>devDependencies</code></td>
+          <td><strong>Ships vs. builds.</strong> <code>react</code> is a dependency &mdash; it
+          runs in the user's browser. <code>vite</code> is a devDependency &mdash; it builds
+          the thing and is never sent to anyone. Getting this backwards ships a toolchain
+          to your users.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ===== PANEL 3: installing one, for real ===== -->
+    <span class="ics-step">3 &middot; Install one yourself</span>
+
+    <p class="ics-sub bs-note">
+      Six commands. Tick them as you go &mdash; this page remembers. Every one has a
+      <strong>done when</strong>, so you never have to wonder whether it worked.
+    </p>
+
+    <ol class="bs-steps" id="steps"></ol>
+
+    <p class="ics-footer">
+      Translation by <a href="https://babeljs.io/docs/babel-standalone">@babel/standalone</a>,
+      loaded from a CDN &mdash; the same translation Vite runs, just in your browser instead
+      of on save. The whole app is <code>js/main.js</code>, which ends with a
+      <strong>BREAK IT ON PURPOSE</strong> list.
+      <br>Next: <a href="../03-honest-dashboard/index.html">03 &mdash; The Honest Dashboard</a>
+      is a React app you can take apart.
+      <br>Open this one in the <a href="playground.html">live editor</a>.
+    </p>
+  </main>
+
+  <!-- Babel as a plain script, not a module: a browser on a file:// path refuses to
+       load a LOCAL module, so everything here stays a classic script. -->
+  <script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js" crossorigin></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>

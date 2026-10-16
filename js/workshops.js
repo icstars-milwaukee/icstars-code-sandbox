@@ -62,6 +62,38 @@ const WORKSHOPS = [
     teaches: ["SELECT", "query params", "API tokens", "rows as arrays"],
     deck: null,
     live: true
+  },
+
+  {
+    n: "03",
+    slug: "03-honest-dashboard",
+    title: "The Honest Dashboard",
+    track: "Front-end",
+    status: "draft",
+    minutes: 45,
+    origin: "RFP Week 8",
+    hook: "You walk out with a dashboard that says where it stops. Four decisions turn " +
+          "a wall of numbers into something a manager reads in ten seconds - and the " +
+          "last one is refusing to answer what your data cannot.",
+    teaches: ["React without a build", "chart form", "one colour", "selection", "refusals"],
+    deck: null,
+    live: true
+  },
+
+  {
+    n: "04",
+    slug: "04-the-build-step",
+    title: "The Build Step",
+    track: "Front-end",
+    status: "draft",
+    minutes: 40,
+    origin: "RFP Week 8",
+    hook: "JSX is not JavaScript and no browser has ever understood it. Type JSX on the left, " +
+          "watch it become React.createElement on the right, and the build step stops being a " +
+          "rumour. Then install Vite yourself, six commands with a done-when on each.",
+    teaches: ["JSX", "npm install", "Vite", "package.json", "dev server"],
+    deck: null,
+    live: true
   }
 
   /* ---- Copy this block to add the next one -------------------
