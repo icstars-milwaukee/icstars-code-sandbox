@@ -111,6 +111,22 @@ const WORKSHOPS = [
        Vite project needs, and this folder's own .codesandbox/tasks.json
        installs and starts it on arrival. */
     sandbox: "https://codesandbox.io/p/devbox/github/icstars-milwaukee/icstars-code-sandbox/tree/main/workshops/04-the-build-step"
+  },
+
+  {
+    n: "05",
+    slug: "05-the-calculator",
+    title: "The Calculator",
+    track: "Front-end",
+    status: "draft",
+    minutes: 30,
+    origin: "Cycle 21",
+    hook: "Three functions, eleven lines, one working calculator. Then you divide by zero, " +
+          "and the function has to decide what to say when it cannot do its job - which is " +
+          "the difference between code you can defend and code that lies quietly.",
+    teaches: ["functions", "inputs & return", "guard clauses", "null", "lib/ vs components/"],
+    deck: null,
+    live: true
   }
 
   /* ---- Copy this block to add the next one -------------------

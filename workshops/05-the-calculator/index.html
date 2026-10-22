@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Calculator — i.c.stars Code Sandbox</title>
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="css/calc.css">
+</head>
+<body>
+
+  <header class="ics-header">
+    <div class="ics-wrap">
+      <a class="ics-back" href="../../index.html">&larr; Code Sandbox</a>
+      <div class="ics-brand">i.c.stars<span class="pipe">|</span><span class="star">*</span> Milwaukee</div>
+      <h1 class="ics-title">The Calculator</h1>
+      <p class="ics-sub">
+        Three functions, eleven lines, one calculator. Numbers go in, an answer
+        comes out &mdash; until you ask it to divide by zero, and then it has to
+        decide what an honest function does when <strong>it cannot do its
+        job.</strong>
+      </p>
+    </div>
+  </header>
+
+  <main class="ics-wrap">
+
+    <!-- 1 -->
+    <span class="ics-step">1 &middot; The calculator</span>
+
+    <p class="ics-sub" style="color:var(--grey-dark);margin-top:12px">
+      It works. Change the numbers, press a button. Then make the second number
+      <strong>0</strong> and press &divide;.
+    </p>
+
+    <!-- React builds the calculator in here. -->
+    <div id="calc"></div>
+
+    <!-- 2 -->
+    <span class="ics-step">2 &middot; What a function actually is</span>
+
+    <p>
+      A machine with four parts. That is the whole idea, and every function you
+      will ever write &mdash; in any language &mdash; has these same four:
+    </p>
+
+    <div class="cx-anatomy">function add(a, b) { return a + b; }
+         │   │     │ │
+         │   │     │ └─ <span class="pt">return</span>
+         │   │     └─── <span class="pt">body</span>
+         │   └───────── <span class="pt">inputs</span>
+         └───────────── <span class="pt">name</span></div>
+
+    <ol class="cx-parts">
+      <li><b>name</b> &mdash; so something else can call it</li>
+      <li><b>inputs</b> &mdash; what it needs in order to work.
+          Also called <em>parameters</em>, or <em>arguments</em> when you are
+          talking about the actual values you hand over.</li>
+      <li><b>body</b> &mdash; the work. Everything between the <code>{ }</code>.</li>
+      <li><b>return</b> &mdash; the answer it hands back</li>
+    </ol>
+
+    <p>
+      <strong>Call</strong> it and the answer comes back:
+      <code>add(2, 3)</code> is <code>5</code>. The two numbers you hand it are
+      the <strong>inputs</strong>. The 5 is the <strong>return value</strong>.
+      You write the machine once and press the button a thousand times.
+    </p>
+
+    <p class="ics-note">
+      Leave off the <code>return</code> and the function still runs perfectly.
+      It just hands back nothing &mdash; and whatever called it gets
+      <code>undefined</code>. That is the most common bug in this whole
+      workshop, and the BREAK IT list at the bottom of
+      <code>js/main.js</code> makes you cause it on purpose.
+    </p>
+
+    <!-- 3 -->
+    <span class="ics-step">3 &middot; Three functions, one shape</span>
+
+    <p>
+      Here is all of <code>js/lib/math.js</code>. Same four parts every time
+      &mdash; only the body changes:
+    </p>
+
+    <div class="ics-tablewrap">
+      <table class="ics-table">
+        <tr><th>Name</th><th>Body</th><th>Works for any two numbers?</th></tr>
+        <tr>
+          <td><code>add</code></td>
+          <td><code>return a + b;</code></td>
+          <td>Yes.</td>
+        </tr>
+        <tr>
+          <td><code>subtract</code></td>
+          <td><code>return a - b;</code></td>
+          <td>Yes &mdash; but the <strong>order</strong> matters.
+              <code>subtract(3, 10)</code> is <code>-7</code>, not <code>7</code>.</td>
+        </tr>
+        <tr class="cx-rownull">
+          <td><code>divide</code></td>
+          <td><code>if (b === 0) return null;</code><br><code>return a / b;</code></td>
+          <td><strong>No.</strong> Which is why it has an extra line.</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 4 -->
+    <span class="ics-step">4 &middot; The function that cannot always answer</span>
+
+    <p>
+      Dividing by zero has no answer. Not a big answer, not zero &mdash; no
+      answer at all. So <code>divide</code> has to decide what to do when it
+      cannot do its job, and it has three choices:
+    </p>
+
+    <div class="ics-tablewrap">
+      <table class="ics-table">
+        <tr><th>It could&hellip;</th><th>Screen shows</th><th>Why that is a problem</th></tr>
+        <tr>
+          <td><code>return 0</code></td>
+          <td><code>0</code></td>
+          <td><strong>A lie that looks true.</strong> 10 &divide; 0 is not 0. Now a
+              wrong number is loose in the program with nothing marking it as
+              wrong, and anyone who reads it will believe it.</td>
+        </tr>
+        <tr>
+          <td>nothing &mdash; let JavaScript answer</td>
+          <td><code>Infinity</code></td>
+          <td>Honest, and useless on a screen. It is also sticky: add anything to
+              Infinity and you still get Infinity, so one bad divide spreads into
+              every sum after it.</td>
+        </tr>
+        <tr>
+          <td><code>return null</code> &mdash; what it does</td>
+          <td><strong>no answer</strong></td>
+          <td>Nothing. <code>null</code> means &ldquo;no answer&rdquo;, and whoever
+              called the function now has to deal with that out loud.</td>
+        </tr>
+      </table>
+    </div>
+
+    <p class="ics-note">
+      <strong>A function that admits it has no answer is worth more than one
+      that invents a believable number.</strong> Same rule as workshop 03's
+      panel that refuses questions it cannot trace, and the same rule as week
+      8's <code>not built yet</code> &mdash; say where you stop.
+    </p>
+
+    <p>
+      So who deals with it? <code>js/components/Readout.js</code>, in three
+      lines: it checks <code>answer === null</code> and prints <em>no answer
+      &mdash; you cannot divide by zero</em>. The function decided it could not
+      answer; the screen decided how to say so. Two jobs, two files.
+    </p>
+
+    <!-- 5 -->
+    <span class="ics-step">5 &middot; Where the files live, and why</span>
+
+    <ul class="cx-files">
+      <li><code>js/lib/math.js</code>
+        <span>The three functions. No React, no buttons, no HTML &mdash; it draws
+          nothing at all. <strong>Work goes in lib/.</strong></span></li>
+      <li><code>js/components/Readout.js</code>
+        <span>Shows the answer, or says there is not one. Does no arithmetic.</span></li>
+      <li><code>js/components/Calculator.js</code>
+        <span>The screen: two inputs, three buttons. <strong>Screens go in
+          components/.</strong> It does not know how to add &mdash; it only knows
+          which function to call.</span></li>
+      <li><code>js/main.js</code>
+        <span>Puts the calculator on the page, runs the table below, and ends with
+          the BREAK IT list.</span></li>
+    </ul>
+
+    <p>
+      Same split as <a href="../04-the-build-step/index.html">04 &mdash; The
+      Build Step</a>. The reason it earns its keep is the next section.
+    </p>
+
+    <!-- 6 -->
+    <span class="ics-step">6 &middot; Why that split is worth it</span>
+
+    <p>
+      This table ran the same three functions the calculator runs &mdash; with no
+      screen, no buttons and nobody clicking. It is only possible because the
+      arithmetic lives in <code>lib/</code> and <strong>returns</strong> its
+      answer instead of drawing it:
+    </p>
+
+    <div class="ics-tablewrap">
+      <table class="ics-table cx-proof">
+        <tr><th>The call</th><th>Came back</th><th></th></tr>
+        <tbody id="proof"></tbody>
+      </table>
+    </div>
+
+    <p>
+      That is a test. Seven of them. If someone breaks <code>add</code>, this
+      table says so before a human notices &mdash; which is exactly what
+      <strong>week 8</strong> asks you to do to your own project, one row per
+      MUST on your Jira board.
+    </p>
+
+    <p class="ics-footer">
+      React straight from a CDN &mdash; no npm, no build step. The lesson is
+      <code>js/lib/math.js</code>, and <code>js/main.js</code> ends with a
+      <strong>BREAK IT ON PURPOSE</strong> list.
+      <br>Next: <a href="../04-the-build-step/index.html">04 &mdash; The Build
+      Step</a> writes screens in JSX and explains what installing buys you.
+      <br>Open it in the <a href="playground.html">live editor</a>.
+    </p>
+  </main>
+
+  <!-- React as plain scripts, not modules: a browser on a file:// path refuses
+       to load a local module, so a workshop that must run off disk cannot use
+       import. Order matters - each file below needs the ones above it. -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="js/lib/math.js"></script>
+  <script src="js/components/Readout.js"></script>
+  <script src="js/components/Calculator.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
