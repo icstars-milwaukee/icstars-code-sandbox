@@ -17,6 +17,7 @@ the workshop says why:
 | 02 Molson Data | a team password (it queries the real Cycle 21 gateway) |
 | 03 The Honest Dashboard | the network, for React from a CDN. No account, no data. |
 | 04 The Build Step | **npm.** It is a real Vite project — one click in CodeSandbox, or `npm install && npm run dev`. |
+| 05 The Calculator | the network, for React from a CDN. Nothing else. |
 
 ---
 
@@ -28,6 +29,7 @@ the workshop says why:
 | 02 | [Molson Data](workshops/02-molson-data/) — one `SELECT` to the Cycle 21 gateway, rows on the page | Data | 30 min | draft · live editor |
 | 03 | [The Honest Dashboard](workshops/03-honest-dashboard/) — rows in, a readable screen out, and an answer box that refuses | Front-end | 45 min | draft · live editor |
 | 04 | [The Build Step](workshops/04-the-build-step/) — a real Vite app: Hello World → Profile → Data | Front-end | 60 min | draft · deck · **CodeSandbox** |
+| 05 | [The Calculator](workshops/05-the-calculator/) — three functions, and what `divide` does when it cannot answer | Front-end | 30 min | draft · live editor |
 
 The front page builds this list from [`js/workshops.js`](js/workshops.js), which
 is the single file you edit to add a workshop.
@@ -43,7 +45,25 @@ workshops/01-hello-api/
 └── playground.html   GENERATED — the app in a live editor
 ```
 
-Only 01 has a deck so far. A workshop without one is still a workshop; set
+A bigger lesson may split `js/` further, and **05 The Calculator** does —
+because the split *is* its lesson:
+
+```
+workshops/05-the-calculator/
+├── index.html
+├── css/calc.css
+├── js/lib/math.js              work: add, subtract, divide. Draws nothing.
+├── js/components/Readout.js    screen: the answer, or "no answer"
+├── js/components/Calculator.js screen: two inputs, three buttons
+├── js/main.js                  mounts it, and runs its own proof table
+└── playground.html             GENERATED — all six files, in a live editor
+```
+
+`tools/build-playground.py` walks the folder, so nested paths need nothing
+special — the sidebar just lists more files. Same rule as 04's `src/`:
+**work goes in `lib/`, screens go in `components/`.**
+
+01 and 04 have decks. A workshop without one is still a workshop; set
 `deck: null` on its card.
 
 **The workshop folder is the app.** Double-click `index.html` and it runs, off
@@ -168,6 +188,7 @@ workshops/01-hello-api/         fetch, JSON, async/await, DOM
 workshops/02-molson-data/       SELECT, query params, API tokens
 workshops/03-honest-dashboard/  React from a CDN, chart decisions, refusals
 workshops/04-the-build-step/    a real Vite app — JSX, components, pages, APIs
+workshops/05-the-calculator/     functions — inputs, return, and a guard clause
 ```
 
 ## Adding a workshop
